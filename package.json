@@ -10,8 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
+    "fs": "0.0.1-security",
     "pn": "^1.0.0",
-    "restify": "^4.3.0",
     "svg2png": "^4.1.0"
   }
 }

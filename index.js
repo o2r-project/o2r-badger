@@ -1,8 +1,22 @@
 var express = require('express');
 var app = express();
 
-// respond with "hello world" when a GET request is made to the homepage
-app.get('/', function(req, res) {
-  res.send('hello world!!!');
+var base = '/api/1.0/badge';
+
+/**
+* Receive the request for a badge
+*/
+app.get(base + '/doaj/:doi', function(req, res) {
+	var doi = req.params.doi;
+	var width = req.query.width;
+	var type = req.query.type;
+	console.log(width);
+	console.log(type);
+	console.log(doi);
+	console.log(req.baseUrl);
 });
-app.listen(8080, '127.0.0.1');
+
+
+app.listen(3000, function () {
+  console.log('Server listening')
+})
