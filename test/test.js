@@ -1,3 +1,8 @@
+//example test file with mocha,
+//add test in this file
+//run: npm install mocha
+// run npm test
+
 var assert = require('assert');
 describe('Array', function() {
   describe('#indexOf()', function() {
@@ -6,3 +11,4 @@ describe('Array', function() {
     });
   });
 });
+
