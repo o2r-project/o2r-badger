@@ -1,14 +1,24 @@
-//example test file with mocha,
-//add test in this file
-//run: npm install mocha
-// run npm test
+//test file with mocha,
 
-var assert = require('assert');
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
-      assert.equal(-1, [1,2,3].indexOf(4));
+//Require the dev-dependencies
+let chai = require('chai');
+let chaiHttp = require('chai-http');
+let should = chai.should();
+
+chai.use(chaiHttp);
+
+describe('Test the get.app method with png', function() {
+  describe('GET http://localhost:3000/api/1.0/badge/doaj/1234?type=png', function() {
+    it('returns an image', function() {
+      // ...
     });
   });
 });
 
+describe('Test the get.app method with svg', function() {
+  describe('GET http://localhost:3000/api/1.0/badge/doaj/1234?type=svg', function() {
+    it('returns an image', function() {
+      // ...
+    });
+  });
+});

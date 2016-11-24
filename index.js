@@ -14,8 +14,8 @@ app.get(base + '/doaj/:doi', function(req, res) {
 	var type = req.query.type;
 	
 	//needs to be the absolute path to the location of the badge
-	var path = "";
-	var badgename = ""
+	var path = "C:/Users/User/Documents/Uni/Master/2. Semester/Project Badgets/Gitlab/BadgesProject/badge/";
+	var badgename = "svg"
 	
 	if (type == "png")
 	{
@@ -60,3 +60,5 @@ app.get(base + '/doaj/:doi', function(req, res) {
 app.listen(3000, function () {
   console.log('Server listening')
 })
+
+module.exports = app;
