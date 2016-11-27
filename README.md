@@ -4,7 +4,6 @@ This project provides an API for retrieving a scalable badge as svg or png.
 #### Installation
 In order to use this API, make sure that you have installed [Docker](https://www.docker.com/) and [Node.js] (https://nodejs.org/en/).
 
-<<<<<<< HEAD
 Then clone our repository:
 `git clone git@zivgitlab.uni-muenster.de:geocontainer-badges/scalability.git`
 
