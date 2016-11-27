@@ -15,6 +15,7 @@ We also used [Node.js](https://nodejs.org/en/). Make sure to also [install](http
 
 
     git clone https://zivgitlab.uni-muenster.de/geocontainer-badges/scalability
+
 2. Navigate into the project folder with the Dockerfile
 3. Now build the docker image and run it in a docker container:
 
