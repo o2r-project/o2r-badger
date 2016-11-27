@@ -2,63 +2,52 @@ const fs = require("pn/fs");
 const svg2png = require("svg2png");
 var express = require('express');
 var app = express();
-
 var base = '/api/1.0/badge';
 
-/**
-* Receive the request for a Badge
-*/
+//Receive the request for a Badge
 app.get(base + '/doaj/:doi', function(req, res) {
 	var doi = req.params.doi;
 	var picwidth = req.query.width;
+	//var picheight= req.query.height // OPTIONAL
 	var type = req.query.type;
+	var badgename = "christmas"
 	
-	//needs to be the absolute path to the location of the badge
-	var path = "C:/Users/User/Documents/Uni/Master/2. Semester/Project Badgets/Gitlab/BadgesProject/badge/";
-	var badgename = "svg"
-	
-	if (type == "png")
-	{
+	if (type == "png"){
 		// convert image from svg to png
 		if(picwidth != null){
-			/**
+			//todo: add max and min width and height conditions
 			console.log("parse badge from svg to png with width "+ picwidth);
-			fs.readFile(path+badgename+".svg")
-			.then(svg2png({ width: picwidth}))
-			.then(buffer => fs.writeFile( path+badgename+".png", buffer))
-			.catch(e => console.error(e));
-			
-			//return png
-			console.log("return png");
-			res.sendFile(path+badgename+".png");
-			**/
-		}
+
+			filename=__dirname+'/'+badgename+".svg"
+			const input = fs.readFileSync(filename)
+			const output = svg2png.sync(input, { width: picwidth, filename: filename}); //OPTIONAL HEIGHT ARGUMENT: (input, { width: picwidth, height: picheight, filename: filename}) 
+			const outputFilename = badgename+".png";
+			fs.writeFileSync(outputFilename, output, { flag: "wx" });
+			console.log("return resized png");
+			res.sendFile(__dirname+'/'+badgename+".png");
+		}	
 		else{
+		// convert svg to png
 			console.log("parse badge from svg to png");
-			//source path+doi+".svg"
-			fs.readFile(path+badgename+".svg") 
-			.then(svg2png)
-			.then(buffer => fs.writeFile(path+badgename+".png", buffer))
-			.catch(e => console.error(e));
-			
-			//return png
-			console.log("return png");
-			res.sendFile(path+badgename+".png");
-			
+
+			filename=__dirname+'/'+badgename+".svg"
+			const input = fs.readFileSync(filename)
+			console.log(input);
+			const output = svg2png.sync(input);
+			const outputFilename = badgename+".png";
+			fs.writeFileSync(outputFilename, output, { flag: "wx" });
+			console.log("return original size png");
+			res.sendFile(__dirname+'/'+badgename+".png");
 		}
-		
 	}
 	else{
-		
 		// return svg
 		console.log("return svg");
-		res.sendFile(path+badgename+".svg");
+		res.sendFile(__dirname+'/'+badgename+".svg");
 	}
 });
 
 
 app.listen(3000, function () {
-  console.log('Server listening')
+  console.log('Server listening...')
 })
-
-module.exports = app;
