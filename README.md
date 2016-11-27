@@ -20,7 +20,8 @@ Navigat to the downloaded folder and type:
 `npm install && npm start`  
 Afterward you can test the API in the browser or run the testfile:  
 `npm install mocha && npm test`
-
+  
+  
 You can test the API e.g. with the following URLs:
  * http://localhost:3000/api/1.0/badge/doaj/1234?type=png&width=1000
  * http://localhost:3000/api/1.0/badge/doaj/1234?type=svg
