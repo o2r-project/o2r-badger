@@ -17,3 +17,14 @@ describe('Test the get.app method with svg', function() {
     });
   });
 });
+
+
+
+//test the png with width
+describe('Test the get.app method with png and width', function() {
+  describe('GET http://localhost:3000/api/1.0/badge/doaj/1234?type=png&width=1000', function() {
+    it('returns an image', function() {
+      // ...
+    });
+  });
+});
