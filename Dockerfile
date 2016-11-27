@@ -1,6 +1,7 @@
 
 
-FROM node:argon RUN mkdir -p /usr/src/app 
+FROM node:argon 
+RUN mkdir -p /usr/src/app 
 WORKDIR /usr/src/app 
 
 # Install app dependencies 
