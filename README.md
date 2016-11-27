@@ -13,9 +13,11 @@ We used [Docker](https://www.docker.com/) to create a consistent environment. Do
 We also used [Node.js](https://nodejs.org/en/). Make sure to also [install](https://nodejs.org/en/download/) it and store the node-modules inside the project folder.
 1. Clone the project from Gitlab using the following command:
 
+
     git clone https://zivgitlab.uni-muenster.de/geocontainer-badges/scalability
 2. Navigate into the project folder with the Dockerfile
 3. Now build the docker image and run it in a docker container:
+
 
     docker build -t scalability .    //creates the image 
     docker run -p 80:3000 scalability   //runs the image in a container
