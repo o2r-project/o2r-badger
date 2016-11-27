@@ -1,33 +1,22 @@
-## Scalability Badge
-This badge provides a scalable badges that can be embed on a third party site.
+## Scalable Badges
+This project provides an API for retrieving a scalable badge as svg or png.
 
-## Checklist of our task :
- * Implementation of the scaling part
- * API for DOAJ (Directory of Open Access Journals)
- * Running a Docker Container
- * Writing a Documentation and tests
+#### Installation
+In order to use this API, make sure that you have installed [Docker](https://www.docker.com/) and [Node.js] (https://nodejs.org/en/).
 
-## Installation:
+Then clone our repository:
+`git clone git@zivgitlab.uni-muenster.de:geocontainer-badges/scalability.git`
 
-We used [Docker](https://www.docker.com/) to create a consistent environment. Docker is a software containerization platform that allows the users to run their projects in containers. Instead of virtual machines being created there are containers that are much more lightweight as compared to virtual machines. Make sure that you have installed Docker [Docker installation](https://docs.docker.com/engine/installation/) and all the dependencies according to the operating system you use.
-We also used [Node.js](https://nodejs.org/en/). Make sure to also [install](https://nodejs.org/en/download/) it and store the node-modules inside the project folder.
-1. Clone the project from Gitlab using the following command:
+##### with Docker
+Navigate to the downloaded folder and build a docker image:
+`docker build -t scalability .`
+Then run the image:
+`docker run -p 30:3000 scalability`
+Finally test the API with the localhost.
 
-
-    git clone https://zivgitlab.uni-muenster.de/geocontainer-badges/scalability
-
-2. Navigate into the project folder with the Dockerfile
-3. Now build the docker image and run it in a docker container:
-
-
-    docker build -t scalability .    //creates the image 
-    docker run -p 80:3000 scalability   //runs the image in a container
-
-Finally have a look at the results on the localhost 3000. 
-
-## Run the Mocha tests
-
-To run the Testfile:
-
-    npm install mocha 
-    npm test
+##### with Node
+You can also run the API without Docker.
+Navigat to the downloaded folder and type:
+`npm install && npm start`
+Afterward you can test the API in the browser or run the testfile:
+`npm install mocha && npm test`
