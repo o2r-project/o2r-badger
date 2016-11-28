@@ -26,3 +26,8 @@ You can test the API e.g. with the following URLs:
  * http://localhost:3000/api/1.0/badge/doaj/1234?type=png&width=1000
  * http://localhost:3000/api/1.0/badge/doaj/1234?type=svg
  * http://localhost:3000/api/1.0/badge/doaj/1234?type=png
+
+#### License
+SVG2PNG: [license](https://github.com/domenic/svg2png/blob/master/LICENSE.txt)  
+Express: [license](https://github.com/expressjs/express/blob/master/LICENSE)  
+Node-PN: [license](https://github.com/cscott/node-pn)
