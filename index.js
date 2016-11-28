@@ -22,7 +22,7 @@ app.get(base + '/doaj/:doi', function(req, res) {
 			const input = fs.readFileSync(filename)
 			const output = svg2png.sync(input, { width: picwidth, filename: filename}); //OPTIONAL HEIGHT ARGUMENT: (input, { width: picwidth, height: picheight, filename: filename}) 
 			const outputFilename = badgename+picwidth+".png";
-			fs.writeFileSync(outputFilename, output, { flag: "wx" });
+			fs.writeFileSync(outputFilename, output, { flag: "w" });
 			console.log("return resized png");
 			res.sendFile(__dirname+'/'+badgename+picwidth+".png");
 		}	
@@ -35,7 +35,7 @@ app.get(base + '/doaj/:doi', function(req, res) {
 			console.log(input);
 			const output = svg2png.sync(input);
 			const outputFilename = badgename+".png";
-			fs.writeFileSync(outputFilename, output, { flag: "wx" });
+			fs.writeFileSync(outputFilename, output, { flag: "w" });
 			console.log("return original size png");
 			res.sendFile(__dirname+'/'+badgename+".png");
 		}
