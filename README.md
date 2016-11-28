@@ -33,6 +33,6 @@ Express: [license](https://github.com/expressjs/express/blob/master/LICENSE)
 Node-PN: [license](https://github.com/cscott/node-pn)
 
 #### Known Limitations & Issues
-The SVG file to be converted to PNG *must* have in its header the following attributes: Width, Height, and **Viewport**. 
+The SVG file to be converted to PNG *must* have in its header the following attributes: Width, Height, and **Viewport**.   
 In *index.js*, the variable "badgename" (line 13) must be set to the filename of the SVG (without the .svg extension). 
 
