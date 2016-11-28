@@ -35,5 +35,5 @@ Node-PN: [license](https://github.com/cscott/node-pn)
 #### Known Limitations & Issues
 The SVG file to be converted to PNG *must* have in its header the following attributes: Width, Height, and **Viewport**.   
 If you want to test the API with another SVG: in *index.js*, the variable "badgename" (line 13) can be set to the filename of the SVG (without the .svg extension).   
-The svg has to be located in the same folder than the *index.js*.
+The svg has to be located in the svg folder and resulted png are saved in the png folder.
 
