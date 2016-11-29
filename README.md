@@ -35,8 +35,8 @@ You can test the API e.g. with the following URLs:
 
 ## Licenses
 
-SVG2PNG: [license](https://github.com/domenic/svg2png/blob/master/LICENSE.txt)
-Express: [license](https://github.com/expressjs/express/blob/master/LICENSE)
+SVG2PNG: [license](https://github.com/domenic/svg2png/blob/master/LICENSE.txt)  
+Express: [license](https://github.com/expressjs/express/blob/master/LICENSE)  
 Node-PN: [license](https://github.com/cscott/node-pn)
 
 ## Known Limitations & Issues
