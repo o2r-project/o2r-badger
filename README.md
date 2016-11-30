@@ -12,20 +12,20 @@ Then clone our repository:
 
 ### with Docker
 
-Navigate to the downloaded folder and build a docker image:
+Navigate to the downloaded folder and build a docker image:  
 `docker build -t scalability .`
 
-Then run the image:
-`docker run -p 30:3000 scalability`
+Then run the image:  
+`docker run -p 3000:3000 scalability`  
 Finally test the API with the localhost.
 
 ### with Node
 
-You can also run the API without Docker.
-Navigate to the downloaded folder and type:
-`npm install && npm start`
-Afterward you can test the API in the browser or run the testfile:
-`npm install mocha && npm test`
+You can also run the API without Docker.  
+Navigate to the downloaded folder and type:  
+`npm install && npm start`  
+Afterward you can test the API in the browser or run the testfile:  
+`npm install mocha && npm test`  
 
 You can test the API e.g. with the following URLs:
 
