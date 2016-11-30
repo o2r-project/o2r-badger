@@ -11,8 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
-    "mocha": "^3.2.0",
     "pn": "^1.0.0",
+    "request": "^2.79.0",
     "svg2png": "^4.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0"
   }
 }
