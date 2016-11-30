@@ -8,7 +8,6 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/ 
 # Bundle app source 
 RUN npm install
-RUN npm install mocha
 COPY . /usr/src/app 
 EXPOSE 3000 
 

@@ -25,7 +25,7 @@ You can also run the API without Docker.
 Navigate to the downloaded folder and type:  
 `npm install && npm start`  
 Afterward you can test the API in the browser or run the testfile:  
-`npm install mocha && npm test`  
+`npm test`  
 
 You can test the API e.g. with the following URLs:
 
