@@ -27,19 +27,12 @@ Navigate to the downloaded folder and type:
 Afterward you can test the API in the browser or run the testfile:  
 `npm test`  
 
-You can test the API e.g. with the following URLs:
-
- * http://localhost:3000/api/1.0/badge/doaj/1234?type=png&width=1000
- * http://localhost:3000/api/1.0/badge/doaj/1234?type=svg
- * http://localhost:3000/api/1.0/badge/doaj/1234?type=png
-
-## Licenses
-
-[Apache License](https://zivgitlab.uni-muenster.de/geocontainer-badges/scalability/blob/master/LICENSE)
-
 ## Known Limitations & Issues
 
 The SVG file to be converted to PNG *must* have in its header the following attributes: Width, Height, and **viewBox**.
 If you want to test the API with another SVG: in *index.js*, the variable "badgename" (line 13) can be set to the filename of the SVG (without the .svg extension).
 The svg has to be located in the svg folder and resulted png are saved in the png folder.
 
+## Licenses
+
+[Apache License 2.0](https://zivgitlab.uni-muenster.de/geocontainer-badges/scalability/blob/master/LICENSE)
