@@ -15,12 +15,7 @@ app.get(base + '/:type/:service/:id', function (req, res) {
 	var format = req.query.format;
 	var port;
 
-	// test URLs
-	// localhost:3000/api/1.0/badge/executable/o2r/id?format=png&width=100
-	// localhost:3000/api/1.0/badge/licence/o2r/id?format=svg
-	// localhost:3000/api/1.0/badge/peerreviewed/o2r/id?format=png
 
-	//without queries
 	console.log("path= " + req.path);
 
 	switch (type) {
@@ -43,7 +38,7 @@ app.get(base + '/:type/:service/:id', function (req, res) {
 	if (port == 3001 || port == 3002 || port == 3003) {
 		/*
 		// missing server in Url
-		request(port + base + req.path, function (error, response, body) {
+		request('localhost:'+ port + base + req.path, function (error, response, body) {
 			//todo: error handling
 			if (!error) {
 				//todo: read body
@@ -102,6 +97,6 @@ function convert(format, width) {
 
 app.listen(3000, function () {
 	console.log('Server listening...')
-})
+});
 
 module.exports = app;
