@@ -19,7 +19,6 @@ app.get(base + '/:type/:service/:id', function (req, res) {
 	// localhost:3000/api/1.0/badge/executable/o2r/id?format=png&width=100
 	// localhost:3000/api/1.0/badge/licence/o2r/id?format=svg
 	// localhost:3000/api/1.0/badge/peerreviewed/o2r/id?format=png
-	// localhost:3000/api/1.0/badge/hallo/o2r/id?format=png&width=100
 
 	//without queries
 	console.log("path= " + req.path);
@@ -104,3 +103,5 @@ function convert(format, width) {
 app.listen(3000, function () {
 	console.log('Server listening...')
 })
+
+module.exports = app;
