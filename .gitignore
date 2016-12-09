@@ -1,3 +1,4 @@
 # Don't upload the node modules
 node_modules
 npm-debug.log
+launch.json
