@@ -4,6 +4,8 @@ var express = require('express');
 var request = require('request');
 var app = express();
 
+var server = process.env.SERVER_IP || "http://localhost:";//-e
+
 var base = '/api/1.0/badge';
 
 // todo: set environment variables for the ip adresses
@@ -36,9 +38,8 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 
 	// Redirection to requested badge api
 	if (port == 3001 || port == 3002 || port == 3003) {
-		console.log("request: " + 'localhost:' + port + req.path);
-		myurl = 'http://localhost:' + port + req.path;
-		request('http://localhost:' + port + req.path, function (error, response, body) {
+		console.log("request: " + server + port + req.path);
+		request(server + port + req.path, function (error, response, body) {
 			if (!error) {
 				// convert svg to png and send the result
 				if (format == "png") {
