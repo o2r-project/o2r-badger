@@ -62,9 +62,6 @@ describe('Test the get.app method with svg', function () {
           res.should.have.status(200);
           res.should.not.be.empty;
           var svgstring = decoder.end(res.body);
-          console.log("res: "+ JSON.stringify(res));
-          console.log("body: "+JSON.stringify(res.body));
-          console.log("svgstring: "+svgstring);
           svgstring.should.include('<svg');
           done();
         });

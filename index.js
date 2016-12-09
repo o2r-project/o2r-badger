@@ -5,10 +5,8 @@ var request = require('request');
 var app = express();
 
 var server = process.env.SERVER_IP || "http://localhost:";//-e
-
+console.log(server);
 var base = '/api/1.0/badge';
-
-// todo: set environment variables for the ip adresses
 
 //Receive the request for a Badge, redirect to requested badge api and send the result
 app.get(base + '/:type/:service/:id*', function (req, res) {
@@ -60,8 +58,8 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 				}
 			}
 			else {
-				// todo: error handling
-				console.log("error: " + error);
+				console.log(error);
+				return;
 			}
 		});
 	}
