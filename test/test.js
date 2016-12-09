@@ -20,7 +20,7 @@ describe('Test the get.app method with png and width', function () {
           res.should.have.status(200);
           done();
         });
-    });
+    }).timeout(3000);
     it('should return some content', function (done) {
       chai.request(server)
         .get('/api/1.0/badge/executable/o2r/2?format=png')
@@ -54,19 +54,21 @@ describe('Test the get.app method with png and width', function () {
 
 //test the svg
 describe('Test the get.app method with svg', function () {
-  describe('GET localhost:3000/api/1.0/badge/licence/o2r/1?format=svg', function () {
+  describe('GET localhost:3000/api/1.0/badge/executable/o2r/1?format=svg', function () {
     it('should return svg', function (done) {
       chai.request(server)
-        .get('/api/1.0/badge/licence/o2r/1?format=svg')
+        .get('/api/1.0/badge/executable/o2r/1?format=svg')
         .end(function (err, res) {
           res.should.have.status(200);
           res.should.not.be.empty;
           var svgstring = decoder.end(res.body);
-          //console.log(svgstring);
-          svgstring.should.include('<svg xmlns="http://www.w3.org/2000/svg"');
+          console.log("res: "+ JSON.stringify(res));
+          console.log("body: "+JSON.stringify(res.body));
+          console.log("svgstring: "+svgstring);
+          svgstring.should.include('<svg');
           done();
         });
-    });
+    }).timeout(3000);
   });
 });
 

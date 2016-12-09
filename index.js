@@ -40,15 +40,22 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 		myurl = 'http://localhost:' + port + req.path;
 		request('http://localhost:' + port + req.path, function (error, response, body) {
 			if (!error) {
-				// send svg
-				if (format == "svg") {
-					res.send(body);
-				}
 				// convert svg to png and send the result
-				else {
+				if (format == "png") {
 					result = convert(format, width, body);
-					res.setHeader('Content-Type', 'image/png');
-					res.send(result);
+					var img = new Buffer (result, "base64");
+					res.writeHead(200, {
+						'Content-Type': 'image/png',
+						'Content-Length':img.length
+					});
+					res.end(img);
+				}
+				//send svg
+				else {
+					res.writeHead(200, {
+						'Content-Type': 'image/svg+xml'
+					});
+					res.end(body);
 				}
 			}
 			else {
@@ -72,8 +79,7 @@ function convert(format, width, response) {
 	}
 	else {
 		const output = svg2png.sync(response);
-		console.log("Output: "+output);
-		console.log("return resized png");
+		console.log("return png");
 		return output;
 	}
 }
