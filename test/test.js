@@ -12,10 +12,10 @@ chai.use(chaiHttp);
 
 //test the png
 describe('Test the get.app method with png and width', function () {
-  describe('GET localhost:3000/api/1.0/badge/executable/o2r/id?format=png&width=100', function () {
+  describe('GET localhost:3000/api/1.0/badge/executable/o2r/2?format=png&width=100', function () {
     it('should have OK response status', function (done) {
       chai.request(server)
-        .get('/api/1.0/badge/executable/o2r/id?format=png&width=100')
+        .get('/api/1.0/badge/executable/o2r/2?format=png&width=100')
         .end(function (err, res) {
           res.should.have.status(200);
           done();
@@ -23,7 +23,7 @@ describe('Test the get.app method with png and width', function () {
     });
     it('should return some content', function (done) {
       chai.request(server)
-        .get('/api/1.0/badge/executable/o2r/id?format=png')
+        .get('/api/1.0/badge/executable/o2r/2?format=png')
         .end(function (err, res) {
           res.body.should.not.be.empty;
           done();
@@ -31,7 +31,7 @@ describe('Test the get.app method with png and width', function () {
     });
     it('should return the correct image type', function (done) {
       chai.request(server)
-        .get('/api/1.0/badge/executable/o2r/id?format=png')
+        .get('/api/1.0/badge/executable/o2r/3?format=png')
         .end(function (err, res) {
           var dimensions = sizeOf(res.body);
           expect(dimensions.type).to.eql('png');
@@ -42,7 +42,7 @@ describe('Test the get.app method with png and width', function () {
     });
     it('should return the correct image size', function (done) {
       chai.request(server)
-        .get('/api/1.0/badge/executable/o2r/id?format=png&width=42')
+        .get('/api/1.0/badge/executable/o2r/3?format=png&width=42')
         .end(function (err, res) {
           var dimensions = sizeOf(res.body);
           expect(dimensions.width).to.eql(42);
@@ -54,10 +54,10 @@ describe('Test the get.app method with png and width', function () {
 
 //test the svg
 describe('Test the get.app method with svg', function () {
-  describe('GET localhost:3000/api/1.0/badge/licence/o2r/id?format=svg', function () {
+  describe('GET localhost:3000/api/1.0/badge/licence/o2r/1?format=svg', function () {
     it('should return svg', function (done) {
       chai.request(server)
-        .get('/api/1.0/badge/licence/o2r/id?format=svg')
+        .get('/api/1.0/badge/licence/o2r/1?format=svg')
         .end(function (err, res) {
           res.should.have.status(200);
           res.should.not.be.empty;

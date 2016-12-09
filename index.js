@@ -9,7 +9,7 @@ var badgename = "whale";
 
 
 //Receive the request for a Badge
-app.get(base + '/:type/:service/:id', function (req, res) {
+app.get(base + '/:type/:service/:id*', function (req, res) {
 	var type = req.params.type;
 	var width = req.query.width;
 	var format = req.query.format;
@@ -22,7 +22,7 @@ app.get(base + '/:type/:service/:id', function (req, res) {
 		case "executable":
 			port = 3001;
 			break;
-		case "peerreviewed":
+		case "peerreview":
 			port = 3002;
 			break;
 		case "licence":
@@ -36,62 +36,51 @@ app.get(base + '/:type/:service/:id', function (req, res) {
 	console.log("type: " + type + " and port: " + port);
 
 	if (port == 3001 || port == 3002 || port == 3003) {
-		/*
-		// missing server in Url
-		request('localhost:'+ port + base + req.path, function (error, response, body) {
-			//todo: error handling
-			if (!error) {
-				//todo: read body
-				convert(format, width);
-			}
-		});
-		*/
-		result = convert(format, width);
-		res.sendFile(result);
 
+		console.log("request: " + 'localhost:' + port + req.path)
+		myurl = 'http://localhost:' + port + req.path;
+		request('http://localhost:' + port + req.path, function (error, response, body) {
+			if (!error) {
+				if (format == "svg") {
+					res.send(body);
+				}
+				else {
+					result = convert(format, width, body);
+					res.setHeader('Content-Type','image/png');
+					res.send(result);
+				}
+				//console.log(body);
+			}
+			else {
+				console.log("error: " + error);
+			}
+
+		});
 	}
 	else {
 		console.log("wrong url");
 	}
 });
 
-function convert(format, width) {
+function convert(format, width, response) {
 
-	//todo: don't load badge but load it from url, in case of png save somewhere
+	// convert image from svg to png
+	if (width != null) {
 
-	if (format == "png") {
-		// convert image from svg to png
-		if (width != null) {
+		output = svg2png.sync(response, { width: width });
+		console.log("return resized png");
+		return output;
 
-			console.log("parse badge from svg to png with width " + width);
-
-			filename = __dirname + '/svg/' + badgename + ".svg"
-			const input = fs.readFileSync(filename)
-			const output = svg2png.sync(input, { width: width, filename: filename }); //OPTIONAL HEIGHT ARGUMENT: (input, { width: picwidth, height: picheight, filename: filename}) 
-			const outputFilename = './png/' + badgename + width + ".png";
-			fs.writeFileSync(outputFilename, output, { flag: "w" });
-			console.log("return resized png");
-			return __dirname + '/png/' + badgename + width + ".png";
-		}
-		else {
-			// convert svg to png
-			console.log("parse badge from svg to png");
-
-			filename = __dirname + '/svg/' + badgename + ".svg"
-			const input = fs.readFileSync(filename)
-			console.log(input);
-			const output = svg2png.sync(input);
-			const outputFilename = './png/' + badgename + ".png";
-			fs.writeFileSync(outputFilename, output, { flag: "w" });
-			console.log("return original size png");
-			return __dirname + '/png/' + badgename + ".png";
-		}
 	}
 	else {
-		// return svg
-		console.log("return svg");
-		return __dirname + '/svg/' + badgename + ".svg";
+		output = svg2png.sync(response);
+		console.log("Output: "+output);
+		console.log("return resized png");
+
+		return output;
+
 	}
+
 }
 
 
