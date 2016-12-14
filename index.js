@@ -8,6 +8,62 @@ var server = process.env.SERVER_IP || "http://localhost:";//-e
 console.log(server);
 var base = '/api/1.0/badge';
 
+
+app.get(base, function (req, res) {
+	res.setHeader('Content-Type', 'application/json');
+	res.send(JSON.stringify({
+		"type": [
+			"executable",
+			"peerreview",
+			"licence"
+		],
+		"services": [
+			"o2r",
+			"doaj"
+		]
+	}));
+});
+
+app.get(base + '/:type', function (req, res) {
+	var type = req.params.type;
+	switch (type) {
+		case "executable":
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify({
+				"service": [
+					"o2r"
+				]
+			}));
+			break;
+		case "peerreview":
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify({
+				"service": [
+					"doaj"
+				]
+			}));
+			break;
+		case "licence":
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify({
+				"service": [
+					"o2r"
+				]
+			}));
+			break;
+		default:
+			console.log("Please insert a valid type parameter");
+			res.send("Please insert a valid type parameter");
+			break;
+	}
+
+});
+
+app.get(base + '/:type/:service', function (req, res) {
+	res.setHeader('Content-Type', 'application/json');
+	res.send();
+});
+
 //Receive the request for a Badge, redirect to requested badge api and send the result
 app.get(base + '/:type/:service/:id*', function (req, res) {
 	var type = req.params.type;
@@ -42,10 +98,10 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 				// convert svg to png and send the result
 				if (format == "png") {
 					result = convert(format, width, body);
-					var img = new Buffer (result, "base64");
+					var img = new Buffer(result, "base64");
 					res.writeHead(200, {
 						'Content-Type': 'image/png',
-						'Content-Length':img.length
+						'Content-Length': img.length
 					});
 					res.end(img);
 				}
@@ -72,6 +128,9 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 function convert(format, width, response) {
 	// convert image from svg to png
 	if (width != null) {
+
+		//todo: check svg for toolbox, if false add
+
 		const output = svg2png.sync(response, { width: width });
 		console.log("return resized png");
 		return output;
