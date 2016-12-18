@@ -1,4 +1,3 @@
-const fs = require("pn/fs");
 const svg2png = require("svg2png");
 var express = require('express');
 var request = require('request');
@@ -6,7 +5,7 @@ var app = express();
 var DOMParser = require('xmldom').DOMParser;
 var XMLSerializer = require('xmldom').XMLSerializer;
 
-var server = process.env.SERVER_IP || "http://localhost:";//-e
+var server = process.env.SERVER_IP || "http://giv-project6.uni-muenster.de:";//-e
 console.log(server);
 var base = '/api/1.0/badge';
 
@@ -94,31 +93,37 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 	// Redirection to requested badge api
 	if (port == 3001 || port == 3002 || port == 3003) {
 		console.log("request: " + server + port + req.path);
-		request(server + port + req.path, function (error, response, body) {
-			if (!error) {
-				// convert svg to png and send the result
-				if (format == "png") {
-					result = convert(format, width, body);
-					var img = new Buffer(result, "base64");
-					res.writeHead(200, {
-						'Content-Type': 'image/png',
-						'Content-Length': img.length
-					});
-					res.end(img);
+
+		request({
+			url: server + port + req.path,
+			proxy: "http://wwwproxy.uni-muenster.de:80/"
+		},
+			function (error, response, body) {
+
+				if (!error) {
+					// convert svg to png and send the result
+					if (format == "png") {
+						result = convert(format, width, body);
+						var img = new Buffer(result, "base64");
+						res.writeHead(200, {
+							'Content-Type': 'image/png',
+							'Content-Length': img.length
+						});
+						res.end(img);
+					}
+					//send svg
+					else {
+						res.writeHead(200, {
+							'Content-Type': 'image/svg+xml'
+						});
+						res.end(body);
+					}
 				}
-				//send svg
 				else {
-					res.writeHead(200, {
-						'Content-Type': 'image/svg+xml'
-					});
-					res.end(body);
+					console.log(error);
+					return;
 				}
-			}
-			else {
-				console.log(error);
-				return;
-			}
-		});
+			});
 	}
 	else {
 		console.log("wrong url");
@@ -131,7 +136,6 @@ function convert(format, width, file) {
 
 	// convert image from svg to png
 	if (width != null) {
-
 		//check if svg has a viewBox
 		var doc = new DOMParser().parseFromString(file, 'text/xml');
 		var viewBox = doc.documentElement.getAttribute('viewBox');
@@ -145,9 +149,9 @@ function convert(format, width, file) {
 			}
 			var serializer = new XMLSerializer();
 			file = serializer.serializeToString(doc);
-			
+
 		}
-		else{
+		else {
 			console.log("failed convertion of svg, no viewBox available");
 			return;
 		}
