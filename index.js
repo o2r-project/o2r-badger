@@ -3,11 +3,12 @@ const svg2png = require("svg2png");
 var express = require('express');
 var request = require('request');
 var app = express();
+var DOMParser = require('xmldom').DOMParser;
+var XMLSerializer = require('xmldom').XMLSerializer;
 
 var server = process.env.SERVER_IP || "http://localhost:";//-e
 console.log(server);
 var base = '/api/1.0/badge';
-
 
 app.get(base, function (req, res) {
 	res.setHeader('Content-Type', 'application/json');
@@ -124,19 +125,39 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 	}
 });
 
+
 // Convert SVG to scaled PNG
-function convert(format, width, response) {
+function convert(format, width, file) {
+
 	// convert image from svg to png
 	if (width != null) {
 
-		//todo: check svg for toolbox, if false add
+		//check if svg has a viewBox
+		var doc = new DOMParser().parseFromString(file, 'text/xml');
+		var viewBox = doc.documentElement.getAttribute('viewBox');
+		if (!viewBox || viewBox.length == 0) {
+			//if not add one
+			console.log("add viewBox");
+			var svgwidth = doc.documentElement.getAttribute('width');
+			var svgheight = doc.documentElement.getAttribute('height');
+			if (svgwidth > 0 && svgheight > 0) {
+				doc.documentElement.setAttribute('viewBox', '0 0 ' + svgwidth + ' ' + svgheight);
+			}
+			var serializer = new XMLSerializer();
+			file = serializer.serializeToString(doc);
+			
+		}
+		else{
+			console.log("failed convertion of svg, no viewBox available");
+			return;
+		}
 
-		const output = svg2png.sync(response, { width: width });
+		const output = svg2png.sync(file, { width: width });
 		console.log("return resized png");
 		return output;
 	}
 	else {
-		const output = svg2png.sync(response);
+		const output = svg2png.sync(file);
 		console.log("return png");
 		return output;
 	}
