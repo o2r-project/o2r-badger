@@ -104,12 +104,17 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 					// convert svg to png and send the result
 					if (format == "png") {
 						result = convert(format, width, body);
-						var img = new Buffer(result, "base64");
-						res.writeHead(200, {
-							'Content-Type': 'image/png',
-							'Content-Length': img.length
-						});
-						res.end(img);
+						if (!result) {
+							res.status(500).send('Converting of svg to png not possible!')
+						}
+						else {
+							var img = new Buffer(result, "base64");
+							res.writeHead(200, {
+								'Content-Type': 'image/png',
+								'Content-Length': img.length
+							});
+							res.end(img);
+						}
 					}
 					//send svg
 					else {
@@ -134,11 +139,29 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 // Convert SVG to scaled PNG
 function convert(format, width, file) {
 
+	var doc = new DOMParser().parseFromString(file, 'text/xml');
+	var viewBox = doc.documentElement.getAttribute('viewBox');
+	var svgwidth = doc.documentElement.getAttribute('width');
+	var svgheight = doc.documentElement.getAttribute('height');
+
+	if (!svgwidth || !svgheight) {
+		if (!viewBox) {
+			console.log("SVG has no attributes width, height and viewBox");
+			return;
+		}
+		values = viewBox.split(" ");
+		svgwidth = values[2];
+		svgheight = values[3];
+		console.log("width: " + svgwidth + " height:" + svgheight);
+		doc.documentElement.setAttribute('width', svgwidth);
+		doc.documentElement.setAttribute('heigth', svgheight);
+		var serializer = new XMLSerializer();
+		file = serializer.serializeToString(doc);
+	}
 	// convert image from svg to png
 	if (width != null) {
 		//check if svg has a viewBox
-		var doc = new DOMParser().parseFromString(file, 'text/xml');
-		var viewBox = doc.documentElement.getAttribute('viewBox');
+
 		if (!viewBox || viewBox.length == 0) {
 			//if not add one
 			console.log("add viewBox");
@@ -149,11 +172,6 @@ function convert(format, width, file) {
 			}
 			var serializer = new XMLSerializer();
 			file = serializer.serializeToString(doc);
-
-		}
-		else {
-			console.log("failed convertion of svg, no viewBox available");
-			return;
 		}
 
 		const output = svg2png.sync(file, { width: width });
