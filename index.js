@@ -15,11 +15,14 @@ app.get(base, function (req, res) {
 		"type": [
 			"executable",
 			"peerreview",
-			"licence"
+			"licence",
+			"spatial",
+			"releasetime"
 		],
 		"services": [
 			"o2r",
-			"doaj"
+			"doaj",
+			"crossref"
 		]
 	}));
 });
@@ -48,6 +51,20 @@ app.get(base + '/:type', function (req, res) {
 			res.send(JSON.stringify({
 				"service": [
 					"o2r"
+				]
+			}));
+		case "spatial":
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify({
+				"service": [
+					"o2r"
+				]
+			}));
+		case "releasetime":
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify({
+				"service": [
+					"crossref"
 				]
 			}));
 			break;
@@ -83,6 +100,12 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 		case "licence":
 			port = 3003;
 			break;
+		case "releasetime":
+			port = 3004;
+			break;
+		case "spatial":
+			port = 3005;
+			break;
 		default:
 			console.log("No such type, please check the URL");
 			break;
@@ -91,7 +114,7 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 	console.log("type: " + type + " and port: " + port);
 
 	// Redirection to requested badge api
-	if (port == 3001 || port == 3002 || port == 3003) {
+	if (port == 3001 || port == 3002 || port == 3003 || port == 3004 || port == 3005) {
 		console.log("request: " + server + port + req.path);
 
 		request({
