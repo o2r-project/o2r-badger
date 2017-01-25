@@ -110,6 +110,7 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 						else {
 							var img = new Buffer(result, "base64");
 							res.writeHead(200, {
+								'Access-Control-Allow-Origin': '*',
 								'Content-Type': 'image/png',
 								'Content-Length': img.length
 							});
@@ -119,6 +120,7 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 					//send svg
 					else {
 						res.writeHead(200, {
+							'Access-Control-Allow-Origin': '*',
 							'Content-Type': 'image/svg+xml'
 						});
 						res.end(body);
