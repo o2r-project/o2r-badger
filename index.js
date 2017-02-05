@@ -1,12 +1,16 @@
-const svg2png = require("svg2png");
+var svg2png = require("svg2png");
 var express = require('express');
 var request = require('request');
+var sslApp = require('letsencrypt-express');
 var app = express();
 var DOMParser = require('xmldom').DOMParser;
 var XMLSerializer = require('xmldom').XMLSerializer;
 
-var server = process.env.SERVER_IP || "http://giv-project6.uni-muenster.de:";//-e
-console.log(server);
+var sslServer = process.env.LE_SERVER || "https://acme-v01.api.letsencrypt.org/director";
+var proxy = process.env.HTTP_PROXY || "http://wwwproxy.uni-muenster.de:80/";
+var host = process.env.HOST || 'giv-project6.uni-muenster.de';
+var email = process.env.LE_EMAIL || "letsencrypt-badges@mailinator.com";
+var server = "http://" + host + ":";
 var base = '/api/1.0/badge';
 
 app.get(base, function (req, res) {
@@ -114,12 +118,12 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 	console.log("type: " + type + " and port: " + port);
 
 	// Redirection to requested badge api
-	if (port == 3001 || port == 3002 || port == 3003 || port == 3004 || port == 3005) {
+	if (port >= 3001 && port <= 3005) {
 		console.log("request: " + server + port + req.path);
 
 		request({
 			url: server + port + req.path,
-			proxy: "http://wwwproxy.uni-muenster.de:80/"
+			proxy: proxy
 		},
 			function (error, response, body) {
 
@@ -199,20 +203,23 @@ function convert(format, width, file) {
 			file = serializer.serializeToString(doc);
 		}
 
-		const output = svg2png.sync(file, { width: width });
+		var output = svg2png.sync(file, { width: width });
 		console.log("return resized png");
 		return output;
 	}
 	else {
-		const output = svg2png.sync(file);
+		var output = svg2png.sync(file);
 		console.log("return png");
 		return output;
 	}
 }
 
+sslApp.create({
+	server: sslServer,
+	email: email,
+	agreeTos: true,
+	approveDomains: [host],
+	app: app
+}).listen(3000, 4000);
 
-app.listen(3000, function () {
-	console.log('Server listening...')
-});
-
-module.exports = app;
+module.exports = sslApp;
