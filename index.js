@@ -4,6 +4,8 @@ var request = require('request');
 var app = express();
 var DOMParser = require('xmldom').DOMParser;
 var XMLSerializer = require('xmldom').XMLSerializer;
+var StringDecoder = require('string_decoder').StringDecoder;
+var decoder = new StringDecoder('utf8');
 
 var server = process.env.SERVER_IP || "http://giv-project6.uni-muenster.de:";//-e
 console.log(server);
@@ -124,29 +126,37 @@ app.get(base + '/:type/:service/:id*', function (req, res) {
 			function (error, response, body) {
 
 				if (!error) {
-					// convert svg to png and send the result
-					if (format == "png") {
-						result = convert(format, width, body);
-						if (!result) {
-							res.status(500).send('Converting of svg to png not possible!')
+					//check if body is a svg
+					if (body.includes('<svg')) {
+
+						// convert svg to png and send the result
+						if (format == "png") {
+							result = convert(format, width, body);
+							if (!result) {
+								res.status(500).send('Converting of svg to png not possible!')
+							}
+							else {
+								var img = new Buffer(result, "base64");
+								res.writeHead(200, {
+									'Access-Control-Allow-Origin': '*',
+									'Content-Type': 'image/png',
+									'Content-Length': img.length
+								});
+								res.end(img);
+							}
 						}
+						//send svg
 						else {
-							var img = new Buffer(result, "base64");
 							res.writeHead(200, {
 								'Access-Control-Allow-Origin': '*',
-								'Content-Type': 'image/png',
-								'Content-Length': img.length
+								'Content-Type': 'image/svg+xml'
 							});
-							res.end(img);
+							res.end(body);
 						}
 					}
-					//send svg
-					else {
-						res.writeHead(200, {
-							'Access-Control-Allow-Origin': '*',
-							'Content-Type': 'image/svg+xml'
-						});
-						res.end(body);
+					//send forward
+					else{
+						res.send(body);
 					}
 				}
 				else {
