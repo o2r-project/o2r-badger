@@ -1,6 +1,19 @@
-# Scalable Badges
+# O2R-Badger
 
-This project provides an API for retrieving a scalable badge as svg or png.
+API for retrieving scalable badges on reproducibility. 
+
+Based on the following microservices:
+
+- [geocontainer-badges/scalability](https://zivgitlab.uni-muenster.de/geocontainer-badges/scalability)
+- [geocontainer-badges/Badgeinformation](https://zivgitlab.uni-muenster.de/geocontainer-badges/Badgeinformation)
+- [geocontainer-badges/spatial-information](https://zivgitlab.uni-muenster.de/geocontainer-badges/spatial-information)
+- [geocontainer-badges/executable-code](https://zivgitlab.uni-muenster.de/geocontainer-badges/executable-code)
+- [geocontainer-badges/licencing](https://zivgitlab.uni-muenster.de/geocontainer-badges/licencing)
+- [geocontainer-badges/release](https://zivgitlab.uni-muenster.de/geocontainer-badges/release)
+- [geocontainer-badges/peer-review](https://zivgitlab.uni-muenster.de/geocontainer-badges/peer-review)
+- [geocontainer-badges/testservers](https://zivgitlab.uni-muenster.de/geocontainer-badges/testservers)
+
+## _Work in progress_
 
 ## Installation
 
