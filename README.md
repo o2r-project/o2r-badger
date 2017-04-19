@@ -2,10 +2,9 @@
 
 API for retrieving scalable badges on reproducibility. 
 
-Based on the following microservices:
+Based on the following microservices (part of the "Badges for computational geoscience containers" study project at ifgi):
 
 - [geocontainer-badges/scalability](https://zivgitlab.uni-muenster.de/geocontainer-badges/scalability)
-- [geocontainer-badges/Badgeinformation](https://zivgitlab.uni-muenster.de/geocontainer-badges/Badgeinformation)
 - [geocontainer-badges/spatial-information](https://zivgitlab.uni-muenster.de/geocontainer-badges/spatial-information)
 - [geocontainer-badges/executable-code](https://zivgitlab.uni-muenster.de/geocontainer-badges/executable-code)
 - [geocontainer-badges/licencing](https://zivgitlab.uni-muenster.de/geocontainer-badges/licencing)
@@ -29,12 +28,12 @@ Navigate to the downloaded folder and build a docker image:
 `docker build -t scalability .`
 
 Then run the image:  
-`docker run -p 3000:3000 scalability`  
+`docker run -p 3000:3000 scalability`
 Finally test the API with the localhost.
 
 ### with Node
 
-You can also run the API without Docker.  
+You can also run the API without Docker.
 Navigate to the downloaded folder and type:  
 `npm install && npm start`  
 Afterward you can test the API in the browser or run the testfile:  
