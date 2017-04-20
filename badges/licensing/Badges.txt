@@ -1,0 +1,9 @@
+open 		-> https://img.shields.io/badge/licence-open-44cc11.svg
+
+mostly open 	-> https://img.shields.io/badge/licence-mostly%20open-yellow.svg
+
+partially open 	-> https://img.shields.io/badge/licence-partially%20open-fe7d00.svg
+
+closed 		-> https://img.shields.io/badge/licence-closed-ff0000.svg
+
+no information 	-> https://img.shields.io/badge/licence-no%20Information-9f9f9f.svg

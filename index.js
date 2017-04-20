@@ -34,7 +34,8 @@ app.get('/api/1.0/badge/:type/:service/:id', controllers.scale.getBadge);
 //Executing: 3001
 app.get('/api/1.0/badge/:executable/:o2r/:id/:extended?', controllers.execute.getExecutabilityBadge);
 
-//Licensing:
+//Licensing 3003
+app.get('/api/1.0/badge/licence/o2r/:id/:extended?', controllers.license.getLicenseBadge);
 
 //Locating: 3005
 app.get('/api/1.0/badge/spatial/o2r/:id', controllers.locate.getSmallSpatialBadge);
