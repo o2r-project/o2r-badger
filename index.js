@@ -35,7 +35,9 @@ app.get('/api/1.0/badge/:type/:service/:id', controllers.scale.getBadge);
 
 //Licensing:
 
-//Locating:
+//Locating: 3005
+app.get('/api/1.0/badge/spatial/o2r/:id', controllers.scale.getSmallSpatialBadge);
+app.get('/api/1.0/badge/spatial/o2r/:id/extended', controllers.scale.getBigSpatialBadge);
 
 //Release date:
 
