@@ -1,6 +1,7 @@
 'use strict';
+const debug = require('debug')('badger');
 var nodeServer = /*'http://localhost:3003'*/ process.env.NODE_SERVER || "http://192.168.99.100:3003";//-e
-console.log(nodeServer + " nodeserver");
+debug(nodeServer + " nodeserver");
 
 var assert = require('assert');
 var chai = require('chai');

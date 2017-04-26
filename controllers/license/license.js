@@ -1,6 +1,7 @@
 /**
  * Include services used for the application
  */
+const debug = require('debug')('badger');
 var server = process.env.TESTSERVER || "http://192.168.99.100:8080";
 var express = require('express');
 var request = require('request');
@@ -117,10 +118,10 @@ exports.getLicenseBadge = (req, res) => {
                 badge = 'license_noInformation.svg'
                 res.sendFile(badge, options, function(err) {
                     if(err) {
-                        console.log(err);
+                        debug(err);
                         res.status(err.status).end();
                     }
-                    else console.log('Sent file: ', badge);
+                    else debug('Sent file: ', badge);
                 });
             }
 
@@ -130,10 +131,10 @@ exports.getLicenseBadge = (req, res) => {
                     badge = 'license_open.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
-                            console.log(err);
+                            debug(err);
                             res.status(err.status).end();
                         }
-                        else console.log('Sent file: ', badge);
+                        else debug('Sent file: ', badge);
                     });            
                 }
                     
@@ -141,10 +142,10 @@ exports.getLicenseBadge = (req, res) => {
                     badge = 'license_data_noCode_text.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
-                            console.log(err);
+                            debug(err);
                             res.status(err.status).end();
                         }
-                        else console.log('Sent file: ', badge);
+                        else debug('Sent file: ', badge);
                     });            
                 }
                 
@@ -152,10 +153,10 @@ exports.getLicenseBadge = (req, res) => {
                     badge = 'license_noData_code_text.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
-                            console.log(err);
+                            debug(err);
                             res.status(err.status).end();
                         }
-                        else console.log('Sent file: ', badge);
+                        else debug('Sent file: ', badge);
                     });            
                 }
                     
@@ -163,10 +164,10 @@ exports.getLicenseBadge = (req, res) => {
                     badge = 'license_data_code_noText.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
-                            console.log(err);
+                            debug(err);
                             res.status(err.status).end();
                         }
-                        else console.log('Sent file: ', badge);
+                        else debug('Sent file: ', badge);
                     });            
                 }
                     
@@ -174,10 +175,10 @@ exports.getLicenseBadge = (req, res) => {
                     badge = 'license_noData_noCode_text.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
-                            console.log(err);
+                            debug(err);
                             res.status(err.status).end();
                         }
-                        else console.log('Sent file: ', badge);
+                        else debug('Sent file: ', badge);
                     });            
                 }
                 
@@ -185,10 +186,10 @@ exports.getLicenseBadge = (req, res) => {
                     badge = 'license_data_noCode_noText.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
-                            console.log(err);
+                            debug(err);
                             res.status(err.status).end();
                         }
-                        else console.log('Sent file: ', badge);
+                        else debug('Sent file: ', badge);
                     });            
                 }
                     
@@ -196,10 +197,10 @@ exports.getLicenseBadge = (req, res) => {
                     badge = 'license_noData_code_noText.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
-                            console.log(err);
+                            debug(err);
                             res.status(err.status).end();
                         }
-                        else console.log('Sent file: ', badge);
+                        else debug('Sent file: ', badge);
                     });            
                 }
                     
@@ -207,10 +208,10 @@ exports.getLicenseBadge = (req, res) => {
                     badge = 'license_closed.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
-                            console.log(err);
+                            debug(err);
                             res.status(err.status).end();
                         }
-                        else console.log('Sent file: ', badge);
+                        else debug('Sent file: ', badge);
                     });            
                 }
                 //cases for unknown licences for one tag
@@ -219,80 +220,80 @@ exports.getLicenseBadge = (req, res) => {
                         badge = 'License_data_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(oddata == true && odtext == false) {
                         badge = 'license_data_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(oddata == false && odtext == true) {
                         badge = 'license_noData_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(oddata == false && odtext == false) {
                         badge = 'license_noData_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(oddata == 'unknown' && odtext == false) {
                         badge = 'license_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(oddata == 'unknown' && odtext == true) {
                         badge = 'license_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(oddata == false && odtext == 'unknown') {
                         badge = 'license_noData.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(oddata == true && odtext == 'unknown') {
                         badge = 'license_data.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                 }
@@ -301,60 +302,60 @@ exports.getLicenseBadge = (req, res) => {
                         badge = 'license_code_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(osicode == true && odtext == false) {
                         badge = 'license_code_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(osicode == false && odtext == true) {
                         badge = 'license_noCode_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(osicode == false && odtext == false) {
                         badge = 'license_noCode_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(osicode == false && odtext == 'unknown') {
                         badge = 'license_noCode.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(osicode == true && odtext == 'unknown') {
                         badge = 'license_code.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                 }
@@ -363,40 +364,40 @@ exports.getLicenseBadge = (req, res) => {
                         badge = 'license_data_code.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(osicode == true && oddata == false) {
                         badge = 'license_noData_code.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(osicode == false && oddata == true) {
                         badge = 'license_data_noCode.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                     else if(osicode == false && oddata == false) {
                         badge = 'license_noData_noCode.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
-                                console.log(err);
+                                debug(err);
                                 res.status(err.status).end();
                             }
-                            else console.log('Sent file: ', badge);
+                            else debug('Sent file: ', badge);
                         });                
                     }
                 }
@@ -482,10 +483,10 @@ exports.getLicenseBadge = (req, res) => {
                 badge = 'license_noInformation.svg'
                 res.sendFile(badge, options, function(err) {
                     if(err) {
-                        console.log(err);
+                        debug(err);
                         res.status(err.status).end();
                     }
-                    else console.log('Sent file: ', badge);
+                    else debug('Sent file: ', badge);
                 });
             }
             else {

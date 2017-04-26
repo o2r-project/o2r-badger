@@ -1,3 +1,4 @@
+const debug = require('debug')('badger');
 const svg2png = require("svg2png");
 var request = require('request');
 var DOMParser = require('xmldom').DOMParser;
@@ -66,7 +67,7 @@ exports.getType = (req, res) => {
 			}));
 			break;
 		default:
-			console.log("Please insert a valid type parameter");
+			debug("Please insert a valid type parameter");
 			res.send("Please insert a valid type parameter");
 			break;
 	}    
@@ -83,7 +84,7 @@ exports.getBadge = (req, res) => {
 	var format = req.query.format;
 	var port;
 
-	console.log("path= " + req.path);
+	debug("path= " + req.path);
 
 	switch (type) {
 		case "executable":
@@ -102,15 +103,15 @@ exports.getBadge = (req, res) => {
 			port = 3005;
 			break;
 		default:
-			console.log("No such type, please check the URL");
+			debug("No such type, please check the URL");
 			break;
 	}
 
-	console.log("type: " + type + " and port: " + port);
+	debug("type: " + type + " and port: " + port);
 
 	// Redirection to requested badge api
 	if (port == 3001 || port == 3002 || port == 3003 || port == 3004 || port == 3005) {
-		console.log("request: " + server + port + req.path);
+		debug("request: " + server + port + req.path);
 
 		request({
 			url: server + port + req.path,
@@ -153,13 +154,13 @@ exports.getBadge = (req, res) => {
 					}
 				}
 				else {
-					console.log(error);
+					debug(error);
 					return;
 				}
 			});
 	}
 	else {
-		console.log("wrong url");
+		debug("wrong url");
 	}    
 };
 
@@ -173,13 +174,13 @@ function convert(format, width, file) {
 
 	if (!svgwidth || !svgheight) {
 		if (!viewBox) {
-			console.log("SVG has no attributes width, height and viewBox");
+			debug("SVG has no attributes width, height and viewBox");
 			return;
 		}
 		values = viewBox.split(" ");
 		svgwidth = values[2];
 		svgheight = values[3];
-		console.log("width: " + svgwidth + " height:" + svgheight);
+		debug("width: " + svgwidth + " height:" + svgheight);
 		doc.documentElement.setAttribute('width', svgwidth);
 		doc.documentElement.setAttribute('heigth', svgheight);
 		var serializer = new XMLSerializer();
@@ -191,7 +192,7 @@ function convert(format, width, file) {
 
 		if (!viewBox || viewBox.length == 0) {
 			//if not add one
-			console.log("add viewBox");
+			debug("add viewBox");
 			var svgwidth = doc.documentElement.getAttribute('width');
 			var svgheight = doc.documentElement.getAttribute('height');
 			if (svgwidth > 0 && svgheight > 0) {
@@ -202,12 +203,12 @@ function convert(format, width, file) {
 		}
 
 		const output = svg2png.sync(file, { width: width });
-		console.log("return resized png");
+		debug("return resized png");
 		return output;
 	}
 	else {
 		const output = svg2png.sync(file);
-		console.log("return png");
+		debug("return png");
 		return output;
 	}
 }

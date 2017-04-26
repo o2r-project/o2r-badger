@@ -17,6 +17,7 @@
 var c = {};
 c.version = {};
 c.fs = {};
+c.net = {};
 var env = process.env;
 
 // Information about badger
@@ -29,22 +30,10 @@ c.version.api = 1;
 c.net.port = env.BADGER_PORT || 8089;
 c.net.endpoint = env.BADGER_ENDPOINT || 'localhost';
 
-// fix mongo location if trailing slash was omitted
-if (c.mongo.location[c.mongo.location.length - 1] !== '/') {
-  c.mongo.location += '/';
-}
-
 // fs paths
 c.fs.base = env.BADGER_BASEPATH || '/tmp/o2r/';
 
 // session secret
 c.sessionsecret = env.SESSION_SECRET || 'o2r';
-
-// user levels
-c.user = {};
-c.user.level = {};
-c.user.level.create_compendium = 100;
-c.user.level.create_job = 0;
-c.user.level.view_status = 500;
 
 module.exports = c;

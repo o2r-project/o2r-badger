@@ -1,6 +1,6 @@
 'use strict';
 var nodeServer = process.env.NODE_SERVER || "http://192.168.99.100:3001";//-e
-console.log(nodeServer+ " nodeserver");
+debug(nodeServer+ " nodeserver");
 
 var assert = require('assert');
 var chai = require('chai');

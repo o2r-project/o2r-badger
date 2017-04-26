@@ -1,3 +1,4 @@
+const debug = require('debug')('badger');
 var request = require('request');
 
 exports.getExecutabilityBadge = (req, res) => {
@@ -31,7 +32,7 @@ exports.getExecutabilityBadge = (req, res) => {
                 id = 'GTb0t';
                 break;
             default:
-                console.log('doi not found');
+                debug('doi not found');
                 // no information badge is send in this case (no job for the id can be found)
         }
     }
@@ -45,7 +46,7 @@ exports.getExecutabilityBadge = (req, res) => {
 
         // no job for the given id available
         if(error) {
-            console.log(error);
+            debug(error);
         }
         // status responses
         if(response.status == 404) {
@@ -88,11 +89,11 @@ exports.getExecutabilityBadge = (req, res) => {
              *
              */
             request('http://o2r.uni-muenster.de/api/v1/job/' + jobID, function(error, response, body) {
-                console.log(jobID);
+                debug(jobID);
 
                 // no job with the given jobID found
                 if(error) {
-                    console.log(error);
+                    debug(error);
                     return;
                 }
 

@@ -1,7 +1,8 @@
 /**
 * Include services used for the application 
 */
-var server = process.env.TESTSERVER || "http://192.168.99.100:8080";
+const debug = require('debug')('badger');
+var server = process.env.TESTSERVER || "http://192.168.99.100:8080"; //TODO fix
 var request = require ('request');
 var fs = require ('fs')
 
@@ -119,19 +120,19 @@ exports.getBigSpatialBadge = (req, res) => {
 			fs.writeFileSync('index.html', file);
 			res.sendFile('index.html', options, function(err) {
                     if(err) {
-                        console.log(err);
+                        debug(err);
                         res.status(err.status).end();
                     }
-                    else console.log('Sent file: ', 'index.html');
+                    else debug('Sent file: ', 'index.html');
             });
 		}
 		else {
 			res.sendFile('indexNoMap.html', options, function(err) {
                     if(err) {
-                        console.log(err);
+                        debug(err);
                         res.status(err.status).end();
                     }
-                    else console.log('Sent file: ', 'indexNoMap.html');
+                    else debug('Sent file: ', 'indexNoMap.html');
             });
 		}
 	});    

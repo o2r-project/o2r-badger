@@ -10,6 +10,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
+    "debug": "^2.6.4",
     "express": "^4.14.0",
     "request": "^2.79.0",
     "svg2png": "^4.1.0",

@@ -1,4 +1,6 @@
+const config = require('./config/config');
 const svg2png = require("svg2png");
+const debug = require('debug')('badger');
 var express = require('express');
 var request = require('request');
 var app = express();
@@ -19,8 +21,8 @@ controllers.location = require('./controllers/location/location');
 controllers.scaling = require('./controllers/scaling/scaling');
 controllers.server = require('./controllers/server/server');
 
-var server = process.env.SERVER_IP || "http://giv-project6.uni-muenster.de:";//-e
-console.log(server);
+var server = /*process.env.SERVER_IP*/ config.net.endpoint || "http://giv-project6.uni-muenster.de:";//-e
+debug('Server: ', server);
 var base = '/api/1.0/badge';
 
 /*
@@ -50,8 +52,11 @@ app.get('/api/1.0/badge/:releasetime/:crossref/:doi/:extended?', controllers.rel
 //Peer review:
 //TODO (PHP)
 
-app.listen(8089, function () {
-	console.log('Server listening...')
+app.listen(config.net.port, () => {
+	debug('badger %s with API version %s waiting for requests on port %s',
+	config.version,
+	config.api_version,
+	config.net.port);
 });
 
 module.exports = app;
