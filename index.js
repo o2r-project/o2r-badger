@@ -50,7 +50,7 @@ app.get('/api/1.0/badge/:releasetime/:crossref/:doi/:extended?', controllers.rel
 //Peer review:
 //TODO (PHP)
 
-app.listen(3000, function () {
+app.listen(8089, function () {
 	console.log('Server listening...')
 });
 
