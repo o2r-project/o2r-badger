@@ -31,7 +31,8 @@ var base = '/api/1.0/badge';
 app.get('/api/1.0/badge', controllers.scaling.getBase);
 app.get('/api/1.0/badge/:type', controllers.scaling.getType);
 app.get('/api/1.0/badge/:type/:service', controllers.scaling.getService);
-app.get('/api/1.0/badge/:type/:service/:id', controllers.scaling.getBadge);
+app.get('/api/1.0/badge/:type/:service/:id', controllers.scaling.getBadge/*FromReference*/);
+// app.post('/api/1.0/badge/:type/:service', controllers.scaling.getBadgeFromData);
 
 //Executing: 3001
 app.get('/api/1.0/badge/:executable/:o2r/:id/:extended?', controllers.executability.getExecutabilityBadge);
@@ -47,12 +48,7 @@ app.get('/api/1.0/badge/spatial/o2r/:id/extended', controllers.location.getBigSp
 app.get('/api/1.0/badge/:releasetime/:crossref/:doi/:extended?', controllers.release.getReleaseDateBadge);
 
 //Peer review:
-
-//Serving:
-
-
-
-
+//TODO (PHP)
 
 app.listen(3000, function () {
 	console.log('Server listening...')
