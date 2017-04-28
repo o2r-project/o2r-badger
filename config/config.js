@@ -21,14 +21,12 @@ c.net = {};
 var env = process.env;
 
 // Information about badger
-c.version.major = 0;
-c.version.minor = 1;
-c.version.bug = 0;
-c.version.api = 1;
+c.api_version = 1;
 
 // network
 c.net.port = env.BADGER_PORT || 8089;
-c.net.endpoint = env.BADGER_ENDPOINT || 'localhost';
+c.net.endpoint = env.BADGER_ENDPOINT || 'http://localhost';
+c.net.proxy = '';
 
 // fs paths
 c.fs.base = env.BADGER_BASEPATH || '/tmp/o2r/';

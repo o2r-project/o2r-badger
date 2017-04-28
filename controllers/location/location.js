@@ -2,6 +2,7 @@
 * Include services used for the application 
 */
 const debug = require('debug')('badger');
+const config = require('../../config/config');
 var server = process.env.TESTSERVER || "http://192.168.99.100:8080"; //TODO fix
 var request = require ('request');
 var fs = require ('fs')

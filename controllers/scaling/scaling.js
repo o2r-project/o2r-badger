@@ -1,10 +1,13 @@
 const debug = require('debug')('badger');
+const config = require('../../config/config');
 const svg2png = require("svg2png");
 var request = require('request');
 var DOMParser = require('xmldom').DOMParser;
 var XMLSerializer = require('xmldom').XMLSerializer;
 var StringDecoder = require('string_decoder').StringDecoder;
+
 var decoder = new StringDecoder('utf8');
+var server = config.net.endpoint + ':';
 
 
 exports.getBase = (req, res) => {
@@ -114,8 +117,10 @@ exports.getBadge = (req, res) => {
 		debug("request: " + server + port + req.path);
 
 		request({
-			url: server + port + req.path,
-			proxy: "http://wwwproxy.uni-muenster.de:80/"
+			//url: server + port + req.path,
+			url: server + 8089 + req.path,
+			//proxy: "http://wwwproxy.uni-muenster.de:80/"
+			proxy: config.net.proxy
 		},
 			function (error, response, body) {
 

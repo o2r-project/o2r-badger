@@ -1,5 +1,7 @@
 const debug = require('debug')('badger');
+const config = require('../../config/config');
 var request = require('request');
+
 
 exports.getExecutabilityBadge = (req, res) => {
     //read the params from the URL

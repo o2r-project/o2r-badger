@@ -21,7 +21,7 @@ controllers.location = require('./controllers/location/location');
 controllers.scaling = require('./controllers/scaling/scaling');
 controllers.server = require('./controllers/server/server');
 
-var server = /*process.env.SERVER_IP*/ config.net.endpoint || "http://giv-project6.uni-muenster.de:";//-e
+var server = /*process.env.SERVER_IP*/ config.net.endpoint || "http://giv-project6.uni-muenster.de:";//-e // todo remove
 debug('Server: ', server);
 var base = '/api/1.0/badge';
 
@@ -33,7 +33,7 @@ var base = '/api/1.0/badge';
 app.get('/api/1.0/badge', controllers.scaling.getBase);
 app.get('/api/1.0/badge/:type', controllers.scaling.getType);
 app.get('/api/1.0/badge/:type/:service', controllers.scaling.getService);
-app.get('/api/1.0/badge/:type/:service/:id', controllers.scaling.getBadge/*FromReference*/);
+//app.get('/api/1.0/badge/:type/:service/:id', controllers.scaling.getBadge/*FromReference*/);
 // app.post('/api/1.0/badge/:type/:service', controllers.scaling.getBadgeFromData);
 
 //Executing: 3001
@@ -53,8 +53,7 @@ app.get('/api/1.0/badge/:releasetime/:crossref/:doi/:extended?', controllers.rel
 //TODO (PHP)
 
 app.listen(config.net.port, () => {
-	debug('badger %s with API version %s waiting for requests on port %s',
-	config.version,
+	debug('badger with API version %s waiting for requests on port %s',
 	config.api_version,
 	config.net.port);
 });

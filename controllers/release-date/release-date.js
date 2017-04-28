@@ -1,4 +1,5 @@
 const debug = require('debug')('badger');
+const config = require('../../config/config');
 var crossref = "http://api.crossref.org/works/";
 
 /**
