@@ -6,6 +6,7 @@ var DOMParser = require('xmldom').DOMParser;
 var XMLSerializer = require('xmldom').XMLSerializer;
 var StringDecoder = require('string_decoder').StringDecoder;
 var path = require('path');
+var fs = require('fs');
 
 var decoder = new StringDecoder('utf8');
 var server = config.net.endpoint + ':';
@@ -118,8 +119,8 @@ exports.getBadge = (req, res) => {
 		debug("request: " + server + port + req.path);
 
 		request({
-			//url: server + port + req.path,
-			url: server + 8089 + req.path,
+			//url: server + port + req.path, //
+			url: server + config.net.port + req.path,
 			//proxy: "http://wwwproxy.uni-muenster.de:80/"
 			proxy: config.net.proxy
 		},
@@ -170,32 +171,36 @@ exports.getBadge = (req, res) => {
 };
 
 exports.resizeAndSend = (req, res) => {
-	var filePath = path.join(__dirname, req.filePath);
-	fs.readFile(filePath, (err, data) => {
-		if (err) {
-			debug(err);
-			res.status(500).send('Error reading svg file');
-		} else {
-			result = convert(req.query.format, req.query.width, data);
-			if (!result) {
-				res.status(500).send('Converting of svg to png not possible!');
+	if (req.query.format == "png") {
+		fs.readFile(req.filePath, 'utf8', (err, data) => {
+			if (err) {
+				debug(err);
+				res.status(500).send('Error reading svg file');
 			} else {
-				var img = new Buffer(result, "base64");
-				res.writeHead(200, {
-					'Access-Control-Allow-Origin': '*',
-					'Content-Type': 'image/png',
-					'Content-Length': img.length
-				});
-				res.end(img);
+				result = convert(req.query.format, req.query.width, data);
+				if (!result) {
+					res.status(500).send('Converting of svg to png not possible!');
+				} else {
+					var img = new Buffer(result, "base64");
+					res.writeHead(200, {
+						'Access-Control-Allow-Origin': '*',
+						'Content-Type': 'image/png',
+						'Content-Length': img.length
+					});
+					res.end(img);
+				}
 			}
-		}
-	});
+		});
+	} else {
+		res.sendFile(req.filePath);
+	}
 };
 
 // Convert SVG to scaled PNG
 function convert(format, width, file) {
 
 	var doc = new DOMParser().parseFromString(file, 'text/xml');
+	//var doc = file;
 	var viewBox = doc.documentElement.getAttribute('viewBox');
 	var svgwidth = doc.documentElement.getAttribute('width');
 	var svgheight = doc.documentElement.getAttribute('height');
@@ -241,4 +246,4 @@ function convert(format, width, file) {
 	}
 }
 
-Module.exports.convert = convert;
+//Module.exports.convert = convert;

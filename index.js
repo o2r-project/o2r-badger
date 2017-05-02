@@ -18,8 +18,8 @@ review = require('./controllers/review-status/review-status');
 release = require('./controllers/release-date/release-date');
 location = require('./controllers/location/location');
 //Misc services
-controllers.scaling = require('./controllers/scaling/scaling');
-controllers.server = require('./controllers/server/server');
+scaling = require('./controllers/scaling/scaling');
+server = require('./controllers/server/server');
 
 var server = /*process.env.SERVER_IP*/ config.net.endpoint || "http://giv-project6.uni-muenster.de:";//-e // todo remove
 debug('Server: ', server);
