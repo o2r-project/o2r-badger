@@ -1,6 +1,8 @@
 const debug = require('debug')('badger');
 const config = require('../../config/config');
 var request = require('request');
+var scaling = require('../scaling/scaling');
+
 
 
 exports.getExecutabilityBadge = (req, res) => {
@@ -8,6 +10,9 @@ exports.getExecutabilityBadge = (req, res) => {
     var id = req.params.id;
     var jobID;
     var extended = req.params.extended;
+
+    var width = req.query.width;
+    var format = req.query.format;
 
     // If the request was done with an doi: Find the corresponding o2r id
     // Doi has to start with "doi:" and has to be Url enconded
@@ -54,7 +59,8 @@ exports.getExecutabilityBadge = (req, res) => {
         if(response.status == 404) {
             if(compendiumJSON.error) {
                 if(extended == "extended"){
-                    res.sendFile('./Executable_noInfo.svg' , { root : __dirname} );
+                    scaling.resizeAndSend('./badges/executability/Executable_noInfo.svg', width, format);
+                    //res.sendFile('./Executable_noInfo.svg' , { root : __dirname} );
                 } else if (extended == undefined){
                     res.redirect('https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg');
                 } else {

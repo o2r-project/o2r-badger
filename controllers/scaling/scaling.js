@@ -5,6 +5,7 @@ var request = require('request');
 var DOMParser = require('xmldom').DOMParser;
 var XMLSerializer = require('xmldom').XMLSerializer;
 var StringDecoder = require('string_decoder').StringDecoder;
+var path = require('path');
 
 var decoder = new StringDecoder('utf8');
 var server = config.net.endpoint + ':';
@@ -133,8 +134,7 @@ exports.getBadge = (req, res) => {
 							result = convert(format, width, body);
 							if (!result) {
 								res.status(500).send('Converting of svg to png not possible!')
-							}
-							else {
+							} else {
 								var img = new Buffer(result, "base64");
 								res.writeHead(200, {
 									'Access-Control-Allow-Origin': '*',
@@ -167,6 +167,29 @@ exports.getBadge = (req, res) => {
 	else {
 		debug("wrong url");
 	}    
+};
+
+exports.resizeAndSend = (req, res) => {
+	var filePath = path.join(__dirname, req.filePath);
+	fs.readFile(filePath, (err, data) => {
+		if (err) {
+			debug(err);
+			res.status(500).send('Error reading svg file');
+		} else {
+			result = convert(req.query.format, req.query.width, data);
+			if (!result) {
+				res.status(500).send('Converting of svg to png not possible!');
+			} else {
+				var img = new Buffer(result, "base64");
+				res.writeHead(200, {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'image/png',
+					'Content-Length': img.length
+				});
+				res.end(img);
+			}
+		}
+	});
 };
 
 // Convert SVG to scaled PNG
@@ -217,3 +240,5 @@ function convert(format, width, file) {
 		return output;
 	}
 }
+
+Module.exports.convert = convert;
