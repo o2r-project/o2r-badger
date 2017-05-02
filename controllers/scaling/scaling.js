@@ -192,7 +192,18 @@ exports.resizeAndSend = (req, res) => {
 			}
 		});
 	} else {
-		res.sendFile(req.filePath);
+		if (typeof req.options !== 'undefined') {
+			res.sendFile(req.filePath);
+		} else {
+			res.sendFile(req.filePath, req.options, function(err) {
+				if(err) {
+					debug(err);
+					res.status(err.status).end();
+				}
+				else debug('Sent file');
+			});  
+		}
+
 	}
 };
 

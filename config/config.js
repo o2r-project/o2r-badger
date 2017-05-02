@@ -18,6 +18,7 @@ var c = {};
 c.version = {};
 c.fs = {};
 c.net = {};
+c.ext = {};
 var env = process.env;
 
 // Information about badger
@@ -27,6 +28,9 @@ c.api_version = 1;
 c.net.port = env.BADGER_PORT || 8089;
 c.net.endpoint = env.BADGER_ENDPOINT || 'http://localhost';
 c.net.proxy = '';
+
+//external resources
+c.ext.license = 'http://localhost:8080';
 
 // fs paths
 c.fs.base = env.BADGER_BASEPATH || '/tmp/o2r/';

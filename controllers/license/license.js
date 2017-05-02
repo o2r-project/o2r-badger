@@ -2,15 +2,23 @@
  * Include services used for the application
  */
 const debug = require('debug')('badger');
+const config = require('../../config/config');
 var server = process.env.TESTSERVER || "http://192.168.99.100:8080";
 var express = require('express');
 var request = require('request');
 var fs = require('fs');
+var scaling = require('../scaling/scaling');
+var path = require('path');
+
+var server = config.ext.license;
 
 exports.getLicenseBadge = (req, res) => {
 
     var id = req.params.id;
     var extended = req.params.extended;
+
+    var width = req.query.width;
+    var format = req.query.format;
 
     //map the dois for testing to compendium ids
     if(id.substring(0, 4) === "doi:") {
@@ -115,290 +123,155 @@ exports.getLicenseBadge = (req, res) => {
                 }
             }
             else {
-                badge = 'license_noInformation.svg'
-                res.sendFile(badge, options, function(err) {
-                    if(err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, './license_noInformation.svg');
+                req.options = options;
+                scaling.resizeAndSend(req, res);
             }
 
             // compare the boolean values of the code / data / text licences to determine the badge to send it to the client
             if(extended === 'extended') {
                 if(osicode===true && oddata===true && odtext===true){
-                    badge = 'license_open.svg';
-                    res.sendFile(badge, options, function(err) {
-                        if(err) {
-                            debug(err);
-                            res.status(err.status).end();
-                        }
-                        else debug('Sent file: ', badge);
-                    });            
+                    req.filePath = path.join(__dirname, './license_open.svg');
+                    req.options = options;           
                 }
                     
                 else if(osicode===false && oddata===true && odtext===true){
-                    badge = 'license_data_noCode_text.svg';
-                    res.sendFile(badge, options, function(err) {
-                        if(err) {
-                            debug(err);
-                            res.status(err.status).end();
-                        }
-                        else debug('Sent file: ', badge);
-                    });            
+                    req.filePath = path.join(__dirname, './license_data_noCode_text.svg');
+                    req.options = options;
+                    scaling.resizeAndSend(req, res);         
                 }
                 
                 else if(osicode===true && oddata===false && odtext===true){
-                    badge = 'license_noData_code_text.svg';
-                    res.sendFile(badge, options, function(err) {
-                        if(err) {
-                            debug(err);
-                            res.status(err.status).end();
-                        }
-                        else debug('Sent file: ', badge);
-                    });            
+                    req.filePath = path.join(__dirname, './license_noData_code_text.svg');
+                    req.options = options;
+                    scaling.resizeAndSend(req, res);      
                 }
                     
                 else if(osicode===true && oddata===true && odtext===false){
-                    badge = 'license_data_code_noText.svg';
-                    res.sendFile(badge, options, function(err) {
-                        if(err) {
-                            debug(err);
-                            res.status(err.status).end();
-                        }
-                        else debug('Sent file: ', badge);
-                    });            
+                    req.filePath = path.join(__dirname, './license_data_code_noText.svg');
+                    req.options = options;
+                    scaling.resizeAndSend(req, res);       
                 }
                     
                 else if(osicode===false && oddata===false && odtext===true){
-                    badge = 'license_noData_noCode_text.svg';
-                    res.sendFile(badge, options, function(err) {
-                        if(err) {
-                            debug(err);
-                            res.status(err.status).end();
-                        }
-                        else debug('Sent file: ', badge);
-                    });            
+                    req.filePath = path.join(__dirname, './license_noData_noCode_text.svg');
+                    req.options = options;
+                    scaling.resizeAndSend(req, res);       
                 }
                 
                 else if(osicode===false && oddata===true && odtext===false){
-                    badge = 'license_data_noCode_noText.svg';
-                    res.sendFile(badge, options, function(err) {
-                        if(err) {
-                            debug(err);
-                            res.status(err.status).end();
-                        }
-                        else debug('Sent file: ', badge);
-                    });            
+                    req.filePath = path.join(__dirname, './license_data_noCode_noText.svg');
+                    req.options = options;
+                    scaling.resizeAndSend(req, res);          
                 }
                     
                 else if(osicode===true && oddata===false && odtext===false){
-                    badge = 'license_noData_code_noText.svg';
-                    res.sendFile(badge, options, function(err) {
-                        if(err) {
-                            debug(err);
-                            res.status(err.status).end();
-                        }
-                        else debug('Sent file: ', badge);
-                    });            
+                    req.filePath = path.join(__dirname, './license_noData_code_noText.svg');
+                    req.options = options;
+                    scaling.resizeAndSend(req, res);         
                 }
                     
                 else if(osicode===false && oddata===false && odtext===false){
-                    badge = 'license_closed.svg';
-                    res.sendFile(badge, options, function(err) {
-                        if(err) {
-                            debug(err);
-                            res.status(err.status).end();
-                        }
-                        else debug('Sent file: ', badge);
-                    });            
+                    req.filePath = path.join(__dirname, './license_closed.svg');
+                    req.options = options;
+                    scaling.resizeAndSend(req, res);           
                 }
                 //cases for unknown licences for one tag
                 else if(osicode === 'unknown') {
                     if(oddata === true && odtext === true) {
-                        badge = 'License_data_text.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_data_text.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);              
                     }
                     else if(oddata === true && odtext === false) {
-                        badge = 'license_data_noText.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_data_noText.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);              
                     }
                     else if(oddata === false && odtext === true) {
-                        badge = 'license_noData_text.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_noData_text.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);               
                     }
                     else if(oddata === false && odtext === false) {
-                        badge = 'license_noData_noText.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_noData_noText.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);                
                     }
                     else if(oddata === 'unknown' && odtext === false) {
-                        badge = 'license_noText.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_noText.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);              
                     }
                     else if(oddata === 'unknown' && odtext === true) {
-                        badge = 'license_text.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_text.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);              
                     }
                     else if(oddata === false && odtext === 'unknown') {
-                        badge = 'license_noData.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_noData.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);               
                     }
                     else if(oddata === true && odtext === 'unknown') {
-                        badge = 'license_data.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_data.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);               
                     }
                 }
                 else if(oddata === 'unknown') {
                     if(osicode === true && odtext === true) {
-                        badge = 'license_code_text.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_code_text.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);             
                     }
                     else if(osicode === true && odtext === false) {
-                        badge = 'license_code_noText.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_code_noText.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);            
                     }
                     else if(osicode === false && odtext === true) {
-                        badge = 'license_noCode_text.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_noCode_text.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);              
                     }
                     else if(osicode === false && odtext === false) {
-                        badge = 'license_noCode_noText.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_noCode_noText.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);
+              
                     }
                     else if(osicode === false && odtext === 'unknown') {
-                        badge = 'license_noCode.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_noCode.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);              
                     }
                     else if(osicode === true && odtext === 'unknown') {
-                        badge = 'license_code.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_code.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);               
                     }
                 }
                 else if(odtext === 'unknown') {
                     if(osicode === true && oddata === true) {
-                        badge = 'license_data_code.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_data_code.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);              
                     }
                     else if(osicode === true && oddata === false) {
-                        badge = 'license_noData_code.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_noData_code.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);             
                     }
                     else if(osicode === false && oddata === true) {
-                        badge = 'license_data_noCode.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_data_noCode.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);              
                     }
                     else if(osicode === false && oddata === false) {
-                        badge = 'license_noData_noCode.svg';
-                        res.sendFile(badge, options, function(err) {
-                            if(err) {
-                                debug(err);
-                                res.status(err.status).end();
-                            }
-                            else debug('Sent file: ', badge);
-                        });                
+                        req.filePath = path.join(__dirname, './license_noData_noCode.svg');
+                        req.options = options;
+                        scaling.resizeAndSend(req, res);           
                     }
                 }
             }
@@ -480,14 +353,9 @@ exports.getLicenseBadge = (req, res) => {
         }
         else {
             if(extended === 'extended') {
-                badge = 'license_noInformation.svg'
-                res.sendFile(badge, options, function(err) {
-                    if(err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, './license_noInformation.svg');
+                req.options = options;
+                scaling.resizeAndSend(req, res);
             }
             else {
                 res.redirect('https://img.shields.io/badge/licence-n%2Fa-9f9f9f.svg');

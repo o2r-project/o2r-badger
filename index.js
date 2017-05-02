@@ -37,7 +37,7 @@ app.get('/api/1.0/badge/:type/:service', scaling.getService);
 // app.post('/api/1.0/badge/:type/:service', controllers.scaling.getBadgeFromData);
 
 //Executing
-app.get('/api/1.0/badge/:executable/:o2r/:id/:extended?', executability.getExecutabilityBadge);
+app.get('/api/1.0/badge/executable/:o2r/:id/:extended?', executability.getExecutabilityBadge);
 
 //Licensing
 app.get('/api/1.0/badge/licence/o2r/:id/:extended?', license.getLicenseBadge);
@@ -47,7 +47,7 @@ app.get('/api/1.0/badge/spatial/o2r/:id', location.getSmallSpatialBadge);
 app.get('/api/1.0/badge/spatial/o2r/:id/extended', location.getBigSpatialBadge);
 
 //Release date
-app.get('/api/1.0/badge/:releasetime/:crossref/:doi/:extended?', release.getReleaseDateBadge);
+app.get('/api/1.0/badge/releasetime/:crossref/:doi/:extended?', release.getReleaseDateBadge);
 
 //Peer review:
 //TODO (PHP)
