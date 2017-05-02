@@ -27,22 +27,22 @@ exports.getReleaseDateBadge = (req, res) => {
         if (error) {
             debug(error);
         }
-        if (!response || response.status == 404 || response.statusCode == 404) {
+        if (!response || response.status === 404 || response.statusCode === 404) {
             res.status(404).send('not available');
             return;
-        } else if (response.status == 500 || response.statusCode == 500 || error) {
+        } else if (response.status === 500 || response.statusCode === 500 || error) {
             res.status(500).send('Unable to find data on server: %s', error);
             return;
         }
 
         // get the created date (if available)
-        if(response.body != undefined){
+        if(response.body !== undefined){
             // parse the response to json
             var jsonResponse = JSON.parse(response.body);
-            if(jsonResponse.message.issued != undefined){
+            if(jsonResponse.message.issued !== undefined){
                 // get the issued parameter
                 var issued = jsonResponse.message.issued;
-                if(issued["date-parts"] != undefined || issued["date-parts"] != ""){
+                if(issued["date-parts"] !== undefined || issued["date-parts"] !== ""){
                     // get the date part (containing the release date)
                     var date = issued["date-parts"][0];
                     debug(date);
@@ -61,7 +61,7 @@ exports.getReleaseDateBadge = (req, res) => {
 
         // send the no information badge
         function sendUndefined() {
-            if(extended == 'extended'){
+            if(extended === 'extended'){
                 badge = 'badges/released_no_information.svg';
                 res.sendFile(badge, { root : __dirname}, function (err) {
                     if (err) {
@@ -77,15 +77,15 @@ exports.getReleaseDateBadge = (req, res) => {
 
         /*************** send big badges *************/
         // todo take leapyears into account
-        if (extended == 'extended') {
+        if (extended === 'extended') {
 
             // check if day and month are given
             // if not, set them to 0
             var releaseDay = 0;
-            if(date[2] != undefined)
+            if(date[2] !== undefined)
                 releaseDay = date[2];
             var releaseMonth = 0;
-            if(date[1] != undefined)
+            if(date[1] !== undefined)
                 releaseMonth = date[1];
 
             var currentDate = new Date().getTime();

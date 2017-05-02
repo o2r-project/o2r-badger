@@ -13,7 +13,7 @@ exports.getSmallSpatialBadge = (req, res) => {
 	var coordinates;
 
 	// map the doi to the fake id for test server
-	if(id.substring(0, 4) == "doi:") {
+	if(id.substring(0, 4) === "doi:") {
         id = id.substring(4);
 
         switch(encodeURIComponent(id)) {
@@ -35,7 +35,7 @@ exports.getSmallSpatialBadge = (req, res) => {
 	// call the test server with fake id
 	request(server + '/spatial/' + id, function(error, response, body) {
 		//response is valid
-		if(response.statusCode == 200) {
+		if(response.statusCode === 200) {
 			coordinates = JSON.parse(body);			
 		
 			//calculate the center of the polygon
@@ -43,14 +43,14 @@ exports.getSmallSpatialBadge = (req, res) => {
 			//and get the reversed geocoding for it
 			request({url: 'http://api.geonames.org/countrySubdivisionJSON?lat='+result[0]+'&lng='+result[1]+'&username=badges', 
 				proxy: "http://wwwproxy.uni-muenster.de:80/"}, function (error,response,body){
-					if(response.statusCode == 200) {
+					if(response.statusCode === 200) {
 						var geoname = JSON.parse(body);
 						var geoname_ocean;
 						// send the badge with the geocoded information to client
 						if (geoname.status) {
 							request({url: 'http://api.geonames.org/oceanJSON?lat=' + result[0] + '&lng=' + result[1] + '&username=badges&username=badges', 
 								proxy: "http://wwwproxy.uni-muenster.de:80/"}, function (error,response,body){
-									if(response.statusCode == 200) {
+									if(response.statusCode === 200) {
 										geoname_ocean = JSON.parse(body);
 										res.redirect("https://img.shields.io/badge/research%20location-" + geoname_ocean.ocean.name + "-blue.svg");
 									}
@@ -82,7 +82,7 @@ exports.getBigSpatialBadge = (req, res) => {
 	var id = req.params.id;
 	var coordinates;
 	//map doi to fake id for test server
-	if(id.substring(0, 4) == "doi:") {
+	if(id.substring(0, 4) === "doi:") {
         id = id.substring(4);
 
         switch(encodeURIComponent(id)) {
@@ -112,7 +112,7 @@ exports.getBigSpatialBadge = (req, res) => {
     };
 	// request the metadata from testserver
 	request(server + '/spatial/' + id, function(error, response, body) {
-		if(response.statusCode == 200) {
+		if(response.statusCode === 200) {
 			coordinates = JSON.parse(body);
 			var html = fs.readFileSync('index_template.html', 'utf-8')
 			html.replace('bbox', "Hello");

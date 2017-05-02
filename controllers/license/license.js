@@ -13,7 +13,7 @@ exports.getLicenseBadge = (req, res) => {
     var extended = req.params.extended;
 
     //map the dois for testing to compendium ids
-    if(id.substring(0, 4) == "doi:") {
+    if(id.substring(0, 4) === "doi:") {
         id = id.substring(4);
 
         switch(encodeURIComponent(id)) {
@@ -53,7 +53,7 @@ exports.getLicenseBadge = (req, res) => {
 
     // send a request to the fake server to retrieve information about licencing 
     request(server + '/licence/' + id, function(error, response, body) {
-        if(error || response.statusCode != 404){
+        if(error || response.statusCode !== 404){
             var compendiumJSON = JSON.parse(body);
             var badge;
             var osicode;
@@ -84,7 +84,7 @@ exports.getLicenseBadge = (req, res) => {
                 var od = JSON.parse(fs.readFileSync('od.json'));
 
                 //check for all licences if they are included in our list of compatible compendia 
-                if(datalicence == 'unknown') {
+                if(datalicence === 'unknown') {
                     oddata = 'unknown';
                 }
                 else {
@@ -94,7 +94,7 @@ exports.getLicenseBadge = (req, res) => {
                     else oddata = false;
                 }
 
-                if(textlicence == 'unknown') {
+                if(textlicence === 'unknown') {
                     odtext = 'unknown';
                 }
                 else {
@@ -104,7 +104,7 @@ exports.getLicenseBadge = (req, res) => {
                     else odtext = false;
                 }
                 
-                if(codelicence == 'unknown') {
+                if(codelicence === 'unknown') {
                     osicode = 'unknown';
                 }
                 else {
@@ -126,8 +126,8 @@ exports.getLicenseBadge = (req, res) => {
             }
 
             // compare the boolean values of the code / data / text licences to determine the badge to send it to the client
-            if(extended == 'extended') {
-                if(osicode==true && oddata==true && odtext==true){
+            if(extended === 'extended') {
+                if(osicode===true && oddata===true && odtext===true){
                     badge = 'license_open.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
@@ -138,7 +138,7 @@ exports.getLicenseBadge = (req, res) => {
                     });            
                 }
                     
-                else if(osicode==false && oddata==true && odtext==true){
+                else if(osicode===false && oddata===true && odtext===true){
                     badge = 'license_data_noCode_text.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
@@ -149,7 +149,7 @@ exports.getLicenseBadge = (req, res) => {
                     });            
                 }
                 
-                else if(osicode==true && oddata==false && odtext==true){
+                else if(osicode===true && oddata===false && odtext===true){
                     badge = 'license_noData_code_text.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
@@ -160,7 +160,7 @@ exports.getLicenseBadge = (req, res) => {
                     });            
                 }
                     
-                else if(osicode==true && oddata==true && odtext==false){
+                else if(osicode===true && oddata===true && odtext===false){
                     badge = 'license_data_code_noText.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
@@ -171,7 +171,7 @@ exports.getLicenseBadge = (req, res) => {
                     });            
                 }
                     
-                else if(osicode==false && oddata==false && odtext==true){
+                else if(osicode===false && oddata===false && odtext===true){
                     badge = 'license_noData_noCode_text.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
@@ -182,7 +182,7 @@ exports.getLicenseBadge = (req, res) => {
                     });            
                 }
                 
-                else if(osicode==false && oddata==true && odtext==false){
+                else if(osicode===false && oddata===true && odtext===false){
                     badge = 'license_data_noCode_noText.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
@@ -193,7 +193,7 @@ exports.getLicenseBadge = (req, res) => {
                     });            
                 }
                     
-                else if(osicode==true && oddata==false && odtext==false){
+                else if(osicode===true && oddata===false && odtext===false){
                     badge = 'license_noData_code_noText.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
@@ -204,7 +204,7 @@ exports.getLicenseBadge = (req, res) => {
                     });            
                 }
                     
-                else if(osicode==false && oddata==false && odtext==false){
+                else if(osicode===false && oddata===false && odtext===false){
                     badge = 'license_closed.svg';
                     res.sendFile(badge, options, function(err) {
                         if(err) {
@@ -215,8 +215,8 @@ exports.getLicenseBadge = (req, res) => {
                     });            
                 }
                 //cases for unknown licences for one tag
-                else if(osicode == 'unknown') {
-                    if(oddata == true && odtext == true) {
+                else if(osicode === 'unknown') {
+                    if(oddata === true && odtext === true) {
                         badge = 'License_data_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -226,7 +226,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(oddata == true && odtext == false) {
+                    else if(oddata === true && odtext === false) {
                         badge = 'license_data_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -236,7 +236,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(oddata == false && odtext == true) {
+                    else if(oddata === false && odtext === true) {
                         badge = 'license_noData_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -246,7 +246,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(oddata == false && odtext == false) {
+                    else if(oddata === false && odtext === false) {
                         badge = 'license_noData_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -256,7 +256,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(oddata == 'unknown' && odtext == false) {
+                    else if(oddata === 'unknown' && odtext === false) {
                         badge = 'license_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -266,7 +266,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(oddata == 'unknown' && odtext == true) {
+                    else if(oddata === 'unknown' && odtext === true) {
                         badge = 'license_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -276,7 +276,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(oddata == false && odtext == 'unknown') {
+                    else if(oddata === false && odtext === 'unknown') {
                         badge = 'license_noData.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -286,7 +286,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(oddata == true && odtext == 'unknown') {
+                    else if(oddata === true && odtext === 'unknown') {
                         badge = 'license_data.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -297,8 +297,8 @@ exports.getLicenseBadge = (req, res) => {
                         });                
                     }
                 }
-                else if(oddata == 'unknown') {
-                    if(osicode == true && odtext == true) {
+                else if(oddata === 'unknown') {
+                    if(osicode === true && odtext === true) {
                         badge = 'license_code_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -308,7 +308,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(osicode == true && odtext == false) {
+                    else if(osicode === true && odtext === false) {
                         badge = 'license_code_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -318,7 +318,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(osicode == false && odtext == true) {
+                    else if(osicode === false && odtext === true) {
                         badge = 'license_noCode_text.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -328,7 +328,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(osicode == false && odtext == false) {
+                    else if(osicode === false && odtext === false) {
                         badge = 'license_noCode_noText.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -338,7 +338,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(osicode == false && odtext == 'unknown') {
+                    else if(osicode === false && odtext === 'unknown') {
                         badge = 'license_noCode.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -348,7 +348,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(osicode == true && odtext == 'unknown') {
+                    else if(osicode === true && odtext === 'unknown') {
                         badge = 'license_code.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -359,8 +359,8 @@ exports.getLicenseBadge = (req, res) => {
                         });                
                     }
                 }
-                else if(odtext == 'unknown') {
-                    if(osicode == true && oddata == true) {
+                else if(odtext === 'unknown') {
+                    if(osicode === true && oddata === true) {
                         badge = 'license_data_code.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -370,7 +370,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(osicode == true && oddata == false) {
+                    else if(osicode === true && oddata === false) {
                         badge = 'license_noData_code.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -380,7 +380,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(osicode == false && oddata == true) {
+                    else if(osicode === false && oddata === true) {
                         badge = 'license_data_noCode.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -390,7 +390,7 @@ exports.getLicenseBadge = (req, res) => {
                             else debug('Sent file: ', badge);
                         });                
                     }
-                    else if(osicode == false && oddata == false) {
+                    else if(osicode === false && oddata === false) {
                         badge = 'license_noData_noCode.svg';
                         res.sendFile(badge, options, function(err) {
                             if(err) {
@@ -403,83 +403,83 @@ exports.getLicenseBadge = (req, res) => {
                 }
             }
             else {
-                if(osicode==true && oddata==true && odtext==true){
+                if(osicode===true && oddata===true && odtext===true){
                     res.redirect('https://img.shields.io/badge/licence-open-44cc11.svg');           
                 }    
-                else if(osicode==false && oddata==true && odtext==true || osicode==true && oddata==false && odtext==true || osicode==true && oddata==true && odtext==false){
+                else if(osicode===false && oddata===true && odtext===true || osicode===true && oddata===false && odtext===true || osicode===true && oddata===true && odtext===false){
                     res.redirect('https://img.shields.io/badge/licence-mostly%20open-yellow.svg');       
                 }
-                else if(osicode==false && oddata==false && odtext==true || osicode==false && oddata==true && odtext==false || osicode==true && oddata==false && odtext==false){
+                else if(osicode===false && oddata===false && odtext===true || osicode===false && oddata===true && odtext===false || osicode===true && oddata===false && odtext===false){
                     res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');          
                 }
-                else if(osicode==false && oddata==false && odtext==false){
+                else if(osicode===false && oddata===false && odtext===false){
                     res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');            
                 }
                 //cases for unknown licences for one tag
-                else if(osicode == 'unknown') {
-                    if(oddata == true && odtext == true) {
+                else if(osicode === 'unknown') {
+                    if(oddata === true && odtext === true) {
                         res.redirect('https://img.shields.io/badge/licence-mostly%20open-yellow.svg');               
                     }
-                    else if(oddata == true && odtext == false) {
+                    else if(oddata === true && odtext === false) {
                         res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');                
                     }
-                    else if(oddata == false && odtext == true) {
+                    else if(oddata === false && odtext === true) {
                         res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');                
                     }
-                    else if(oddata == false && odtext == false) {
+                    else if(oddata === false && odtext === false) {
                         res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');               
                     }
-                    else if(oddata == 'unknown' && odtext == false) {
+                    else if(oddata === 'unknown' && odtext === false) {
                         res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');                
                     }
-                    else if(oddata == 'unknown' && odtext == true) {
+                    else if(oddata === 'unknown' && odtext === true) {
                         res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');               
                     }
-                    else if(oddata == false && odtext == 'unknown') {
+                    else if(oddata === false && odtext === 'unknown') {
                         res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');                
                     }
-                    else if(oddata == true && odtext == 'unknown') {
+                    else if(oddata === true && odtext === 'unknown') {
                         res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');                
                     }
                 }
-                else if(oddata == 'unknown') {
-                    if(osicode == true && odtext == true) {
+                else if(oddata === 'unknown') {
+                    if(osicode === true && odtext === true) {
                         res.redirect('https://img.shields.io/badge/licence-mostly%20open-yellow.svg');               
                     }
-                    else if(osicode == true && odtext == false) {
+                    else if(osicode === true && odtext === false) {
                         res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');                
                     }
-                    else if(osicode == false && odtext == true) {
+                    else if(osicode === false && odtext === true) {
                         res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');                
                     }
-                    else if(osicode == false && odtext == false) {
+                    else if(osicode === false && odtext === false) {
                         res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');                
                     }
-                    else if(osicode == false && odtext == 'unknown') {
+                    else if(osicode === false && odtext === 'unknown') {
                         res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');                
                     }
-                    else if(osicode == true && odtext == 'unknown') {
+                    else if(osicode === true && odtext === 'unknown') {
                         res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');                
                     }
                 }
-                else if(odtext == 'unknown') {
-                    if(osicode == true && oddata == true) {
+                else if(odtext === 'unknown') {
+                    if(osicode === true && oddata === true) {
                         res.redirect('https://img.shields.io/badge/licence-mostly%20open-yellow.svg');                
                     }
-                    else if(osicode == true && oddata == false) {
+                    else if(osicode === true && oddata === false) {
                         res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');                
                     }
-                    else if(osicode == false && oddata == true) {
+                    else if(osicode === false && oddata === true) {
                         res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');               
                     }
-                    else if(osicode == false && oddata == false) {
+                    else if(osicode === false && oddata === false) {
                         res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');                
                     }
                 }
             }
         }
         else {
-            if(extended == 'extended') {
+            if(extended === 'extended') {
                 badge = 'license_noInformation.svg'
                 res.sendFile(badge, options, function(err) {
                     if(err) {

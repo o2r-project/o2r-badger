@@ -115,7 +115,7 @@ exports.getBadge = (req, res) => {
 	debug("type: " + type + " and port: " + port);
 
 	// Redirection to requested badge api
-	if (port == 3001 || port == 3002 || port == 3003 || port == 3004 || port == 3005) {
+	if (port === 3001 || port === 3002 || port === 3003 || port === 3004 || port === 3005) {
 		debug("request: " + server + port + req.path);
 
 		request({
@@ -131,7 +131,7 @@ exports.getBadge = (req, res) => {
 					if (body.includes('<svg')) {
 
 						// convert svg to png and send the result
-						if (format == "png") {
+						if (format === "png") {
 							result = convert(format, width, body);
 							if (!result) {
 								res.status(500).send('Converting of svg to png not possible!')
@@ -171,7 +171,7 @@ exports.getBadge = (req, res) => {
 };
 
 exports.resizeAndSend = (req, res) => {
-	if (req.query.format == "png") {
+	if (req.query.format === "png") {
 		fs.readFile(req.filePath, 'utf8', (err, data) => {
 			if (err) {
 				debug(err);
@@ -220,10 +220,10 @@ function convert(format, width, file) {
 		file = serializer.serializeToString(doc);
 	}
 	// convert image from svg to png
-	if (width != null) {
+	if (width !== null) {
 		//check if svg has a viewBox
 
-		if (!viewBox || viewBox.length == 0) {
+		if (!viewBox || viewBox.length === 0) {
 			//if not add one
 			debug("add viewBox");
 			var svgwidth = doc.documentElement.getAttribute('width');

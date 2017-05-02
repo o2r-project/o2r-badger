@@ -16,7 +16,7 @@ exports.getExecutabilityBadge = (req, res) => {
     // If the request was done with an doi: Find the corresponding o2r id
     // Doi has to start with "doi:" and has to be Url enconded
     // todo delete this when the o2r api supports a doi based search for compendia
-    if(id.substring(0, 4) == "doi:") {
+    if(id.substring(0, 4) === "doi:") {
         id = id.substring(4);
         switch(encodeURIComponent(id)) {
             case '10.1006%2Fjeem.1994.1031':
@@ -55,13 +55,13 @@ exports.getExecutabilityBadge = (req, res) => {
             debug(error);
         }
         // status responses
-        if(response.status == 404) {
+        if(response.status === 404) {
             if(compendiumJSON.error) {
-                if(extended == "extended"){
+                if(extended === "extended"){
                     req.filePath = path.join(__dirname, './Executable_noInfo.svg');
                     scaling.resizeAndSend(req, res);
                     //res.sendFile('./Executable_noInfo.svg' , { root : __dirname} );
-                } else if (extended == undefined){
+                } else if (extended === undefined){
                     res.redirect('https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg');
                 } else {
                     res.status(404).send('not allowed');
@@ -69,7 +69,7 @@ exports.getExecutabilityBadge = (req, res) => {
             }
             return;
         }
-        else if(response.status == 500 || error) {
+        else if(response.status === 500 || error) {
             res.status(500).send('Unable to find data on server: %s', error);
             return;
         }
@@ -79,11 +79,11 @@ exports.getExecutabilityBadge = (req, res) => {
 
         // no job found
         if(compendiumJSON.error) {
-            if(extended == "extended"){
+            if(extended === "extended"){
                 req.filePath = path.join(__dirname, './Executable_noInfo.svg');
                 scaling.resizeAndSend(req, res);
                 //res.sendFile('./Executable_noInfo.svg' , { root : __dirname} );
-            } else if (extended == undefined){
+            } else if (extended === undefined){
                 res.redirect('https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg');
             } else {
                 res.status(404).send('not allowed');
@@ -111,21 +111,21 @@ exports.getExecutabilityBadge = (req, res) => {
 
                 // send the correct badge due to
                 // the status of the compendium
-                if(req.params.extended == "extended") {
+                if(req.params.extended === "extended") {
                     //if the status is "success" the green badge is sent to the client
-                    if (bodyJSON.status == "success") {
+                    if (bodyJSON.status === "success") {
                         req.filePath = path.join(__dirname, './Executable_Green.svg');
                         scaling.resizeAndSend(req, res);
                         //res.sendFile('./Executable_Green.svg' , { root : __dirname});
                     }
                     // for a "fail" the red badge is sent
-                    else if (bodyJSON.status == "failure") {
+                    else if (bodyJSON.status === "failure") {
                         req.filePath = path.join(__dirname, './Executable_Red.svg');
                         scaling.resizeAndSend(req, res);
                         //res.sendFile('./Executable_Red.svg' , { root : __dirname});
                     }
                     // and for the running status the yellow badge is sent to the client
-                    else if (bodyJSON.status == "running") {
+                    else if (bodyJSON.status === "running") {
                         req.filePath = path.join(__dirname, './Executable_Running.svg');
                         scaling.resizeAndSend(req, res);
                         //res.sendFile('./Executable_Running.svg' , { root : __dirname});
@@ -136,18 +136,18 @@ exports.getExecutabilityBadge = (req, res) => {
                         //res.sendFile('./Executable_noInfo.svg' , { root : __dirname});
                     }
 
-                } else if(req.params.extended == undefined){
+                } else if(req.params.extended === undefined){
                     //if the status is "success" the green badge is sent to the client
-                    if (bodyJSON.status == "success") {
+                    if (bodyJSON.status === "success") {
                         // send the reponse from our server
                         res.redirect('https://img.shields.io/badge/executable-yes-44cc11.svg');
                     }
                     // for a "fail" the red badge is sent
-                    else if (bodyJSON.status == "failure") {
+                    else if (bodyJSON.status === "failure") {
                         res.redirect('https://img.shields.io/badge/executable-no-ff0000.svg');
                     }
                     // and for the running status the yellow badge is sent to the client
-                    else if (bodyJSON.status == "running") {
+                    else if (bodyJSON.status === "running") {
                         res.redirect('https://img.shields.io/badge/executable-running-yellow.svg');
                     }
                     else {
