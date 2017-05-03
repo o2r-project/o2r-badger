@@ -3,7 +3,7 @@
  */
 const debug = require('debug')('badger');
 const config = require('../../config/config');
-var server = process.env.TESTSERVER || "http://192.168.99.100:8080";
+//var server = process.env.TESTSERVER || "http://192.168.99.100:8080";
 var express = require('express');
 var request = require('request');
 var fs = require('fs');
@@ -47,7 +47,7 @@ exports.getLicenseBadge = (req, res) => {
     }
 
     var options = {
-        root: __dirname + '/badges/',
+        //root: __dirname + '/badges/',
         dotfiles: 'deny',
         headers: {
             'x-timestamp': Date.now(),
@@ -88,8 +88,8 @@ exports.getLicenseBadge = (req, res) => {
                 else codelicence = 'unknown';
 
                 // read json file osi.json and od.json to compare wheather the licence of the compendia is in the list of licences
-                var osi = JSON.parse(fs.readFileSync('osi.json'));
-                var od = JSON.parse(fs.readFileSync('od.json'));
+                var osi = JSON.parse(fs.readFileSync('./controllers/license/osi.json'));
+                var od = JSON.parse(fs.readFileSync('./controllers/license/od.json'));
 
                 //check for all licences if they are included in our list of compatible compendia 
                 if(datalicence === 'unknown') {
@@ -132,7 +132,8 @@ exports.getLicenseBadge = (req, res) => {
             if(extended === 'extended') {
                 if(osicode===true && oddata===true && odtext===true){
                     req.filePath = path.join(__dirname, './license_open.svg');
-                    req.options = options;           
+                    req.options = options;  
+                    scaling.resizeAndSend(req, res);          
                 }
                     
                 else if(osicode===false && oddata===true && odtext===true){
