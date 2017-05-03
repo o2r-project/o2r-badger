@@ -47,7 +47,7 @@ app.get('/api/1.0/badge/spatial/o2r/:id', location.getSmallSpatialBadge);
 app.get('/api/1.0/badge/spatial/o2r/:id/extended', location.getBigSpatialBadge);
 
 //Release date
-app.get('/api/1.0/badge/releasetime/:crossref/:doi/:extended?', release.getReleaseDateBadge);
+app.get('/api/1.0/badge/releasetime/crossref/:doi/:extended?', release.getReleaseDateBadge);
 
 //Peer review:
 //TODO (PHP)

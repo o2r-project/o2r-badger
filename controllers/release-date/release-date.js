@@ -3,7 +3,7 @@ const config = require('../../config/config');
 const path = require('path');
 const request = require('request');
 
-var crossref = "http://api.crossref.org/works/";
+var crossref = config.ext.crossref;
 
 exports.getReleaseDateBadge = (req, res) => {
 
@@ -60,7 +60,7 @@ exports.getReleaseDateBadge = (req, res) => {
         // send the no information badge
         function sendUndefined() {
             if(extended === 'extended'){
-                req.filePath = path.join(__dirname, './controllers/release-date/released_no_information.svg');
+                req.filePath = path.join(__dirname, 'badges/released_no_information.svg');
                 scaling.resizeAndSend(req, res);
             } else {
                 res.redirect('https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg');
@@ -85,33 +85,28 @@ exports.getReleaseDateBadge = (req, res) => {
 
             if (releaseDate > currentDate-31536000000) {
                 req.filePath = path.join(__dirname, 'badges/released_year.svg');
-                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-157680000000) {
                 req.filePath = path.join(__dirname, 'badges/released_5_year.svg');
-                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-315360000000) {
                 req.filePath = path.join(__dirname, 'badges/released_10_years.svg');
-                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-630720000000) {
                 req.filePath = path.join(__dirname, 'badges/released_20_years.svg');
-                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-946080000000) {
                 req.filePath = path.join(__dirname, 'badges/released_30_years.svg');
-                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-1261440000000) {
                 req.filePath = path.join(__dirname, 'badges/released_40_years.svg');
-                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate < currentDate-1261440000000) {
                 // todo insert new badge
                 req.filePath = path.join(__dirname, 'badges/released_over_50_years.svg');
-                scaling.resizeAndSend(req, res);
             }
+            // Scale the file and send the request
+            scaling.resizeAndSend(req, res);
         }
 
         /************* send small badges ********************/

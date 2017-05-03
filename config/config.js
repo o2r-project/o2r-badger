@@ -29,8 +29,9 @@ c.net.port = env.BADGER_PORT || 8089;
 c.net.endpoint = env.BADGER_ENDPOINT || 'http://localhost';
 c.net.proxy = '';
 
-//external resources
+//external resources/APIs
 c.ext.license = 'http://localhost:8080';
+c.ext.crossref = 'http://api.crossref.org/works/';
 
 // fs paths
 c.fs.base = env.BADGER_BASEPATH || '/tmp/o2r/';
