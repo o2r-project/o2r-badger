@@ -171,7 +171,7 @@ exports.getBadge = (req, res) => {
 };
 
 exports.resizeAndSend = (req, res) => {
-	if (req.query.format === "png") {
+	if (req.query.format === "png" && req.type !== 'location') {
 		fs.readFile(req.filePath, 'utf8', (err, data) => {
 			if (err) {
 				debug(err);

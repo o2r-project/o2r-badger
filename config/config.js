@@ -30,7 +30,7 @@ c.net.endpoint = env.BADGER_ENDPOINT || 'http://localhost';
 c.net.proxy = '';
 
 //external resources/APIs
-c.ext.license = 'http://localhost:8080';
+c.ext.testserver = 'http://localhost:8080';
 c.ext.crossref = 'http://api.crossref.org/works/';
 
 // fs paths

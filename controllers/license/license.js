@@ -10,7 +10,7 @@ var fs = require('fs');
 var scaling = require('../scaling/scaling');
 var path = require('path');
 
-var server = config.ext.license;
+var server = config.ext.testserver;
 
 exports.getLicenseBadge = (req, res) => {
 

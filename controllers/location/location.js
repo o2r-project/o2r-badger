@@ -3,10 +3,11 @@
 */
 const debug = require('debug')('badger');
 const config = require('../../config/config');
-var server = process.env.TESTSERVER || "http://192.168.99.100:8080"; //TODO fix
 var request = require ('request');
-var fs = require ('fs')
+var fs = require ('fs');
+var path = require('path');
 
+var server = config.ext.testserver;
 
 exports.getSmallSpatialBadge = (req, res) => {
 	var id = req.params.id;
@@ -42,7 +43,7 @@ exports.getSmallSpatialBadge = (req, res) => {
 			var result = calculateMeanCenter(coordinates);
 			//and get the reversed geocoding for it
 			request({url: 'http://api.geonames.org/countrySubdivisionJSON?lat='+result[0]+'&lng='+result[1]+'&username=badges', 
-				proxy: "http://wwwproxy.uni-muenster.de:80/"}, function (error,response,body){
+				proxy: config.net.proxy}, function (error,response,body){
 					if(response.statusCode === 200) {
 						var geoname = JSON.parse(body);
 						var geoname_ocean;
@@ -114,27 +115,23 @@ exports.getBigSpatialBadge = (req, res) => {
 	request(server + '/spatial/' + id, function(error, response, body) {
 		if(response.statusCode === 200) {
 			coordinates = JSON.parse(body);
-			var html = fs.readFileSync('index_template.html', 'utf-8')
+			var html = fs.readFileSync('./controllers/location/index_template.html', 'utf-8')
 			html.replace('bbox', "Hello");
 			//insert the locations into the html file / leaflet
 			var file = html.replace('var bbox;', 'var bbox = ' + JSON.stringify(coordinates.metadata.spatial.union.geojson.bbox) + ';');
-			fs.writeFileSync('index.html', file);
-			res.sendFile('index.html', options, function(err) {
-                    if(err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', 'index.html');
-            });
+			fs.writeFileSync('./controllers/location/index.html', file);
+			req.filePath = path.join(__dirname, 'index.html');
+			req.type = 'location';
+			req.options = options;
+			debug('Sending map %s', req.filePath);
+			scaling.resizeAndSend(req, res); 
 		}
 		else {
-			res.sendFile('indexNoMap.html', options, function(err) {
-                    if(err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', 'indexNoMap.html');
-            });
+			req.filePath = path.join(__dirname, 'indexNoMap.html');
+			req.type = 'location';
+			req.options = options;
+			debug('Sending map %s', req.filePath);
+			scaling.resizeAndSend(req, res); 
 		}
 	});    
 }
