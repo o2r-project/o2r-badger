@@ -58,9 +58,8 @@ exports.getExecutabilityBadge = (req, res) => {
         if(response.status === 404) {
             if(compendiumJSON.error) {
                 if(extended === "extended"){
-                    req.filePath = path.join(__dirname, './Executable_noInfo.svg');
+                    req.filePath = path.join(__dirname, 'badges/Executable_noInfo.svg');
                     scaling.resizeAndSend(req, res);
-                    //res.sendFile('./Executable_noInfo.svg' , { root : __dirname} );
                 } else if (extended === undefined){
                     res.redirect('https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg');
                 } else {
@@ -80,9 +79,8 @@ exports.getExecutabilityBadge = (req, res) => {
         // no job found
         if(compendiumJSON.error) {
             if(extended === "extended"){
-                req.filePath = path.join(__dirname, './Executable_noInfo.svg');
+                req.filePath = path.join(__dirname, 'badges/Executable_noInfo.svg');
                 scaling.resizeAndSend(req, res);
-                //res.sendFile('./Executable_noInfo.svg' , { root : __dirname} );
             } else if (extended === undefined){
                 res.redirect('https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg');
             } else {
@@ -114,27 +112,22 @@ exports.getExecutabilityBadge = (req, res) => {
                 if(req.params.extended === "extended") {
                     //if the status is "success" the green badge is sent to the client
                     if (bodyJSON.status === "success") {
-                        req.filePath = path.join(__dirname, './Executable_Green.svg');
-                        scaling.resizeAndSend(req, res);
-                        //res.sendFile('./Executable_Green.svg' , { root : __dirname});
+                        req.filePath = path.join(__dirname, 'badges/Executable_Green.svg');
                     }
                     // for a "fail" the red badge is sent
                     else if (bodyJSON.status === "failure") {
-                        req.filePath = path.join(__dirname, './Executable_Red.svg');
-                        scaling.resizeAndSend(req, res);
-                        //res.sendFile('./Executable_Red.svg' , { root : __dirname});
+                        req.filePath = path.join(__dirname, 'badges/Executable_Red.svg');
                     }
                     // and for the running status the yellow badge is sent to the client
                     else if (bodyJSON.status === "running") {
-                        req.filePath = path.join(__dirname, './Executable_Running.svg');
-                        scaling.resizeAndSend(req, res);
-                        //res.sendFile('./Executable_Running.svg' , { root : __dirname});
+                        req.filePath = path.join(__dirname, 'badges/Executable_Running.svg');
                     }
-                    else{
-                        req.filePath = path.join(__dirname, './Executable_noInfo.svg');
-                        scaling.resizeAndSend(req, res);
-                        //res.sendFile('./Executable_noInfo.svg' , { root : __dirname});
+                    else {
+                        req.filePath = path.join(__dirname, 'badges/Executable_noInfo.svg');
                     }
+
+                    // Send the request
+                    scaling.resizeAndSend(req, res);
 
                 } else if(req.params.extended === undefined){
                     //if the status is "success" the green badge is sent to the client

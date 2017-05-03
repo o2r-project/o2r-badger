@@ -115,7 +115,7 @@ exports.getLicenseBadge = (req, res) => {
                 if(codelicence === 'unknown') {
                     osicode = 'unknown';
                 }
-                else {
+                else { 
                     if(osi.hasOwnProperty(codelicence)) {
                         osicode = true;
                     }
@@ -123,158 +123,114 @@ exports.getLicenseBadge = (req, res) => {
                 }
             }
             else {
-                req.filePath = path.join(__dirname, './license_noInformation.svg');
+                req.filePath = path.join(__dirname, 'badges/license_noInformation.svg');
                 req.options = options;
+                debug('Sending SVG %s to scaling service', req.filePath);
                 scaling.resizeAndSend(req, res);
             }
+
+            let localPath;
 
             // compare the boolean values of the code / data / text licences to determine the badge to send it to the client
             if(extended === 'extended') {
                 if(osicode===true && oddata===true && odtext===true){
-                    req.filePath = path.join(__dirname, './license_open.svg');
-                    req.options = options;  
-                    scaling.resizeAndSend(req, res);          
+                    localPath ='badges/license_open.svg';          
                 }
                     
                 else if(osicode===false && oddata===true && odtext===true){
-                    req.filePath = path.join(__dirname, './license_data_noCode_text.svg');
-                    req.options = options;
-                    scaling.resizeAndSend(req, res);         
+                    localPath = 'badges/license_data_noCode_text.svg';        
                 }
                 
                 else if(osicode===true && oddata===false && odtext===true){
-                    req.filePath = path.join(__dirname, './license_noData_code_text.svg');
-                    req.options = options;
-                    scaling.resizeAndSend(req, res);      
+                    localPath = 'badges/license_noData_code_text.svg';     
                 }
                     
                 else if(osicode===true && oddata===true && odtext===false){
-                    req.filePath = path.join(__dirname, './license_data_code_noText.svg');
-                    req.options = options;
-                    scaling.resizeAndSend(req, res);       
+                    localPath = 'badges/license_data_code_noText.svg';  
                 }
                     
                 else if(osicode===false && oddata===false && odtext===true){
-                    req.filePath = path.join(__dirname, './license_noData_noCode_text.svg');
-                    req.options = options;
-                    scaling.resizeAndSend(req, res);       
+                    localPath = 'badges/license_noData_noCode_text.svg';
                 }
                 
                 else if(osicode===false && oddata===true && odtext===false){
-                    req.filePath = path.join(__dirname, './license_data_noCode_noText.svg');
-                    req.options = options;
-                    scaling.resizeAndSend(req, res);          
+                    localPath = 'badges/license_data_noCode_noText.svg';          
                 }
                     
                 else if(osicode===true && oddata===false && odtext===false){
-                    req.filePath = path.join(__dirname, './license_noData_code_noText.svg');
-                    req.options = options;
-                    scaling.resizeAndSend(req, res);         
+                    localPath = 'badges/license_noData_code_noText.svg';        
                 }
                     
                 else if(osicode===false && oddata===false && odtext===false){
-                    req.filePath = path.join(__dirname, './license_closed.svg');
-                    req.options = options;
-                    scaling.resizeAndSend(req, res);           
+                    localPath = 'badges/license_closed.svg';          
                 }
                 //cases for unknown licences for one tag
                 else if(osicode === 'unknown') {
                     if(oddata === true && odtext === true) {
-                        req.filePath = path.join(__dirname, './license_data_text.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);              
+                        localPath = 'badges/license_data_text.svg';          
                     }
                     else if(oddata === true && odtext === false) {
-                        req.filePath = path.join(__dirname, './license_data_noText.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);              
+                        localPath = 'badges/license_data_noText.svg';            
                     }
                     else if(oddata === false && odtext === true) {
-                        req.filePath = path.join(__dirname, './license_noData_text.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);               
+                        localPath = 'badges/license_noData_text.svg';            
                     }
                     else if(oddata === false && odtext === false) {
-                        req.filePath = path.join(__dirname, './license_noData_noText.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);                
+                        localPath = 'badges/license_noData_noText.svg';              
                     }
                     else if(oddata === 'unknown' && odtext === false) {
-                        req.filePath = path.join(__dirname, './license_noText.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);              
+                        localPath = 'badges/license_noText.svg';              
                     }
                     else if(oddata === 'unknown' && odtext === true) {
-                        req.filePath = path.join(__dirname, './license_text.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);              
+                        localPath = 'badges/license_text.svg';          
                     }
                     else if(oddata === false && odtext === 'unknown') {
-                        req.filePath = path.join(__dirname, './license_noData.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);               
+                        localPath = 'badges/license_noData.svg';             
                     }
                     else if(oddata === true && odtext === 'unknown') {
-                        req.filePath = path.join(__dirname, './license_data.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);               
+                        localPath = 'badges/license_data.svg';              
                     }
                 }
                 else if(oddata === 'unknown') {
                     if(osicode === true && odtext === true) {
-                        req.filePath = path.join(__dirname, './license_code_text.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);             
+                        localPath = 'badges/license_code_text.svg';        
                     }
                     else if(osicode === true && odtext === false) {
-                        req.filePath = path.join(__dirname, './license_code_noText.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);            
+                        localPath = 'badges/license_code_noText.svg';           
                     }
                     else if(osicode === false && odtext === true) {
-                        req.filePath = path.join(__dirname, './license_noCode_text.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);              
+                        localPath = 'badges/license_noCode_text.svg';
                     }
                     else if(osicode === false && odtext === false) {
-                        req.filePath = path.join(__dirname, './license_noCode_noText.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);
+                        localPath = 'badges/license_noCode_noText.svg';
               
                     }
                     else if(osicode === false && odtext === 'unknown') {
-                        req.filePath = path.join(__dirname, './license_noCode.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);              
+                        localPath = 'badges/license_noCode.svg';
                     }
                     else if(osicode === true && odtext === 'unknown') {
-                        req.filePath = path.join(__dirname, './license_code.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);               
+                        localPath = 'badges/license_code.svg';
                     }
                 }
                 else if(odtext === 'unknown') {
                     if(osicode === true && oddata === true) {
-                        req.filePath = path.join(__dirname, './license_data_code.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);              
+                        localPath = 'badges/license_data_code.svg';
                     }
                     else if(osicode === true && oddata === false) {
-                        req.filePath = path.join(__dirname, './license_noData_code.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);             
+                        localPath = 'badges/license_noData_code.svg';
                     }
                     else if(osicode === false && oddata === true) {
-                        req.filePath = path.join(__dirname, './license_data_noCode.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);              
+                        localPath = 'badges/license_data_noCode.svg';
                     }
                     else if(osicode === false && oddata === false) {
-                        req.filePath = path.join(__dirname, './license_noData_noCode.svg');
-                        req.options = options;
-                        scaling.resizeAndSend(req, res);           
+                        localPath = 'badges/license_noData_noCode.svg';
                     }
                 }
+                // Send the request (+ scaling)
+                req.filePath = path.join(__dirname, localPath);
+                req.options = options;
+                debug('Sending SVG %s to scaling service', req.filePath);
+                scaling.resizeAndSend(req, res);           
             }
             else {
                 if(osicode===true && oddata===true && odtext===true){
@@ -354,8 +310,9 @@ exports.getLicenseBadge = (req, res) => {
         }
         else {
             if(extended === 'extended') {
-                req.filePath = path.join(__dirname, './license_noInformation.svg');
+                req.filePath = path.join(__dirname, 'badges/license_noInformation.svg');
                 req.options = options;
+                debug('Sending SVG %s to scaling service', req.filePath);
                 scaling.resizeAndSend(req, res);
             }
             else {
