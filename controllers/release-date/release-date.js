@@ -1,11 +1,9 @@
 const debug = require('debug')('badger');
 const config = require('../../config/config');
-var crossref = "http://api.crossref.org/works/";
+const path = require('path');
+const request = require('request');
 
-/**
- * Include services used for the application
- */
-var request = require('request');
+var crossref = "http://api.crossref.org/works/";
 
 exports.getReleaseDateBadge = (req, res) => {
 
@@ -19,7 +17,7 @@ exports.getReleaseDateBadge = (req, res) => {
     request(
         {
         url: crossref + doi,
-        proxy: "http://wwwproxy.uni-muenster.de:80"
+        proxy: config.net.proxy,
         },
         function (error, response, body) {
 
@@ -62,14 +60,8 @@ exports.getReleaseDateBadge = (req, res) => {
         // send the no information badge
         function sendUndefined() {
             if(extended === 'extended'){
-                badge = 'badges/released_no_information.svg';
-                res.sendFile(badge, { root : __dirname}, function (err) {
-                    if (err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, './controllers/release-date/released_no_information.svg');
+                scaling.resizeAndSend(req, res);
             } else {
                 res.redirect('https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg');
             }
@@ -91,77 +83,34 @@ exports.getReleaseDateBadge = (req, res) => {
             var currentDate = new Date().getTime();
             var releaseDate = new Date(date[0], releaseMonth, releaseDay, 0, 0, 0, 0).getTime();
 
-
             if (releaseDate > currentDate-31536000000) {
-                badge = 'badges/released_year.svg';
-                res.sendFile(badge, { root : __dirname}, function (err) {
-                    if (err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, 'badges/released_year.svg');
+                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-157680000000) {
-                badge = 'badges/released_5_year.svg';
-                res.sendFile(badge, { root : __dirname}, function (err) {
-                    if (err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, 'badges/released_5_year.svg');
+                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-315360000000) {
-                badge = 'badges/released_10_years.svg';
-                res.sendFile(badge, { root : __dirname}, function (err) {
-                    if (err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, 'badges/released_10_years.svg');
+                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-630720000000) {
-                badge = 'badges/released_20_years.svg';
-                res.sendFile(badge, { root : __dirname}, function (err) {
-                    if (err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, 'badges/released_20_years.svg');
+                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-946080000000) {
-                badge = 'badges/released_30_years.svg';
-                res.sendFile(badge, { root : __dirname}, function (err) {
-                    if (err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, 'badges/released_30_years.svg');
+                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate > currentDate-1261440000000) {
-                badge = 'badges/released_40_years.svg';
-                res.sendFile(badge, { root : __dirname}, function (err) {
-                    if (err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, 'badges/released_40_years.svg');
+                scaling.resizeAndSend(req, res);
             }
             else if (releaseDate < currentDate-1261440000000) {
                 // todo insert new badge
-                badge = 'badges/released_over_50_years.svg';
-                res.sendFile(badge, { root : __dirname}, function (err) {
-                    if (err) {
-                        debug(err);
-                        res.status(err.status).end();
-                    }
-                    else debug('Sent file: ', badge);
-                });
+                req.filePath = path.join(__dirname, 'badges/released_over_50_years.svg');
+                scaling.resizeAndSend(req, res);
             }
         }
 
