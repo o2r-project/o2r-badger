@@ -32,6 +32,7 @@ c.net.proxy = '';
 //external resources/APIs
 c.ext.testserver = 'http://localhost:8080';
 c.ext.crossref = 'http://api.crossref.org/works/';
+c.ext.o2r = 'http://o2r.uni-muenster.de';
 
 // fs paths
 c.fs.base = env.BADGER_BASEPATH || '/tmp/o2r/';

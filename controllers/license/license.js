@@ -56,7 +56,7 @@ exports.getLicenseBadge = (req, res) => {
     };
 
     //real request would go to
-    /*request('http://o2r.uni-muenster.de/api/v1/compendium' + id, function(error, reponse, body) {
+    /*request(config.ext.o2r + '/api/v1/compendium' + id, function(error, reponse, body) {
     })*/
 
     // send a request to the fake server to retrieve information about licencing 

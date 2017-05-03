@@ -48,7 +48,7 @@ exports.getExecutabilityBadge = (req, res) => {
      * The id of that job is then saved in jobID variable
      *
      */
-    request('http://o2r.uni-muenster.de/api/v1/job?compendium_id=' + id, function(error, response, body) {
+    request(config.ext.o2r + '/api/v1/job?compendium_id=' + id, function(error, response, body) {
 
         // no job for the given id available
         if(error) {
@@ -96,7 +96,7 @@ exports.getExecutabilityBadge = (req, res) => {
              *  send a request to the o2r api to get the status of the job selected from the compendium
              *
              */
-            request('http://o2r.uni-muenster.de/api/v1/job/' + jobID, function(error, response, body) {
+            request(config.ext.o2r + '/api/v1/job/' + jobID, function(error, response, body) {
                 debug(jobID);
 
                 // no job with the given jobID found
