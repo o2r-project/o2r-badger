@@ -50,7 +50,7 @@ exports.getSmallSpatialBadge = (req, res) => {
 						// send the badge with the geocoded information to client
 						if (geoname.status) {
 							request({url: 'http://api.geonames.org/oceanJSON?lat=' + result[0] + '&lng=' + result[1] + '&username=badges&username=badges', 
-								proxy: "http://wwwproxy.uni-muenster.de:80/"}, function (error,response,body){
+								proxy: config.net.proxy}, function (error,response,body){
 									if(response.statusCode === 200) {
 										geoname_ocean = JSON.parse(body);
 										res.redirect("https://img.shields.io/badge/research%20location-" + geoname_ocean.ocean.name + "-blue.svg");

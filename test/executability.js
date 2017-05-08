@@ -1,4 +1,5 @@
 'use strict';
+const debug = require('debug')('badger');
 var nodeServer = process.env.NODE_SERVER || "http://192.168.99.100:3001";//-e
 debug(nodeServer+ " nodeserver");
 

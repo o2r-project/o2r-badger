@@ -211,7 +211,6 @@ exports.resizeAndSend = (req, res) => {
 function convert(format, width, file) {
 
 	var doc = new DOMParser().parseFromString(file, 'text/xml');
-	//var doc = file;
 	var viewBox = doc.documentElement.getAttribute('viewBox');
 	var svgwidth = doc.documentElement.getAttribute('width');
 	var svgheight = doc.documentElement.getAttribute('height');
@@ -256,5 +255,3 @@ function convert(format, width, file) {
 		return output;
 	}
 }
-
-//Module.exports.convert = convert;

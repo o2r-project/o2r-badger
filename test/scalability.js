@@ -1,4 +1,5 @@
 //test file with mocha
+const debug = require('debug')('badger');
 var server = require('../index');
 var chai = require('chai');
 var chaiHttp = require('chai-http');
