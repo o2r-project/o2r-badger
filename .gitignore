@@ -4,3 +4,4 @@ npm-debug.log
 launch.json
 .idea
 .vscode
+controllers/location/index.html

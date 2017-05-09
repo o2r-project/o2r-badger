@@ -51,7 +51,7 @@ app.get('/api/1.0/badge/spatial/o2r/:id/extended', location.getBigSpatialBadge);
 app.get('/api/1.0/badge/releasetime/crossref/:doi/:extended?', release.getReleaseDateBadge);
 
 //Peer review:
-app.get('/api/1.0/badge/peerreview/doaj/:extended?', peerReview.getPeerReviewBadge);
+app.get('/api/1.0/badge/peerreview/doaj/:id/:extended?', peerReview.getPeerReviewBadge);
 
 app.listen(config.net.port, () => {
 	debug('badger with API version %s waiting for requests on port %s',
