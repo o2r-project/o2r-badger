@@ -35,6 +35,11 @@ exports.getSmallSpatialBadge = (req, res) => {
 	};
 	// call the test server with fake id
 	request(server + '/spatial/' + id, function(error, response, body) {
+		if (error) {
+			debug(error);
+            res.redirect("https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg");
+            return;
+		}
 		//response is valid
 		if(response.statusCode === 200) {
 			coordinates = JSON.parse(body);			

@@ -56,12 +56,12 @@ exports.getLicenseBadge = (req, res) => {
     };
 
     //real request would go to
-    /*request(config.ext.o2r + '/api/v1/compendium' + id, function(error, reponse, body) {
+    /*request(config.ext.o2r + '/api/v1/compendium' + id, function(error, response, body) {
     })*/
 
     // send a request to the fake server to retrieve information about licencing 
     request(server + '/licence/' + id, function(error, response, body) {
-        if(error || response.statusCode !== 404){
+        if(!error && response.statusCode !== 404){
             var compendiumJSON = JSON.parse(body);
             var badge;
             var osicode;
@@ -321,4 +321,4 @@ exports.getLicenseBadge = (req, res) => {
         }
         
     })
-}
+};
