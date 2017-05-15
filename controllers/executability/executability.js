@@ -53,6 +53,8 @@ exports.getExecutabilityBadge = (req, res) => {
         // no job for the given id available
         if(error) {
             debug(error);
+            res.redirect("https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg");
+            return;
         }
         // status responses
         if(response.status === 404) {

@@ -37,8 +37,8 @@ exports.getSmallSpatialBadge = (req, res) => {
 	request(server + '/spatial/' + id, function(error, response, body) {
 		if (error) {
 			debug(error);
-            res.redirect("https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg");
-            return;
+			res.redirect("https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg");
+			return;
 		}
 		//response is valid
 		if(response.statusCode === 200) {
@@ -118,6 +118,11 @@ exports.getBigSpatialBadge = (req, res) => {
     };
 	// request the metadata from testserver
 	request(server + '/spatial/' + id, function(error, response, body) {
+		if (error) {
+			debug(error);
+			res.redirect("https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg");
+			return;
+		}
 		if(response.statusCode === 200) {
 			coordinates = JSON.parse(body);
 			var html = fs.readFileSync('./controllers/location/index_template.html', 'utf-8')

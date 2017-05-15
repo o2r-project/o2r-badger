@@ -9,7 +9,7 @@ COPY package.json /usr/src/app/
 # Bundle app source 
 RUN npm install
 COPY . /usr/src/app 
-EXPOSE 3000 
+EXPOSE 8089 
 
 # run the app and the testserver 
 CMD ["npm", "start"]
