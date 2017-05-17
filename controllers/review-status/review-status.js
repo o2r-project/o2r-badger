@@ -14,7 +14,7 @@ exports.getPeerReviewBadge = (req, res) => {
     } else {
         //handle small badge
     }
-
+    let badgeNA = 'https://img.shields.io/badge/Peer%20Review-n%2Fa-lightgrey.svg';
     let requestURL = 'https://doaj.org/api/v1/search/articles/' + encodeURIComponent(id);
 
     //request DOAJ API to get ISSN 
@@ -22,21 +22,33 @@ exports.getPeerReviewBadge = (req, res) => {
     request(requestURL, function(error, response, body) {
 
         if (error) {
-            debug(error);
-            res.status(500).send('Error accessing DOAJ articles API');
+            debug('DOAJ API not accessible: %s', error);
+            res.redirect(badgeNA);
             return;
         }
 
-        let data = JSON.parse(body);
+        try {
 
-        if (data.results.length === 0) {
-            res.redirect('https://img.shields.io/badge/Peer%20Review-n%2Fa-lightgrey.svg');
-            return;
-        }
+            let data = JSON.parse(body);
 
-        let issn = data.results[0].bibjson.journal.issns[0];
-        if (!issn) {
-            res.redirect('https://img.shields.io/badge/Peer%20Review-n%2Fa-lightgrey.svg');
+            if (typeof data.results === 'undefined') {
+                res.redirect(badgeNA);
+                return;
+            }
+
+            if (data.results.length === 0) {
+                res.redirect(badgeNA);
+                return;
+            }
+
+            let issn = data.results[0].bibjson.journal.issns[0];
+            if (!issn) {
+                res.redirect(badgeNA);
+                return;
+            }
+        } catch(err) {
+            debug(err);
+            res.redirect(badgeNA);
             return;
         }
 
