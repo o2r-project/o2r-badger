@@ -24,9 +24,8 @@ exports.getBadgeFromData = (req, res) => {
             debug('Completed generating badge');
         })
         .catch(err => {
-            debug("Error generating badge:", err);
-
             if (err.badgeNA === true) { // Send "N/A" badge
+                debug("No badge information found", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -36,6 +35,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
+                debug("Error generating badge:", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -83,9 +83,8 @@ exports.getBadgeFromReference = (req, res) => {
             //done(passon.id, null);
         })
         .catch(err => {
-            debug("Error generating badge:", err);
-
             if (err.badgeNA === true) { // Send "N/A" badge
+                debug("No badge information found", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -95,6 +94,7 @@ exports.getBadgeFromReference = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
+                debug("Error generating badge:", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -145,9 +145,9 @@ function getReleaseTime(passon) {
                     if(jsonResponse.message.issued !== undefined){
                         // get the issued parameter
                         let issued = jsonResponse.message.issued;
-                        if(issued["date-parts"] !== undefined || issued["date-parts"] !== ""){
+                        if(issued['date-parts'] !== undefined || issued['date-parts'] !== ''){
                             // get the date part (containing the release date)
-                            let date = issued["date-parts"][0];
+                            let date = issued['date-parts'][0];
                             if (isNaN(date[0]) || isNaN(date[0]) || isNaN(date[0])) {
                                 let error = new Error();
                                 error.msg = 'date is not a number';
@@ -159,7 +159,7 @@ function getReleaseTime(passon) {
                             passon.releaseDay = date[2];
                             passon.releaseMonth = date[1];
                             passon.releaseYear = date[0];
-                            debug("Release date is %s", date);
+                            debug('Release date is %s', date);
                             fulfill(passon);
                         } else {
                             let error = new Error();

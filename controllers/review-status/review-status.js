@@ -5,7 +5,7 @@ const scaling = require('../scaling/scaling');
 const path = require('path');
 
 let badgeNASmall = 'https://img.shields.io/badge/Peer%20Review-n%2Fa-lightgrey.svg';
-let badgeNABig = '';
+let badgeNABig = ''; //todo implement extended badges
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -21,9 +21,8 @@ exports.getBadgeFromData = (req, res) => {
             debug('Completed generating badge');
         })
         .catch(err => {
-            debug("Error generating badge:", err);
-
             if (err.badgeNA === true) { // Send "N/A" badge
+                debug("No badge information found", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -33,6 +32,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
+                debug("Error generating badge:", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -81,9 +81,8 @@ exports.getBadgeFromReference = (req, res) => {
             //done(passon.id, null);
         })
         .catch(err => {
-            debug("Error generating badge:", err);
-
             if (err.badgeNA === true) { // Send "N/A" badge
+                debug("No badge information found", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -93,6 +92,7 @@ exports.getBadgeFromReference = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
+                debug("Error generating badge:", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;

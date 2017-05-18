@@ -22,9 +22,8 @@ exports.getBadgeFromData = (req, res) => {
             debug('Completed generating badge');
         })
         .catch(err => {
-            debug("Error generating badge:", err);
-
             if (err.badgeNA === true) { // Send "N/A" badge
+                debug("No badge information found", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -34,6 +33,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
+                debug("Error generating badge:", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -82,9 +82,8 @@ exports.getBadgeFromReference = (req, res) => {
             debug('Completed generating badge for %s', passon.id);
         })
         .catch(err => {
-            debug("Error generating badge:", err);
-
             if (err.badgeNA === true) { // Send "N/A" badge
+                debug("No badge information found", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -94,6 +93,7 @@ exports.getBadgeFromReference = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
+                debug('Error generating badge:', err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -138,7 +138,7 @@ function getCompendiumID(passon) {
 
             let data = JSON.parse(body);
 
-            // If exactly one compendium was found, contiune. Otherwise, redirect to the "N/A badge"
+            // If exactly one compendium was found, contiune. Otherwise, redirect to the 'N/A badge'
             if (data.results && data.results.length === 1) {
                 passon.compendiumID = data.results[0];
                 fulfill(passon);
@@ -232,17 +232,17 @@ function sendResponse(passon) {
     return new Promise((fulfill, reject) => {
         debug('Sending response for status %s', passon.jobStatus);
 
-        if(passon.extended === "extended") {
-            //if the status is "success" the green badge is sent to the client
-            if (passon.jobStatus === "success") {
+        if(passon.extended === 'extended') {
+            //if the status is 'success' the green badge is sent to the client
+            if (passon.jobStatus === 'success') {
                 passon.req.filePath = path.join(__dirname, 'badges/Executable_Green.svg');
             }
-            // for a "fail" the red badge is sent
-            else if (passon.jobStatus === "failure") {
+            // for a 'fail' the red badge is sent
+            else if (passon.jobStatus === 'failure') {
                 passon.req.filePath = path.join(__dirname, 'badges/Executable_Red.svg');
             }
             // and for the running status the yellow badge is sent to the client
-            else if (passon.jobStatus === "running") {
+            else if (passon.jobStatus === 'running') {
                 passon.req.filePath = path.join(__dirname, 'badges/Executable_Running.svg');
             }
             else {
@@ -254,19 +254,19 @@ function sendResponse(passon) {
             fulfill(passon);
 
         } else if (passon.extended === undefined) {
-            //if the status is "success" the green badge is sent to the client
-            if (passon.jobStatus === "success") {
+            //if the status is 'success' the green badge is sent to the client
+            if (passon.jobStatus === 'success') {
                 // send the reponse from our server
                 passon.res.redirect('https://img.shields.io/badge/executable-yes-44cc11.svg');
                 fulfill(passon);
             }
-            // for a "fail" the red badge is sent
-            else if (passon.jobStatus === "failure") {
+            // for a 'fail' the red badge is sent
+            else if (passon.jobStatus === 'failure') {
                 passon.res.redirect('https://img.shields.io/badge/executable-no-ff0000.svg');
                 fulfill(passon);
             }
             // and for the running status the yellow badge is sent to the client
-            else if (passon.jobStatus === "running") {
+            else if (passon.jobStatus === 'running') {
                 passon.res.redirect('https://img.shields.io/badge/executable-running-yellow.svg');
                 fulfill(passon);
             }
