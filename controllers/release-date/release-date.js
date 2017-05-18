@@ -2,122 +2,243 @@ const debug = require('debug')('badger');
 const config = require('../../config/config');
 const path = require('path');
 const request = require('request');
+const scaling = require('../scaling/scaling');
 
-var crossref = config.ext.crossref;
 
-exports.getReleaseDateBadge = (req, res) => {
+let crossref = config.ext.crossref;
 
-    var doi = req.params.doi;
-    doi = doi.split(":");
-    doi = doi[1];
-    var extended = req.params.extended;
-    var badge;
+exports.getBadgeFromData = (req, res) => {
 
-    // Request to crossref to get information for the paper with the given doi
-    request(
-        {
-        url: crossref + doi,
-        proxy: config.net.proxy,
-        },
-        function (error, response, body) {
+    let passon = {
+        releaseDay: this.req.query.releaseDay,
+        releaseMonth : this.req.query.releaseMonth,
+        releaseYear : this.req.query.releaseYear,
+        extended: this.req.query.extended,
+        req: this.req,
+        res: this.res
+    };
 
-            // error handling of request to crossref
-            if (error) {
-                debug(error);
-                sendUndefined();
-                return;
+    return sendResponse(passon)
+        .then((passon) => {
+            debug('Completed generating badge');
+            //done(passon.id, null);
+        })
+        .catch(err => {
+            debug('Badge information not found: %s',
+                JSON.stringify(err));
+
+            if (err.badgeNA === true) { // Send "N/A" badge
+                if (passon.extended === 'extended') {
+                    passon.req.filePath = path.join(__dirname, 'badges/released_no_information.svg');
+                    scaling.resizeAndSend(passon.req, passon.res);
+                } else if (passon.extended === undefined) {
+                    res.redirect('https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg');
+                } else {
+                    res.status(404).send('not allowed');
+                }
+            } else { // Send error response
+                let status = 500;
+                if (err.status) {
+                    status = err.status;
+                }
+                let msg = 'Internal error';
+                if (err.msg) {
+                    msg = err.msg;
+                }
+                res.status(status).send(JSON.stringify({ error: msg }));
             }
-            if (!response || response.status === 404 || response.statusCode === 404) {
-                debug('crossref api call failed');
-                res.status(404).send('not available');
-                return;
-            } else if (response.status === 500 || response.statusCode === 500 || error) {
-                res.status(500).send('Unable to find data on server: %s', error);
-                return;
-            }
+            //done(null, err);
+        });
+};
 
-            // get the created date (if available)
-            if(response.body !== undefined){
-                // parse the response to json
-                var jsonResponse = JSON.parse(response.body);
-                if(jsonResponse.message.issued !== undefined){
-                    // get the issued parameter
-                    var issued = jsonResponse.message.issued;
-                    if(issued["date-parts"] !== undefined || issued["date-parts"] !== ""){
-                        // get the date part (containing the release date)
-                        var date = issued["date-parts"][0];
-                        debug(date);
+exports.getBadgeFromReference = (req, res) => {
+
+    let id = req.params.id;
+    let extended;
+
+    debug('Handling %s badge generation for id %s', req.params.type, req.params.id);
+
+    //extract doi from the id parameter (e.g. doi:11.999/asdf.jkl)
+    if(id.substring(0, 4) === "doi:") {
+        id = id.substring(4);
+    } else {
+        debug('doi is invalid');
+        res.redirect("https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg");
+        return;
+    }
+
+    if (typeof req.query.extended !== 'undefined') {
+        extended = req.query.extended;
+    }
+
+    let passon = {
+        id: id,
+        extended: extended,
+        req: this.req,
+        res: this.res
+    };
+
+    return getReleaseTime(passon)
+        .then(sendResponse)
+        .then((passon) => {
+            debug('Completed generating release-time badge for %s', passon.id);
+            //done(passon.id, null);
+        })
+        .catch(err => {
+            debug('Badge information not found: %s',
+                JSON.stringify(err));
+
+            if (err.badgeNA === true) { // Send "N/A" badge
+                if (passon.extended === 'extended') {
+                    passon.req.filePath = path.join(__dirname, 'badges/released_no_information.svg');
+                    scaling.resizeAndSend(passon.req, passon.res);
+                } else if (passon.extended === undefined) {
+                    res.redirect('https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg');
+                } else {
+                    res.status(404).send('not allowed');
+                }
+            } else { // Send error response
+                let status = 500;
+                if (err.status) {
+                    status = err.status;
+                }
+                let msg = 'Internal error';
+                if (err.msg) {
+                    msg = err.msg;
+                }
+                res.status(status).send(JSON.stringify({ error: msg }));
+            }
+            //done(null, err);
+        });
+};
+
+function getReleaseTime(passon) {
+    return new Promise((fulfill, reject) => {
+        debug('Fetching release time from %s for DOI %s', config.ext.crossref, passon.id);
+
+        // Request to crossref to get information for the paper with the given doi
+        request(
+            {
+                url: crossref + passon.id,
+                proxy: config.net.proxy,
+            },
+            function (error, response, body) {
+
+                // error handling of request to crossref
+                if (error) {
+                    debug(error);
+                    reject(error);
+                }
+                if (!response || response.status === 404 || response.statusCode === 404) {
+                    let error = new Error();
+                    error.msg = 'crossref api call failed';
+                    error.status = 500;
+                    reject(error);
+                } else if (response.status === 500 || response.statusCode === 500) {
+                    let error = new Error();
+                    error.msg = 'Unable to find data on server';
+                    error.status = 500;
+                    reject(error);
+                }
+
+                // get the created date (if available)
+                if(response.body !== undefined) {
+                    // parse the response to json
+                    let jsonResponse = JSON.parse(response.body);
+                    if(jsonResponse.message.issued !== undefined){
+                        // get the issued parameter
+                        let issued = jsonResponse.message.issued;
+                        if(issued["date-parts"] !== undefined || issued["date-parts"] !== ""){
+                            // get the date part (containing the release date)
+                            let date = issued["date-parts"][0];
+                            if (isNaN(date[0]) || isNaN(date[0]) || isNaN(date[0])) {
+                                let error = new Error();
+                                error.msg = 'date is not a number';
+                                error.status = 403;
+                                error.badgeNA = true;
+                                reject(error);
+                            }
+
+                            passon.releaseDay = date[2];
+                            passon.releaseMonth = date[1];
+                            passon.releaseYear = date[0];
+                            debug("Release date is %s", date);
+                            fulfill(passon);
+                        } else {
+                            let error = new Error();
+                            error.msg = 'crossref entry does not contain release time';
+                            error.badgeNA = true;
+                            reject(error);
+                        }
                     } else {
-                        sendUndefined();
-                        return;
+                        let error = new Error();
+                        error.msg = 'crossref entry does not contain "issued" data';
+                        error.badgeNA = true;
+                        reject(error);
                     }
                 } else {
-                    sendUndefined();
-                    return;
+                    let error = new Error();
+                    error.msg = 'could not fetch crossref data';
+                    error.badgeNA = true;
+                    reject(error);
                 }
-            } else {
-                sendUndefined();
-                return;
+            });
+    });
+}
+
+function sendResponse(passon) {
+    return new Promise((fulfill, reject) => {
+        debug('Sending response for release date %s/%s/%s',
+            passon.releaseYear,
+            passon.releaseMonth,
+            passon.releaseDay);
+
+        if (isNaN(passon.releaseYear) || isNaN(passon.releaseMonth) || isNaN(passon.releaseDay)) {
+            let error = new Error();
+            error.msg = 'date is not a number';
+            error.status = 403;
+            error.badgeNA = true;
+            reject(error);
+        }
+
+        /*************** send big badges *************/
+        // todo take leapyears into account
+        if (passon.extended === 'extended') {
+            let currentDate = new Date().getTime();
+            let releaseDate = new Date(passon.releaseYear, passon.releaseMonth, passon.releaseDay, 0, 0, 0, 0).getTime();
+
+            if (releaseDate > currentDate-31536000000) {
+                passon.req.filePath = path.join(__dirname, 'badges/released_year.svg');
             }
-
-            // send the no information badge
-            function sendUndefined() {
-                if(extended === 'extended'){
-                    req.filePath = path.join(__dirname, 'badges/released_no_information.svg');
-                    scaling.resizeAndSend(req, res);
-                } else {
-                    res.redirect('https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg');
-                }
+            else if (releaseDate > currentDate-157680000000) {
+                passon.req.filePath = path.join(__dirname, 'badges/released_5_year.svg');
             }
-
-            /*************** send big badges *************/
-            // todo take leapyears into account
-            if (extended === 'extended') {
-
-                // check if day and month are given
-                // if not, set them to 0
-                var releaseDay = 0;
-                if(date[2] !== undefined)
-                    releaseDay = date[2];
-                var releaseMonth = 0;
-                if(date[1] !== undefined)
-                    releaseMonth = date[1];
-
-                var currentDate = new Date().getTime();
-                var releaseDate = new Date(date[0], releaseMonth, releaseDay, 0, 0, 0, 0).getTime();
-
-                if (releaseDate > currentDate-31536000000) {
-                    req.filePath = path.join(__dirname, 'badges/released_year.svg');
-                }
-                else if (releaseDate > currentDate-157680000000) {
-                    req.filePath = path.join(__dirname, 'badges/released_5_year.svg');
-                }
-                else if (releaseDate > currentDate-315360000000) {
-                    req.filePath = path.join(__dirname, 'badges/released_10_years.svg');
-                }
-                else if (releaseDate > currentDate-630720000000) {
-                    req.filePath = path.join(__dirname, 'badges/released_20_years.svg');
-                }
-                else if (releaseDate > currentDate-946080000000) {
-                    req.filePath = path.join(__dirname, 'badges/released_30_years.svg');
-                }
-                else if (releaseDate > currentDate-1261440000000) {
-                    req.filePath = path.join(__dirname, 'badges/released_40_years.svg');
-                }
-                else if (releaseDate < currentDate-1261440000000) {
-                    // todo insert new badge
-                    req.filePath = path.join(__dirname, 'badges/released_over_50_years.svg');
-                }
-                // Scale the file and send the request
-                scaling.resizeAndSend(req, res);
+            else if (releaseDate > currentDate-315360000000) {
+                passon.req.filePath = path.join(__dirname, 'badges/released_10_years.svg');
             }
-
-            /************* send small badges ********************/
-            else {
-                var releaseYear = date[0];
-                // send a badge showing the created date
-                res.redirect('https://img.shields.io/badge/release%20time-' + releaseYear + '-blue.svg');
+            else if (releaseDate > currentDate-630720000000) {
+                passon.req.filePath = path.join(__dirname, 'badges/released_20_years.svg');
             }
+            else if (releaseDate > currentDate-946080000000) {
+                passon.req.filePath = path.join(__dirname, 'badges/released_30_years.svg');
+            }
+            else if (releaseDate > currentDate-1261440000000) {
+                passon.req.filePath = path.join(__dirname, 'badges/released_40_years.svg');
+            }
+            else if (releaseDate < currentDate-1261440000000) {
+                // todo insert new badge
+                passon.req.filePath = path.join(__dirname, 'badges/released_over_50_years.svg');
+            }
+            // Scale the file and send the request
+            scaling.resizeAndSend(passon.req, passon.res);
+            fulfill(passon);
+        }
 
+        /************* send small badges ********************/
+        else {
+            // send a badge showing the created date
+            passon.res.redirect('https://img.shields.io/badge/release%20time-' + passon.releaseYear + '-blue.svg');
+            fulfill(passon);
+        }
     });
 }
