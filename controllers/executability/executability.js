@@ -110,9 +110,10 @@ exports.getBadgeFromReference = (req, res) => {
 
 function getCompendiumID(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Fetching compendium ID from %s for DOI %s', config.ext.o2r, passon.id);
+        let requestURL = config.ext.o2r + '/api/v1/compendium?doi=' + passon.id;
+        debug('Fetching compendium ID from %s with URL', config.ext.o2r, requestURL);
 
-        request(config.ext.o2r + '/api/v1/compendium?doi=' + passon.id, function(error, response, body) {
+        request(requestURL, function(error, response, body) {
 
             // no job for the given id available
             if(error) {
@@ -157,9 +158,10 @@ function getCompendiumID(passon) {
 
 function getJobID(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Fetching job ID for compendium %s from %s', passon.compendiumID, config.ext.o2r);
+        let requestURL = config.ext.o2r + '/api/v1/job?compendium_id=' + passon.compendiumID;
+        debug('Fetching job ID for compendium %s from %s', passon.compendiumID, requestURL);
 
-        request(config.ext.o2r + '/api/v1/job?compendium_id=' + passon.compendiumID, function(error, response, body) {
+        request(requestURL, function(error, response, body) {
 
             // no job for the given id available
             if(error) {
@@ -192,9 +194,10 @@ function getJobID(passon) {
 
 function getJobStatus(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Fetching job status for job %s from %s', passon.jobID, config.ext.o2r);
+        let requestURL = config.ext.o2r + '/api/v1/job/' + passon.jobID;
+        debug('Fetching job status for job %s from %s', passon.jobID, requestURL);
 
-        request(config.ext.o2r + '/api/v1/job/' + passon.jobID, function(error, response, body) {
+        request(requestURL, function(error, response, body) {
 
             // no job for the given id available
             if(error) {

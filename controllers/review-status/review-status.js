@@ -77,7 +77,7 @@ exports.getBadgeFromReference = (req, res) => {
         .then(getReviewStatus)
         .then(sendResponse)
         .then((passon) => {
-            debug('Completed generating release-time badge for %s', passon.id);
+            debug('Completed generating peer-review badge for %s', passon.id);
             //done(passon.id, null);
         })
         .catch(err => {
@@ -156,11 +156,13 @@ function getISSN(passon) {
 
 function getReviewStatus(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Fetching review status from %s for DOI %s', config.ext.DOAJ, passon.id);
+
+        let requestURL = 'https://doaj.org/api/v1/search/journals/' + encodeURIComponent('issn:' + passon.issn);
+        debug('Fetching review status from %s with URL', config.ext.DOAJ, requestURL);
 
         //request DOIJ API to find out if journal with ISSN is peer reviewed
         //e.g. https://doaj.org/api/v1/search/journals/issn%3A1664-1078
-        request('https://doaj.org/api/v1/search/journals/' + encodeURIComponent('issn:' + passon.issn), function(error, response, body) {
+        request(requestURL, function(error, response, body) {
             if (error) {
                 debug('DOAJ API not accessible: %s', error);
                 reject(error);
@@ -184,6 +186,8 @@ function getReviewStatus(passon) {
             } else {
                 if (process.startsWith('Blind')) {
                     passon.reviewStatus = 'Blind';
+                } else if (process.startsWith('Double blind')) {
+                    passon.reviewStatus = 'Double blind';
                 } else {
                     passon.reviewStatus = 'Yes';
                 }

@@ -17,9 +17,6 @@ exports.getLicenseBadge = (req, res) => {
     var id = req.params.id;
     var extended = req.params.extended;
 
-    var width = req.query.width;
-    var format = req.query.format;
-
     //map the dois for testing to compendium ids
     if(id.substring(0, 4) === "doi:") {
         id = id.substring(4);
@@ -46,7 +43,7 @@ exports.getLicenseBadge = (req, res) => {
         }
     }
 
-    var options = {
+    let options = {
         //root: __dirname + '/badges/',
         dotfiles: 'deny',
         headers: {

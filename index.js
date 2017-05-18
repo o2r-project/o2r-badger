@@ -33,16 +33,10 @@ var base = '/api/1.0/badge';
 //Scalability:
 app.get('/api/1.0/badge', scaling.getBase);
 app.get('/api/1.0/badge/:type', scaling.getType);
-//app.get('/api/1.0/badge/:type/:service', scaling.getService); //todo addt his to other controllers
-//app.get('/api/1.0/badge/:type/:service/:id', controllers.scaling.getBadge/*FromReference*/);
-// app.post('/api/1.0/badge/:type/:service', controllers.scaling.getBadgeFromData);
-
-//Executing
-//app.get('/api/1.0/badge/executable/:o2r/:id/:extended?', executability.getExecutabilityBadge);
+//app.get('/api/1.0/badge/:type/:service', scaling.getService); //todo add this to other controllers
 
 app.get('/api/1.0/badge/executable/:o2r/:id', executability.getBadgeFromReference);
 app.get('/api/1.0/badge/executable/:o2r', executability.getBadgeFromData);
-
 
 //Licensing
 //app.get('/api/1.0/badge/licence/o2r/:id/:extended?', license.getLicenseBadge);
@@ -58,14 +52,10 @@ app.get('/api/1.0/badge/executable/:o2r', executability.getBadgeFromData);
 // app.get('/api/1.0/badge/spatial/o2r', location.getBadgeFromData);
 
 //Release date
-//app.get('/api/1.0/badge/releasetime/crossref/:doi/:extended?', release.getReleaseDateBadge);
-
 app.get('/api/1.0/badge/releasetime/crossref/:doi', release.getBadgeFromReference);
 app.get('/api/1.0/badge/releasetime/crossref', release.getBadgeFromData);
 
 //Peer review:
-// app.get('/api/1.0/badge/peerreview/doaj/:id/:extended?', peerReview.getPeerReviewBadge);
-
 app.get('/api/1.0/badge/peerreview/doaj/:id', peerReview.getBadgeFromReference);
 app.get('/api/1.0/badge/peerreview/doaj', peerReview.getBadgeFromData);
 

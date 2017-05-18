@@ -31,8 +31,8 @@ c.net.proxy = '';
 
 //external resources/APIs
 c.ext.testserver = 'http://localhost:8080';
-c.ext.crossref = 'http://api.crossref.org/works/';
-c.ext.o2r = env.BADGER_O2R_HOST || 'http://localhost:8080'; //http://o2r.uni-muenster.de';
+c.ext.crossref = 'https://api.crossref.org/works/';
+c.ext.o2r = env.BADGER_O2R_HOST || 'https://o2r.uni-muenster.de';
 c.ext.DOAJ = 'https://doaj.org/api/v1/search/articles/';
 
 // fs paths

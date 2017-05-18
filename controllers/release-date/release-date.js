@@ -110,12 +110,13 @@ exports.getBadgeFromReference = (req, res) => {
 
 function getReleaseTime(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Fetching release time from %s for DOI %s', config.ext.crossref, passon.id);
+        let requestURL = crossref + passon.id;
+        debug('Fetching release time from %s with URL %s', config.ext.crossref, requestURL);
 
         // Request to crossref to get information for the paper with the given doi
         request(
             {
-                url: crossref + passon.id,
+                url: requestURL,
                 proxy: config.net.proxy,
             },
             function (error, response, body) {
