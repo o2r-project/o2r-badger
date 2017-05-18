@@ -60,14 +60,14 @@ app.get('/api/1.0/badge/executable/:o2r', executability.getBadgeFromData);
 //Release date
 //app.get('/api/1.0/badge/releasetime/crossref/:doi/:extended?', release.getReleaseDateBadge);
 
-// app.get('/api/1.0/badge/releasetime/crossref/:doi', release.getBadgeFromReference);
-// app.get('/api/1.0/badge/releasetime/crossref', release.getBadgeFromData);
+app.get('/api/1.0/badge/releasetime/crossref/:doi', release.getBadgeFromReference);
+app.get('/api/1.0/badge/releasetime/crossref', release.getBadgeFromData);
 
 //Peer review:
 // app.get('/api/1.0/badge/peerreview/doaj/:id/:extended?', peerReview.getPeerReviewBadge);
 
-// app.get('/api/1.0/badge/peerreview/doaj/:id', peerReview.getBadgeFromReference);
-// app.get('/api/1.0/badge/peerreview/doaj', peerReview.getBadgeFromData);
+app.get('/api/1.0/badge/peerreview/doaj/:id', peerReview.getBadgeFromReference);
+app.get('/api/1.0/badge/peerreview/doaj', peerReview.getBadgeFromData);
 
 app.listen(config.net.port, () => {
 	debug('badger with API version %s waiting for requests on port %s',
