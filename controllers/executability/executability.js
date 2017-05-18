@@ -4,13 +4,17 @@ const request = require('request');
 const scaling = require('../scaling/scaling');
 const path = require('path');
 
+let badgeNASmall = 'https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg';
+let badgeNABig = 'badges/Executable_noInfo.svg';
+
+
 exports.getBadgeFromData = (req, res) => {
 
     let passon = {
-        jobStatus : this.req.query.jobStatus,
-        extended: this.req.query.extended,
-        req: this.req,
-        res: this.res
+        jobStatus : req.query.jobStatus,
+        extended: req.query.extended,
+        req: req,
+        res: res
     };
 
     return sendResponse(passon)
@@ -18,15 +22,14 @@ exports.getBadgeFromData = (req, res) => {
             debug('Completed generating badge');
         })
         .catch(err => {
-            debug('Badge information not found: %s',
-                JSON.stringify(err));
+            debug("Error generating badge:", err);
 
             if (err.badgeNA === true) { // Send "N/A" badge
                 if (passon.extended === 'extended') {
-                    passon.req.filePath = path.join(__dirname, 'badges/Executable_noInfo.svg');
+                    passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    res.redirect("https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg");
+                    res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -46,7 +49,7 @@ exports.getBadgeFromData = (req, res) => {
 
 exports.getBadgeFromReference = (req, res) => {
     //read the params from the URL
-    var id = req.params.id;
+    let id = req.params.id;
     let extended;
 
     debug('Handling %s badge generation for id %s', req.params.type, req.params.id);
@@ -67,8 +70,8 @@ exports.getBadgeFromReference = (req, res) => {
     let passon = {
         id: id,
         extended: extended,
-        req: this.req,
-        res: this.res
+        req: req,
+        res: res
     };
 
     return getCompendiumID(passon)
@@ -79,15 +82,14 @@ exports.getBadgeFromReference = (req, res) => {
             debug('Completed generating badge for %s', passon.id);
         })
         .catch(err => {
-            debug('Badge information not found: %s',
-                JSON.stringify(err));
-            
+            debug("Error generating badge:", err);
+
             if (err.badgeNA === true) { // Send "N/A" badge
                 if (passon.extended === 'extended') {
-                    passon.req.filePath = path.join(__dirname, 'badges/Executable_noInfo.svg');
+                    passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    res.redirect("https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg");
+                    res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -133,7 +135,7 @@ function getCompendiumID(passon) {
                 reject(error);
             }
 
-            var data = JSON.parse(body);
+            let data = JSON.parse(body);
 
             // If exactly one compendium was found, contiune. Otherwise, redirect to the "N/A badge"
             if (data.results && data.results.length === 1) {
@@ -181,7 +183,7 @@ function getJobID(passon) {
             }
 
             // Continue with jobID
-            var data = JSON.parse(body);
+            let data = JSON.parse(body);
             passon.jobID = data.results[0];
             fulfill(passon);
         });
@@ -216,7 +218,7 @@ function getJobStatus(passon) {
             }
 
             // Continue with jobID
-            var data = JSON.parse(body);
+            let data = JSON.parse(body);
             passon.jobStatus = data.status;
             fulfill(passon);
         });

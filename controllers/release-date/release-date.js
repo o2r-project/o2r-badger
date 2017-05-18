@@ -4,35 +4,34 @@ const path = require('path');
 const request = require('request');
 const scaling = require('../scaling/scaling');
 
-
 let crossref = config.ext.crossref;
+let badgeNASmall = 'https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg';
+let badgeNABig = 'badges/released_no_information.svg';
 
 exports.getBadgeFromData = (req, res) => {
 
     let passon = {
-        releaseDay: this.req.query.releaseDay,
-        releaseMonth : this.req.query.releaseMonth,
-        releaseYear : this.req.query.releaseYear,
-        extended: this.req.query.extended,
-        req: this.req,
-        res: this.res
+        releaseDay: req.query.releaseDay,
+        releaseMonth : req.query.releaseMonth,
+        releaseYear : req.query.releaseYear,
+        extended: req.query.extended,
+        req: req,
+        res: res
     };
 
     return sendResponse(passon)
         .then((passon) => {
             debug('Completed generating badge');
-            //done(passon.id, null);
         })
         .catch(err => {
-            debug('Badge information not found: %s',
-                JSON.stringify(err));
+            debug("Error generating badge:", err);
 
             if (err.badgeNA === true) { // Send "N/A" badge
                 if (passon.extended === 'extended') {
-                    passon.req.filePath = path.join(__dirname, 'badges/released_no_information.svg');
+                    passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    res.redirect('https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg');
+                    res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -47,7 +46,6 @@ exports.getBadgeFromData = (req, res) => {
                 }
                 res.status(status).send(JSON.stringify({ error: msg }));
             }
-            //done(null, err);
         });
 };
 
@@ -74,8 +72,8 @@ exports.getBadgeFromReference = (req, res) => {
     let passon = {
         id: id,
         extended: extended,
-        req: this.req,
-        res: this.res
+        req: req,
+        res: res
     };
 
     return getReleaseTime(passon)
@@ -85,15 +83,14 @@ exports.getBadgeFromReference = (req, res) => {
             //done(passon.id, null);
         })
         .catch(err => {
-            debug('Badge information not found: %s',
-                JSON.stringify(err));
+            debug("Error generating badge:", err);
 
             if (err.badgeNA === true) { // Send "N/A" badge
                 if (passon.extended === 'extended') {
-                    passon.req.filePath = path.join(__dirname, 'badges/released_no_information.svg');
+                    passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    res.redirect('https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg');
+                    res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -108,7 +105,6 @@ exports.getBadgeFromReference = (req, res) => {
                 }
                 res.status(status).send(JSON.stringify({ error: msg }));
             }
-            //done(null, err);
         });
 };
 
