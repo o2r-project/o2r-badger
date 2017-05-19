@@ -1,16 +1,13 @@
 const debug = require('debug')('badger');
 const config = require('../../config/config');
 const svg2png = require("svg2png");
-var request = require('request');
-var DOMParser = require('xmldom').DOMParser;
-var XMLSerializer = require('xmldom').XMLSerializer;
-var StringDecoder = require('string_decoder').StringDecoder;
-var path = require('path');
-var fs = require('fs');
+const request = require('request');
+const DOMParser = require('xmldom').DOMParser;
+const XMLSerializer = require('xmldom').XMLSerializer;
+const path = require('path');
+const fs = require('fs');
 
-var decoder = new StringDecoder('utf8');
-var server = config.net.endpoint + ':';
-
+let server = config.net.endpoint + ':';
 
 exports.getBase = (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
@@ -31,7 +28,7 @@ exports.getBase = (req, res) => {
 };
 
 exports.getType = (req, res) => {
-	var type = req.params.type;
+	let type = req.params.type;
 	switch (type) {
 		case "executable":
 			res.setHeader('Content-Type', 'application/json');
@@ -56,6 +53,7 @@ exports.getType = (req, res) => {
 					"o2r"
 				]
 			}));
+			break;
 		case "spatial":
 			res.setHeader('Content-Type', 'application/json');
 			res.send(JSON.stringify({
@@ -63,6 +61,7 @@ exports.getType = (req, res) => {
 					"o2r"
 				]
 			}));
+			break;
 		case "releasetime":
 			res.setHeader('Content-Type', 'application/json');
 			res.send(JSON.stringify({
@@ -84,10 +83,10 @@ exports.getService = (req, res) => {
 };
 
 exports.getBadge = (req, res) => {
-	var type = req.params.type;
-	var width = req.query.width;
-	var format = req.query.format;
-	var port;
+	let type = req.params.type;
+	let width = req.query.width;
+	let format = req.query.format;
+	let port;
 
 	debug("path= " + req.path);
 
@@ -136,7 +135,7 @@ exports.getBadge = (req, res) => {
 							if (!result) {
 								res.status(500).send('Converting of svg to png not possible!')
 							} else {
-								var img = new Buffer(result, "base64");
+								let img = new Buffer(result, "base64");
 								res.writeHead(200, {
 									'Access-Control-Allow-Origin': '*',
 									'Content-Type': 'image/png',
@@ -161,7 +160,6 @@ exports.getBadge = (req, res) => {
 				}
 				else {
 					debug(error);
-					return;
 				}
 			});
 	}
@@ -177,11 +175,11 @@ exports.resizeAndSend = (req, res) => {
 				debug(err);
 				res.status(500).send('Error reading svg file');
 			} else {
-				result = convert(req.query.format, req.query.width, data);
+				let result = convert(req.query.format, req.query.width, data);
 				if (!result) {
 					res.status(500).send('Converting of svg to png not possible!');
 				} else {
-					var img = new Buffer(result, "base64");
+					let img = new Buffer(result, "base64");
 					res.writeHead(200, {
 						'Access-Control-Allow-Origin': '*',
 						'Content-Type': 'image/png',
@@ -210,23 +208,23 @@ exports.resizeAndSend = (req, res) => {
 // Convert SVG to scaled PNG
 function convert(format, width, file) {
 
-	var doc = new DOMParser().parseFromString(file, 'text/xml');
-	var viewBox = doc.documentElement.getAttribute('viewBox');
-	var svgwidth = doc.documentElement.getAttribute('width');
-	var svgheight = doc.documentElement.getAttribute('height');
+	let doc = new DOMParser().parseFromString(file, 'text/xml');
+	let viewBox = doc.documentElement.getAttribute('viewBox');
+	let svgwidth = doc.documentElement.getAttribute('width');
+	let svgheight = doc.documentElement.getAttribute('height');
 
 	if (!svgwidth || !svgheight) {
 		if (!viewBox) {
 			debug("SVG has no attributes width, height and viewBox");
 			return;
 		}
-		values = viewBox.split(" ");
+		let values = viewBox.split(" ");
 		svgwidth = values[2];
 		svgheight = values[3];
 		debug("width: " + svgwidth + " height:" + svgheight);
 		doc.documentElement.setAttribute('width', svgwidth);
 		doc.documentElement.setAttribute('heigth', svgheight);
-		var serializer = new XMLSerializer();
+		let serializer = new XMLSerializer();
 		file = serializer.serializeToString(doc);
 	}
 	// convert image from svg to png
@@ -236,12 +234,12 @@ function convert(format, width, file) {
 		if (!viewBox || viewBox.length === 0) {
 			//if not add one
 			debug("add viewBox");
-			var svgwidth = doc.documentElement.getAttribute('width');
-			var svgheight = doc.documentElement.getAttribute('height');
+			let svgwidth = doc.documentElement.getAttribute('width');
+			let svgheight = doc.documentElement.getAttribute('height');
 			if (svgwidth > 0 && svgheight > 0) {
 				doc.documentElement.setAttribute('viewBox', '0 0 ' + svgwidth + ' ' + svgheight);
 			}
-			var serializer = new XMLSerializer();
+			let serializer = new XMLSerializer();
 			file = serializer.serializeToString(doc);
 		}
 

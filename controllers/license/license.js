@@ -10,7 +10,7 @@ const scaling = require('../scaling/scaling');
 const path = require('path');
 
 let server = config.ext.testserver;
-let badgeNASmall = 'https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg';
+let badgeNASmall = 'https://img.shields.io/badge/licence-n%2Fa-9f9f9f.svg';
 let badgeNABig = 'badges/license_noInformation.svg';
 
 exports.getBadgeFromData = (req, res) => {
@@ -112,133 +112,6 @@ exports.getBadgeFromReference = (req, res) => {
                 res.status(status).send(JSON.stringify({ error: msg }));
             }
         });
-};
-
-exports.getLicenseBadge = (req, res) => {
-
-    let id = req.params.id;
-    let extended = req.params.extended;
-
-    //map the dois for testing to compendium ids
-    if(id.substring(0, 4) === 'doi:') {
-        id = id.substring(4);
-
-        switch(encodeURIComponent(id)) {
-            case '10.1006%2Fjeem.1994.1031':
-                id = 1;
-                break;
-            case '10.1115%2F1.2128636':
-                id = 2;
-                break;
-            case '10.1029%2Fjd095id10p16343':
-                id = 3;
-                break;
-            case '10.1126%2Fscience.1092666':
-                id = 4;
-                break;
-            case '10.1016%2Fs0038-092x(00)00089-x':
-                id = 5;
-                break;
-            case '10.1016%2F0095-0696(78)90006-2':
-                id = 6;
-                break;
-        }
-    }
-
-    let options = {
-        //root: __dirname + '/badges/',
-        dotfiles: 'deny',
-        headers: {
-            'x-timestamp': Date.now(),
-            'x-sent': true
-        }
-    };
-
-    //real request would go to
-    /*request(config.ext.o2r + '/api/v1/compendium' + id, function(error, response, body) {
-    })*/
-
-    // send a request to the fake server to retrieve information about licencing 
-    request(server + '/licence/' + id, function(error, response, body) {
-        if(!error && response.statusCode !== 404){
-            let compendiumJSON = JSON.parse(body);
-            let badge;
-            let osicode;
-            let oddata;
-            let odtext;
-            let datalicence;
-            let textlicence;
-            let codelicence;
-
-            // those values are in the json then
-            //json validation
-            if(compendiumJSON.hasOwnProperty('metadata') && compendiumJSON.metadata.hasOwnProperty('licence')) {
-                if(compendiumJSON.metadata.licence.hasOwnProperty('data')) {
-                    datalicence = compendiumJSON.metadata.licence.data;
-                }
-                else datalicence = 'unknown';
-                if(compendiumJSON.metadata.licence.hasOwnProperty('text')) {
-                    textlicence = compendiumJSON.metadata.licence.text;
-                }
-                else textlicence = 'unknown';
-                if(compendiumJSON.metadata.licence.hasOwnProperty('code')) {
-                    codelicence = compendiumJSON.metadata.licence.code;
-                }
-                else codelicence = 'unknown';
-
-                // read json file osi.json and od.json to compare wheather the licence of the compendia is in the list of licences
-                let osi = JSON.parse(fs.readFileSync('./controllers/license/osi.json'));
-                let od = JSON.parse(fs.readFileSync('./controllers/license/od.json'));
-
-                //check for all licences if they are included in our list of compatible compendia
-                if(datalicence === 'unknown') {
-                    oddata = 'unknown';
-                }
-                else {
-                    if(od.hasOwnProperty(datalicence)) {
-                        oddata = true;
-                    }
-                    else oddata = false;
-                }
-
-                if(textlicence === 'unknown') {
-                    odtext = 'unknown';
-                }
-                else {
-                    if(od.hasOwnProperty(textlicence)) {
-                        odtext = true;
-                    }
-                    else odtext = false;
-                }
-
-                if(codelicence === 'unknown') {
-                    osicode = 'unknown';
-                }
-                else {
-                    osicode = osi.hasOwnProperty(codelicence);
-                }
-            }
-            else {
-                req.filePath = path.join(__dirname, 'badges/license_noInformation.svg');
-                req.options = options;
-                debug('Sending SVG %s to scaling service', req.filePath);
-                scaling.resizeAndSend(req, res);
-            }
-            //todo here
-        }
-        else {
-            if(extended === 'extended') {
-                req.filePath = path.join(__dirname, 'badges/license_noInformation.svg');
-                req.options = options;
-                debug('Sending SVG %s to scaling service', req.filePath);
-                scaling.resizeAndSend(req, res);
-            }
-            else {
-                res.redirect('https://img.shields.io/badge/licence-n%2Fa-9f9f9f.svg');
-            }
-        }
-
-    })
 };
 
 function getCompendiumID(passon) {
@@ -393,8 +266,17 @@ function sendResponse(passon) {
         let oddata = passon.odData;
         let odtext = passon.odText;
 
+        let options = {
+            //root: __dirname + '/badges/',
+            dotfiles: 'deny',
+            headers: {
+                'x-timestamp': Date.now(),
+                'x-sent': true
+            }
+        };
+
         // compare the boolean values of the code / data / text licences to determine the badge to send it to the client
-        if(extended === 'extended') {
+        if(passon.extended === 'extended') {
             if(osicode===true && oddata===true && odtext===true){
                 localPath ='badges/license_open.svg';
             }
@@ -569,7 +451,6 @@ function sendResponse(passon) {
                 }
             }
         }
-
         fulfill(passon);
     });
 }
