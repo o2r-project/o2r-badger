@@ -40,13 +40,21 @@ var md5_25 = "434854866412eb3e517d947b218a7a3a";
 var md5_26 = "d9de9c9f2599195a665f084eee5c178a";
 var md5_27 = "0af3d7fd87ed92f05e94d8021cd91280";
 
-
+let form;
 
 describe('Licence', function () {
     describe('/GET license_open', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson1.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the green badge when id is 1', function (done) {
             chai.request(nodeServer)
                 .get('/api/1.0/badge/licence/o2r/1')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -58,9 +66,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noData_code_text', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson2.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noData_code_text badge when the id is 2', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/2')
+                .post('/api/1.0/badge/licence/o2r/2')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -71,9 +87,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_data_code_noText', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson3.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_data_code_noText badge when the id is 3', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/3')
+                .post('/api/1.0/badge/licence/o2r/3')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -85,9 +109,17 @@ describe('Licence', function () {
     });
 
     describe('/GET license_data_noCode_text', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson4.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_data_noCode_text badge when the id is 4', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/4')
+                .post('/api/1.0/badge/licence/o2r/4')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -98,9 +130,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_data_noCode_noText', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson5.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_data_noCode_noText badge when the id is 5', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/5')
+                .post('/api/1.0/badge/licence/o2r/5')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -111,9 +151,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noData_noCode_text', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson6.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noData_noCode_text badge when the id is 6', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/6')
+                .post('/api/1.0/badge/licence/o2r/6')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -124,9 +172,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noData_code_noText', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson7.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noData_code_noText badge when the id is 7', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/7')
+                .post('/api/1.0/badge/licence/o2r/7')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -137,9 +193,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noData_noCode_noText', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson8.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noData_noCode_noText badge when the id is 8', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/8')
+                .post('/api/1.0/badge/licence/o2r/8')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -150,9 +214,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_data_text', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson9.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_data_text badge when the id is 9', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/9')
+                .post('/api/1.0/badge/licence/o2r/9')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -163,9 +235,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_data_code', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson10.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_data_code badge when the id is 10', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/10')
+                .post('/api/1.0/badge/licence/o2r/10')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -176,9 +256,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_code_text', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson11.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_code_text badge when the id is 11', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/11')
+                .post('/api/1.0/badge/licence/o2r/11')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -189,9 +277,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_data', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson1.json12', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_data badge when the id is 12', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/12')
+                .post('/api/1.0/badge/licence/o2r/12')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -202,9 +298,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_text', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson13.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_text badge when the id is 13', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/13')
+                .post('/api/1.0/badge/licence/o2r/13')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -215,9 +319,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_code', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson14.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_code badge when the id is 14', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/14')
+                .post('/api/1.0/badge/licence/o2r/14')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -228,9 +340,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_data_noText', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson15.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_data_noText badge when the id is 15', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/15')
+                .post('/api/1.0/badge/licence/o2r/15')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -241,9 +361,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noData_text', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson16.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noData_text badge when the id is 16', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/16')
+                .post('/api/1.0/badge/licence/o2r/16')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -254,9 +382,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_code_noText', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson17.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_code_noText badge when the id is 17', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/17')
+                .post('/api/1.0/badge/licence/o2r/17')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -267,9 +403,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noCode_text', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson18.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noCode_text badge when the id is 18', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/18')
+                .post('/api/1.0/badge/licence/o2r/18')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -280,9 +424,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noData_code', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson19.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noData_code badge when the id is 19', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/19')
+                .post('/api/1.0/badge/licence/o2r/19')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -293,9 +445,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_data_noCode', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson20.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_data_noCode badge when the id is 20', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/20')
+                .post('/api/1.0/badge/licence/o2r/20')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -306,9 +466,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noData_noText', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson21.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noData_noText badge when the id is 21', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/21')
+                .post('/api/1.0/badge/licence/o2r/21')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -319,9 +487,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noData_noCode', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson22.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noData_noCode badge when the id is 22', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/22')
+                .post('/api/1.0/badge/licence/o2r/22')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -332,9 +508,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noData', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson23.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noData badge when the id is 23', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/23')
+                .post('/api/1.0/badge/licence/o2r/23')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -345,9 +529,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noCode', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson24.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noCode badge when the id is 24', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/24')
+                .post('/api/1.0/badge/licence/o2r/24')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -358,9 +550,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noText', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson25.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noText badge when the id is 25', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/25')
+                .post('/api/1.0/badge/licence/o2r/25')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -371,9 +571,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noCode_noText', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson26.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noCode_noText badge when the id is 26', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/26')
+                .post('/api/1.0/badge/licence/o2r/26')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
@@ -384,9 +592,17 @@ describe('Licence', function () {
         });
     });
     describe('/GET license_noInformation', function () {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson27.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
         it('Should return the license_noInfromation badge when the id is 27', function (done) {
             chai.request(nodeServer)
-                .get('/api/1.0/badge/licence/o2r/27')
+                .post('/api/1.0/badge/licence/o2r/27')
+                .send(form)
                 .end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.not.be.empty;
