@@ -37,7 +37,7 @@ exports.getBadgeFromData = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send 'N/A' badge
-                debug('No badge information found', err);
+                debug("No badge information found: %s", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -47,7 +47,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug('Error generating badge:', err);
+                debug("Error generating badge: %s", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -303,7 +303,7 @@ function sendSmallBadge(passon) {
 
 function sendBigBadge(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Sending badge for geo name %s', passon.geoName);
+        debug('Sending map');
 
         function sendNA(text)  {
             passon.req.type = 'location';
@@ -315,7 +315,6 @@ function sendBigBadge(passon) {
         }
 
         let options = {
-            //root: __dirname,
             dotfiles: 'deny',
             headers: {
                 'x-timestamp': Date.now(),
@@ -323,21 +322,19 @@ function sendBigBadge(passon) {
             }
         };
 
-        if (typeof passon.body === 'undefined') {
-            sendNA('no data provided');
-        }
+        let bbox;
 
-        let coordinates = passon.body;
-
-        if (typeof coordinates.metadata.spatial.union.geojson.bbox === 'undefined') {
-            sendNA('compendium does not have bbox');
+        try {
+            bbox = passon.body.metadata.spatial.union.geojson.bbox;
+        } catch (err) {
+            sendNA('could not read bbox of compendium');
         }
 
         //Generate map
         let html = fs.readFileSync('./controllers/location/index_template.html', 'utf-8');
         html.replace('bbox', "Hello");
         //insert the locations into the html file / leaflet
-        let file = html.replace('var bbox;', 'var bbox = ' + JSON.stringify(coordinates.metadata.spatial.union.geojson.bbox) + ';');
+        let file = html.replace('var bbox;', 'var bbox = ' + JSON.stringify(bbox) + ';');
         let indexHTMLPath = './controllers/location/index.html';
         fs.writeFile(indexHTMLPath, file, (err) => {
             if (err) {

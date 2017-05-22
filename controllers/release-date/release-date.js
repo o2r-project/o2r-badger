@@ -11,21 +11,20 @@ let badgeNABig = 'badges/released_no_information.svg';
 exports.getBadgeFromData = (req, res) => {
 
     let passon = {
-        releaseDay: req.query.releaseDay,
-        releaseMonth : req.query.releaseMonth,
-        releaseYear : req.query.releaseYear,
+        body: req.body,
         extended: req.query.extended,
         req: req,
         res: res
     };
 
-    return sendResponse(passon)
+    return readReleaseTime(passon)
+        .then(sendResponse)
         .then((passon) => {
             debug('Completed generating badge');
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found", err);
+                debug("No badge information found: %s", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -35,7 +34,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug("Error generating badge:", err);
+                debug("Error generating badge: %s", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -77,6 +76,7 @@ exports.getBadgeFromReference = (req, res) => {
     };
 
     return getReleaseTime(passon)
+        .then(readReleaseTime)
         .then(sendResponse)
         .then((passon) => {
             debug('Completed generating release-time badge for %s', passon.id);
@@ -141,38 +141,7 @@ function getReleaseTime(passon) {
                 // get the created date (if available)
                 if(response.body !== undefined) {
                     // parse the response to json
-                    let jsonResponse = JSON.parse(response.body);
-                    if(jsonResponse.message.issued !== undefined){
-                        // get the issued parameter
-                        let issued = jsonResponse.message.issued;
-                        if(issued['date-parts'] !== undefined || issued['date-parts'] !== ''){
-                            // get the date part (containing the release date)
-                            let date = issued['date-parts'][0];
-                            if (isNaN(date[0]) || isNaN(date[0]) || isNaN(date[0])) {
-                                let error = new Error();
-                                error.msg = 'date is not a number';
-                                error.status = 403;
-                                error.badgeNA = true;
-                                reject(error);
-                            }
-
-                            passon.releaseDay = date[2];
-                            passon.releaseMonth = date[1];
-                            passon.releaseYear = date[0];
-                            debug('Release date is %s', date);
-                            fulfill(passon);
-                        } else {
-                            let error = new Error();
-                            error.msg = 'crossref entry does not contain release time';
-                            error.badgeNA = true;
-                            reject(error);
-                        }
-                    } else {
-                        let error = new Error();
-                        error.msg = 'crossref entry does not contain "issued" data';
-                        error.badgeNA = true;
-                        reject(error);
-                    }
+                    passon.body = JSON.parse(response.body);
                 } else {
                     let error = new Error();
                     error.msg = 'could not fetch crossref data';
@@ -183,8 +152,46 @@ function getReleaseTime(passon) {
     });
 }
 
+function readReleaseTime(passon) {
+    return new Promise((fulfill, reject) => {
+        let jsonResponse = passon.body;
+        if(jsonResponse.message.issued !== undefined){
+            // get the issued parameter
+            let issued = jsonResponse.message.issued;
+            if(issued['date-parts'] !== undefined || issued['date-parts'] !== ''){
+                // get the date part (containing the release date)
+                let date = issued['date-parts'][0];
+                if (isNaN(date[0]) || isNaN(date[0]) || isNaN(date[0])) {
+                    let error = new Error();
+                    error.msg = 'date is not a number';
+                    error.status = 403;
+                    error.badgeNA = true;
+                    reject(error);
+                }
+
+                passon.releaseDay = date[2];
+                passon.releaseMonth = date[1];
+                passon.releaseYear = date[0];
+                debug('Release date is %s', date);
+                fulfill(passon);
+            } else {
+                let error = new Error();
+                error.msg = 'crossref entry does not contain release time';
+                error.badgeNA = true;
+                reject(error);
+            }
+        } else {
+            let error = new Error();
+            error.msg = 'crossref entry does not contain "issued" data';
+            error.badgeNA = true;
+            reject(error);
+        }
+    });
+}
+
 function sendResponse(passon) {
     return new Promise((fulfill, reject) => {
+
         debug('Sending response for release date %s/%s/%s',
             passon.releaseYear,
             passon.releaseMonth,

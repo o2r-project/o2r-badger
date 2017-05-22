@@ -16,21 +16,20 @@ let badgeNABig = 'badges/license_noInformation.svg';
 exports.getBadgeFromData = (req, res) => {
 
     let passon = {
-        osiCode: req.query.osiCode,
-        odData: req.query.odData,
-        odText: req.query.odText,
+        body: req.body,
         extended: req.query.extended,
         req: req,
         res: res
     };
 
-    return sendResponse(passon)
+    return getLicenseInformation(passon)
+        .then(sendResponse)
         .then((passon) => {
             debug('Completed generating badge');
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send 'N/A' badge
-                debug('No badge information found', err);
+                debug("No badge information found: %s", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -40,7 +39,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug('Error generating badge:', err);
+                debug("Error generating badge: %s", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -82,6 +81,7 @@ exports.getBadgeFromReference = (req, res) => {
     };
 
     return getCompendiumID(passon)
+        .then(getCompendium)
         .then(getLicenseInformation)
         .then(sendResponse)
         .then((passon) => {
@@ -162,7 +162,7 @@ function getCompendiumID(passon) {
     });
 }
 
-function getLicenseInformation(passon) {
+function getCompendium(passon) {
     return new Promise((fulfill, reject) => {
         let requestURL = config.ext.o2r + '/api/v1/compendium/' + passon.compendiumID;
         debug('Fetching license status for compendium %s from %s', passon.compendiumID, requestURL);
@@ -189,61 +189,68 @@ function getLicenseInformation(passon) {
             }
 
             // Continue with metadata
-            let compendiumJSON = JSON.parse(body);
-            let osicode;
-            let oddata;
-            let odtext;
-            let datalicence;
-            let textlicence;
-            let codelicence;
-
-            // those values are in the json then
-            //json validation
-            if(compendiumJSON.hasOwnProperty('metadata') && compendiumJSON.metadata.hasOwnProperty('licence')) {
-                if(compendiumJSON.metadata.licence.hasOwnProperty('data')) {
-                    datalicence = compendiumJSON.metadata.licence.data;
-                }
-                else datalicence = 'unknown';
-                if(compendiumJSON.metadata.licence.hasOwnProperty('text')) {
-                    textlicence = compendiumJSON.metadata.licence.text;
-                }
-                else textlicence = 'unknown';
-                if(compendiumJSON.metadata.licence.hasOwnProperty('code')) {
-                    codelicence = compendiumJSON.metadata.licence.code;
-                }
-                else codelicence = 'unknown';
-
-                // read json file osi.json and od.json to compare whether the licence of the compendia is in the list of licences
-                let osi = JSON.parse(fs.readFileSync('./controllers/license/osi.json'));
-                let od = JSON.parse(fs.readFileSync('./controllers/license/od.json'));
-
-                //check for all licences if they are included in our list of compatible compendia
-                if(datalicence === 'unknown') {
-                    oddata = 'unknown';
-                }
-                else {
-                    oddata = od.hasOwnProperty(datalicence);
-                }
-
-                if(textlicence === 'unknown') {
-                    odtext = 'unknown';
-                }
-                else {
-                    odtext = od.hasOwnProperty(textlicence);
-                }
-
-                if(codelicence === 'unknown') {
-                    osicode = 'unknown';
-                }
-                else {
-                    osicode = osi.hasOwnProperty(codelicence);
-                }
-            }
-            passon.osiCode = osicode;
-            passon.odData = oddata;
-            passon.odText = odtext;
+            passon.body = JSON.parse(body);
             fulfill(passon);
         });
+    });
+}
+
+function getLicenseInformation(passon) {
+    return new Promise((fulfill, reject) => {
+        let compendiumJSON = passon.body;
+        let osicode;
+        let oddata;
+        let odtext;
+        let datalicence;
+        let textlicence;
+        let codelicence;
+
+        // those values are in the json then
+        //json validation
+        if(compendiumJSON.hasOwnProperty('metadata') && compendiumJSON.metadata.hasOwnProperty('licence')) {
+            if(compendiumJSON.metadata.licence.hasOwnProperty('data')) {
+                datalicence = compendiumJSON.metadata.licence.data;
+            }
+            else datalicence = 'unknown';
+            if(compendiumJSON.metadata.licence.hasOwnProperty('text')) {
+                textlicence = compendiumJSON.metadata.licence.text;
+            }
+            else textlicence = 'unknown';
+            if(compendiumJSON.metadata.licence.hasOwnProperty('code')) {
+                codelicence = compendiumJSON.metadata.licence.code;
+            }
+            else codelicence = 'unknown';
+
+            // read json file osi.json and od.json to compare whether the licence of the compendia is in the list of licences
+            let osi = JSON.parse(fs.readFileSync('./controllers/license/osi.json'));
+            let od = JSON.parse(fs.readFileSync('./controllers/license/od.json'));
+
+            //check for all licences if they are included in our list of compatible compendia
+            if(datalicence === 'unknown') {
+                oddata = 'unknown';
+            }
+            else {
+                oddata = od.hasOwnProperty(datalicence);
+            }
+
+            if(textlicence === 'unknown') {
+                odtext = 'unknown';
+            }
+            else {
+                odtext = od.hasOwnProperty(textlicence);
+            }
+
+            if(codelicence === 'unknown') {
+                osicode = 'unknown';
+            }
+            else {
+                osicode = osi.hasOwnProperty(codelicence);
+            }
+        }
+        passon.osiCode = osicode;
+        passon.odData = oddata;
+        passon.odText = odtext;
+        fulfill(passon);
     });
 }
 

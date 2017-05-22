@@ -10,7 +10,7 @@ let badgeNABig = ''; //todo implement extended badges
 exports.getBadgeFromData = (req, res) => {
 
     let passon = {
-        reviewStatus: req.query.reviewStatus,
+        body: req.body,
         extended: req.query.extended,
         req: req,
         res: res
@@ -22,7 +22,7 @@ exports.getBadgeFromData = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found", err);
+                debug("No badge information found: %s", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -32,7 +32,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug("Error generating badge:", err);
+                debug("Error generating badge: %s", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -167,47 +167,51 @@ function getReviewStatus(passon) {
                 debug('DOAJ API not accessible: %s', error);
                 reject(error);
             }
-
-            let data = JSON.parse(body);
-            if (typeof data.results === 'undefined' || data.results.length === 0) {
-                let error = new Error();
-                error.msg = 'error accessing doaj';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-            }
-            let process = data.results[0].bibjson.editorial_review.process;
-            if (typeof process === 'undefined') {
-                let error = new Error();
-                error.msg = 'no review status found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-            } else {
-                if (process.startsWith('Blind')) {
-                    passon.reviewStatus = 'Blind';
-                } else if (process.startsWith('Double blind')) {
-                    passon.reviewStatus = 'Double blind';
-                } else {
-                    passon.reviewStatus = 'Yes';
-                }
-                fulfill(passon);
-            }
+            passon.body = JSON.parse(body);
+            fulfill(passon);
         });
     });
 }
 
 function sendResponse(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Sending badge for review status %s', passon.reviewStatus);
+        let data = passon.body;
 
-        if (typeof passon.reviewStatus === 'undefined') {
+        if (typeof data.results === 'undefined' || data.results.length === 0) {
             let error = new Error();
-            error.msg = 'no review status provided';
+            error.msg = 'error accessing doaj';
             error.status = 404;
             error.badgeNA = true;
             reject(error);
         }
+        let process;
+
+        try {
+            process = data.results[0].bibjson.editorial_review.process;
+        } catch (error) {
+            error.msg = 'error accessing doaj';
+            error.badgeNA = true;
+            reject(error);
+        }
+
+        if (typeof process === 'undefined') {
+            let error = new Error();
+            error.msg = 'no review status found';
+            error.status = 404;
+            error.badgeNA = true;
+            reject(error);
+        } else {
+            if (process.startsWith('Blind')) {
+                passon.reviewStatus = 'Blind';
+            } else if (process.startsWith('Double blind')) {
+                passon.reviewStatus = 'Double blind';
+            } else {
+                passon.reviewStatus = 'Yes';
+            }
+            fulfill(passon);
+        }
+
+        debug('Sending badge for review status %s', passon.reviewStatus);
         passon.res.redirect(generateBadge(passon.reviewStatus));
         fulfill(passon);
     });

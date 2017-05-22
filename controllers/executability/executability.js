@@ -11,7 +11,7 @@ let badgeNABig = 'badges/Executable_noInfo.svg';
 exports.getBadgeFromData = (req, res) => {
 
     let passon = {
-        jobStatus : req.query.jobStatus,
+        body: req.body,
         extended: req.query.extended,
         req: req,
         res: res
@@ -76,14 +76,14 @@ exports.getBadgeFromReference = (req, res) => {
 
     return getCompendiumID(passon)
         .then(getJobID)
-        .then(getJobStatus)
+        .then(getJob)
         .then(sendResponse)
         .then((passon) => {
             debug('Completed generating badge for %s', passon.id);
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found", err);
+                debug("No badge information found: %s", err);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -93,7 +93,7 @@ exports.getBadgeFromReference = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug('Error generating badge:', err);
+                debug("Error generating badge: %s", err);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -192,7 +192,7 @@ function getJobID(passon) {
     });
 }
 
-function getJobStatus(passon) {
+function getJob(passon) {
     return new Promise((fulfill, reject) => {
         let requestURL = config.ext.o2r + '/api/v1/job/' + passon.jobID;
         debug('Fetching job status for job %s from %s', passon.jobID, requestURL);
@@ -221,8 +221,7 @@ function getJobStatus(passon) {
             }
 
             // Continue with jobID
-            let data = JSON.parse(body);
-            passon.jobStatus = data.status;
+            passon.body = JSON.parse(body);
             fulfill(passon);
         });
     });
@@ -231,6 +230,15 @@ function getJobStatus(passon) {
 function sendResponse(passon) {
     return new Promise((fulfill, reject) => {
         debug('Sending response for status %s', passon.jobStatus);
+
+        try {
+            let data = JSON.parse(passon.body);
+            passon.jobStatus = data.status;
+        } catch (err) {
+            err.badgeNA = true;
+            err.msg = 'error reading job status';
+            reject(err);
+        }
 
         if(passon.extended === 'extended') {
             //if the status is 'success' the green badge is sent to the client
