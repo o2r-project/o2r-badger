@@ -59,7 +59,7 @@ exports.getBadgeFromReference = (req, res) => {
         id = id.substring(4);
     } else {
         debug('doi is invalid');
-        res.redirect("https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg");
+        res.redirect(badgeNASmall);
         return;
     }
 

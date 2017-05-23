@@ -22,14 +22,7 @@ exports.getBadgeFromData = (req, res) => {
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err);
-                if (passon.extended === 'extended') {
-                    passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
-                } else if (passon.extended === undefined) {
-                    res.redirect(badgeNASmall);
-                } else {
-                    res.status(404).send('not allowed');
-                }
+                res.redirect(badgeNASmall);
             } else { // Send error response
                 debug("Error generating badge: %s", err);
                 let status = 500;
@@ -57,7 +50,7 @@ exports.getBadgeFromReference = (req, res) => {
         id = id.substring(4);
     } else {
         debug('doi is invalid');
-        res.redirect("https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg");
+        res.redirect(badgeNASmall);
         return;
     }
 
@@ -82,14 +75,7 @@ exports.getBadgeFromReference = (req, res) => {
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found", err);
-                if (passon.extended === 'extended') {
-                    passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
-                } else if (passon.extended === undefined) {
-                    res.redirect(badgeNASmall);
-                } else {
-                    res.status(404).send('not allowed');
-                }
+                res.redirect(badgeNASmall);
             } else { // Send error response
                 debug("Error generating badge:", err);
                 let status = 500;
@@ -145,8 +131,14 @@ function getISSN(passon) {
                 reject(error);
             }
 
-            passon.issn = data.results[0].bibjson.journal.issns[0];
-            if (!passon.issn) {
+            try {
+                passon.issn = data.results[0].bibjson.journal.issns[0];
+            } catch (err) {
+                err.msg = 'did not find issn for DOI';
+                err.badgeNA = true;
+                reject(err);
+            }
+            if (!passon.issn || typeof passon.issn === 'undefined') {
                 debug('no issn found for DOI %s', passon.id);
                 let error = new Error();
                 error.msg = 'no issn found';
