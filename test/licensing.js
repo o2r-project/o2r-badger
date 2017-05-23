@@ -88,9 +88,29 @@ describe('License badge:', function () {
         });
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r/doi:', () => {
-        it('should respond with a small badge: license open', (done) => {
+    describe('POST /api/1.0/badge/licence/o2r', () => {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson1.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
         });
+        it('should respond with a small badge: license open', (done) => {
+            request({
+                uri: baseURL + '/api/1.0/badge/licence/o2r',
+                method: 'POST',
+                form: form,
+                timeout: requestLoadingTimeout,
+                followRedirect: false
+            }, (err, res, body) => {
+                if (err) done(err);
+                assert.ifError(err);
+                assert.equal(res.statusCode, 302);
+                assert.equal(res.headers['location'], 'https://img.shields.io/badge/licence-open-44cc11.svg');
+                done();
+            });
+        }).timeout(20000);
     });
 
     describe.skip('POST /api/1.0/badge/licence/o2r with json including licence information', () => {
