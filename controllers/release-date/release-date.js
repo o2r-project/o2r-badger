@@ -55,15 +55,6 @@ exports.getBadgeFromReference = (req, res) => {
 
     debug('Handling %s badge generation for id %s', req.params.type, req.params.id);
 
-    //extract doi from the id parameter (e.g. doi:11.999/asdf.jkl)
-    if(id.substring(0, 4) === "doi:") {
-        id = id.substring(4);
-    } else {
-        debug('doi is invalid');
-        res.redirect(badgeNASmall);
-        return;
-    }
-
     if (typeof req.params.extended !== 'undefined') {
         extended = req.params.extended;
     }
@@ -125,6 +116,7 @@ function getReleaseTime(passon) {
                 if (error) {
                     debug(error);
                     reject(error);
+                    return;
                 }
                 if (!response || response.status === 404 || response.statusCode === 404) {
                     let error = new Error();
@@ -132,11 +124,13 @@ function getReleaseTime(passon) {
                     error.msg = 'crossref did not find doi';
                     error.status = 404;
                     reject(error);
+                    return;
                 } else if (response.status === 500 || response.statusCode === 500) {
                     let error = new Error();
                     error.msg = 'Unable to find data on server';
                     error.status = 500;
                     reject(error);
+                    return;
                 }
 
                 try {
@@ -146,6 +140,7 @@ function getReleaseTime(passon) {
                     err.msg = 'could not fetch crossref data';
                     err.badgeNA = true;
                     reject(err);
+                    return;
                 }
             });
     });
@@ -166,6 +161,7 @@ function readReleaseTime(passon) {
                     error.status = 403;
                     error.badgeNA = true;
                     reject(error);
+                    return;
                 }
 
                 passon.releaseDay = date[2];
@@ -178,12 +174,14 @@ function readReleaseTime(passon) {
                 error.msg = 'crossref entry does not contain release time';
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
         } else {
             let error = new Error();
             error.msg = 'crossref entry does not contain "issued" data';
             error.badgeNA = true;
             reject(error);
+            return;
         }
     });
 }
@@ -202,6 +200,7 @@ function sendResponse(passon) {
             error.status = 403;
             error.badgeNA = true;
             reject(error);
+            return;
         }
 
         /*************** send big badges *************/

@@ -45,15 +45,6 @@ exports.getBadgeFromReference = (req, res) => {
 
     debug('Handling badge generation for id %s', req.params.id);
 
-    //extract doi from the id parameter (e.g. doi:11.999/asdf.jkl)
-    if(id.substring(0, 4) === "doi:") {
-        id = id.substring(4);
-    } else {
-        debug('doi is invalid');
-        res.redirect(badgeNASmall);
-        return;
-    }
-
     if (typeof req.params.extended !== 'undefined') {
         extended = req.params.extended;
     }
@@ -95,15 +86,16 @@ function getISSN(passon) {
     return new Promise((fulfill, reject) => {
         debug('Fetching ISSN ID from %s for DOI %s', config.ext.DOAJ, passon.id);
 
-        let requestURL = config.ext.DOAJ + encodeURIComponent(passon.id);
+        let requestURL = config.ext.DOAJ + 'doi:' + encodeURIComponent(passon.id);
 
         //request DOAJ API to get ISSN
         //e.g. https://doaj.org/api/v1/search/articles/doi%3A10.3389%2Ffpsyg.2013.00479
         request(requestURL, function(error, response, body) {
 
-            if (error) {
+            if (error || typeof body.error !== 'undefined') {
                 debug('DOAJ API not accessible: %s', error);
                 reject(error);
+                return;
             }
 
             let data;
@@ -113,6 +105,7 @@ function getISSN(passon) {
                 err.msg = 'error accessing doaj';
                 err.badgeNA = true;
                 reject(error);
+                return;
             }
 
             if (typeof data.results === 'undefined') {
@@ -121,6 +114,7 @@ function getISSN(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
 
             if (data.results.length === 0) {
@@ -129,6 +123,7 @@ function getISSN(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
 
             try {
@@ -137,6 +132,7 @@ function getISSN(passon) {
                 err.msg = 'did not find issn for DOI';
                 err.badgeNA = true;
                 reject(err);
+                return;
             }
             if (!passon.issn || typeof passon.issn === 'undefined') {
                 debug('no issn found for DOI %s', passon.id);
@@ -145,10 +141,10 @@ function getISSN(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
             fulfill(passon);
         });
-
     });
 }
 
@@ -164,6 +160,7 @@ function getReviewStatus(passon) {
             if (error) {
                 debug('DOAJ API not accessible: %s', error);
                 reject(error);
+                return;
             }
             passon.body = JSON.parse(body);
             fulfill(passon);
@@ -181,6 +178,7 @@ function sendResponse(passon) {
             error.status = 404;
             error.badgeNA = true;
             reject(error);
+            return;
         }
         let process;
 
@@ -190,6 +188,7 @@ function sendResponse(passon) {
             error.msg = 'error accessing doaj';
             error.badgeNA = true;
             reject(error);
+            return;
         }
 
         if (typeof process === 'undefined') {
@@ -198,6 +197,7 @@ function sendResponse(passon) {
             error.status = 404;
             error.badgeNA = true;
             reject(error);
+            return;
         } else {
             if (process.startsWith('Blind')) {
                 passon.reviewStatus = 'Blind';

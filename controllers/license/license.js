@@ -59,15 +59,6 @@ exports.getBadgeFromReference = (req, res) => {
 
     debug('Handling badge generation for id %s', req.params.id);
 
-    //extract doi from the id parameter (e.g. doi:11.999/asdf.jkl)
-    if(id.substring(0, 4) === "doi:") {
-        id = id.substring(4);
-    } else {
-        debug('doi is invalid');
-        res.redirect(badgeNASmall);
-        return;
-    }
-
     if (typeof req.query.extended !== 'undefined') {
         extended = req.query.extended;
     }
@@ -133,12 +124,14 @@ function getCompendiumID(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
             else if(response.statusCode === 500 || response.status === 500) {
                 let error = new Error();
                 error.msg = 'error filtering for doi';
                 error.status = 500;
                 reject(error);
+                return;
             }
 
             let data = JSON.parse(body);
@@ -154,6 +147,7 @@ function getCompendiumID(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
 
         });
@@ -171,6 +165,7 @@ function getCompendium(passon) {
             // no job for the given id available
             if(error) {
                 reject(error);
+                return;
             }
             // status responses
             if(response.status === 404 || !body.results) {
@@ -179,12 +174,14 @@ function getCompendium(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
             else if(response.status === 500) {
                 let error = new Error();
                 error.msg = 'Unable to access server';
                 error.status = 500;
                 reject(error);
+                return;
             }
 
             // Continue with metadata
@@ -265,6 +262,7 @@ function sendResponse(passon) {
             error.status = 404;
             error.badgeNA = true;
             reject(error);
+return;
         }
 
         let localPath;

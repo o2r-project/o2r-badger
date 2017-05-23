@@ -54,15 +54,6 @@ exports.getBadgeFromReference = (req, res) => {
 
     debug('Handling %s badge generation for id %s', req.params.type, req.params.id);
 
-    //extract doi from the id parameter (e.g. doi:11.999/asdf.jkl)
-    if(id.substring(0, 4) === "doi:") {
-        id = id.substring(4);
-    } else {
-        debug('doi is invalid');
-        res.redirect(badgeNASmall);
-        return;
-    }
-
     if (typeof req.params.extended !== 'undefined') {
         extended = req.params.extended;
     }
@@ -128,12 +119,14 @@ function getCompendiumID(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
             else if(response.statusCode === 500 || response.status === 500) {
                 let error = new Error();
                 error.msg = 'error filtering for doi';
                 error.status = 500;
                 reject(error);
+                return;
             }
 
             let data = JSON.parse(body);
@@ -149,6 +142,7 @@ function getCompendiumID(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
 
         });
@@ -176,12 +170,14 @@ function getJobID(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
             else if(response.status === 500) {
                 let error = new Error();
                 error.msg = 'Unable to find data on server';
                 error.status = 500;
                 reject(error);
+                return;
             }
 
             // Continue with jobID
@@ -212,12 +208,14 @@ function getJob(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
             else if(response.status === 500) {
                 let error = new Error();
                 error.msg = 'Unable to find data on server';
                 error.status = 500;
                 reject(error);
+                return;
             }
 
             // Continue with jobID
@@ -237,6 +235,7 @@ function sendResponse(passon) {
             err.badgeNA = true;
             err.msg = 'error reading job status';
             reject(err);
+            return;
         }
 
         if(passon.extended === 'extended') {
@@ -286,6 +285,7 @@ function sendResponse(passon) {
             error.msg = 'value for parameter extended not allowed';
             error.status = 404;
             reject(error);
+            return;
         }
     });
 }

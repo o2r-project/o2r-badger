@@ -67,15 +67,6 @@ exports.getBadgeFromReference = (req, res) => {
 
     debug('Handling badge generation for id %s', req.params.id);
 
-    //extract doi from the id parameter (e.g. doi:11.999/asdf.jkl)
-    if(id.substring(0, 4) === "doi:") {
-        id = id.substring(4);
-    } else {
-        debug('doi is invalid');
-        res.redirect(badgeNASmall); //todo move this in all services
-        return;
-    }
-
     if (typeof req.query.extended !== 'undefined') {
         extended = req.query.extended;
     }
@@ -151,12 +142,14 @@ function getCompendiumID(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
             else if(response.statusCode === 500 || response.status === 500) {
                 let error = new Error();
                 error.msg = 'error filtering for doi';
                 error.status = 500;
                 reject(error);
+                return;
             }
 
             let data = JSON.parse(body);
@@ -172,6 +165,7 @@ function getCompendiumID(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
         });
     });
@@ -187,6 +181,7 @@ function getCompendium(passon) {
         request(requestURL, function(error, response, body) {
             if (error) {
                 reject(error);
+                return;
             }
 
             if (response.statusCode !== 200) {
@@ -195,6 +190,7 @@ function getCompendium(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
 
             passon.body = JSON.parse(body);
@@ -214,6 +210,7 @@ function getCenterFromData(passon) {
             error.status = 404;
             error.badgeNA = true;
             reject(error);
+            return;
         }
 
         let coordinates = passon.body;
@@ -225,6 +222,7 @@ function getCenterFromData(passon) {
             err.badgeNA = true;
             err.msg = 'o2r compendium does not contain spatial information (bbox)';
             reject(err);
+            return;
         }
 
         //calculate the center of the polygon
@@ -258,6 +256,7 @@ function getGeoName(passon) {
                                 err.badgeNA = true;
                                 err.msg = 'no ocean name found';
                                 reject(err);
+                                return;
                             }
                             fulfill(passon);
                         } else {
@@ -266,6 +265,7 @@ function getGeoName(passon) {
                             error.status = 404;
                             error.badgeNA = true;
                             reject(error);
+                            return;
                         }
                     });
                 } else if(geoname.codes) {
@@ -283,6 +283,7 @@ function getGeoName(passon) {
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
+                return;
             }
         });
     });
@@ -298,6 +299,7 @@ function sendSmallBadge(passon) {
             error.status = 404;
             error.badgeNA = true;
             reject(error);
+            return;
         }
         passon.res.redirect("https://img.shields.io/badge/research%20location-" + passon.geoName + "-blue.svg");
         fulfill(passon);
@@ -331,6 +333,7 @@ function sendBigBadge(passon) {
             bbox = passon.body.metadata.spatial.union.geojson.bbox;
         } catch (err) {
             sendNA('could not read bbox of compendium');
+            return;
         }
 
         //Generate map
@@ -343,6 +346,7 @@ function sendBigBadge(passon) {
             if (err) {
                 debug('Error writing index.html file to %s', indexHTMLPath);
                 reject(err);
+                return;
             } else {
                 passon.req.filePath = path.join(__dirname, 'index.html');
                 passon.req.type = 'location';
