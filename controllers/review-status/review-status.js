@@ -5,7 +5,6 @@ const scaling = require('../scaling/scaling');
 const path = require('path');
 
 let badgeNASmall = 'https://img.shields.io/badge/Peer%20Review-n%2Fa-lightgrey.svg';
-let badgeNABig = ''; //todo implement extended badges
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -62,8 +61,8 @@ exports.getBadgeFromReference = (req, res) => {
         return;
     }
 
-    if (typeof req.query.extended !== 'undefined') {
-        extended = req.query.extended;
+    if (typeof req.params.extended !== 'undefined') {
+        extended = req.params.extended;
     }
 
     let passon = {
@@ -208,12 +207,10 @@ function sendResponse(passon) {
             } else {
                 passon.reviewStatus = 'Yes';
             }
+            debug('Sending badge for review status %s', passon.reviewStatus);
+            passon.res.redirect(generateBadge(passon.reviewStatus));
             fulfill(passon);
         }
-
-        debug('Sending badge for review status %s', passon.reviewStatus);
-        passon.res.redirect(generateBadge(passon.reviewStatus));
-        fulfill(passon);
     });
 }
 

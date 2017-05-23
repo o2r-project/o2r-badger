@@ -1,0 +1,121 @@
+{
+  "last": "https://doaj.org/api/v1/search/journals/issn:1664-1078?page=1&pageSize=10",
+  "pageSize": 10,
+  "timestamp": "2017-0523T16:50:03Z",
+  "results": [
+    {
+      "last_updated": "2017-02-28T13:09:50Z",
+      "id": "c96ae8c547e840d9acc80f7151a28617",
+      "bibjson": {
+        "allows_fulltext_indexing": true,
+        "persistent_identifier_scheme": [
+          "DOI"
+        ],
+        "keywords": [
+          "cultural psychology",
+          "evolutionary psychology",
+          "psychopathology",
+          "organizational psychology",
+          "developmental psychology",
+          "educational psychology"
+        ],
+        "apc": {
+          "currency": "USD",
+          "average_price": 2490
+        },
+        "subject": [
+          {
+            "code": "BF1-990",
+            "term": "Psychology",
+            "scheme": "LCC"
+          }
+        ],
+        "article_statistics": {
+          "url": "http://loop.frontiersin.org/about",
+          "statistics": true
+        },
+        "title": "Frontiers in Psychology",
+        "publication_time": 14,
+        "provider": "Frontiers Media S.A.",
+        "format": [
+          "PDF",
+          "HTML",
+          "ePUB",
+          "XML"
+        ],
+        "plagiarism_detection": {
+          "detection": true,
+          "url": "http://frontiersin.org/psychology/reviewguidelines"
+        },
+        "apc_url": "http://frontiersin.org/psychology/fees",
+        "link": [
+          {
+            "url": "http://frontiersin.org/psychology",
+            "type": "homepage"
+          },
+          {
+            "url": "http://frontiersin.org/psychology/fees",
+            "type": "waiver_policy"
+          },
+          {
+            "url": "http://frontiersin.org/psychology/editorialboard",
+            "type": "editorial_board"
+          },
+          {
+            "url": "http://frontiersin.org/psychology/about",
+            "type": "aims_scope"
+          },
+          {
+            "url": "http://frontiersin.org/psychology/authorguidelines",
+            "type": "author_instructions"
+          },
+          {
+            "url": "http://frontiersin.org/psychology/about",
+            "type": "oa_statement"
+          }
+        ],
+        "oa_start": {
+          "year": 2010
+        },
+        "author_copyright": {
+          "url": "http://journal.frontiersin.org/journal/psychology#about",
+          "copyright": "True"
+        },
+        "publisher": "Frontiers Media S.A.",
+        "language": [
+          "EN"
+        ],
+        "license": [
+          {
+            "open_access": true,
+            "embedded": false,
+            "title": "CC BY",
+            "url": "http://journal.frontiersin.org/journal/psychology#about",
+            "NC": false,
+            "ND": false,
+            "embedded_example_url": "",
+            "SA": false,
+            "type": "CC BY",
+            "BY": true
+          }
+        ],
+        "country": "CH",
+        "submission_charges_url": "http://frontiersin.org/psychology/fees",
+        "author_publishing_rights": {
+          "url": "http://journal.frontiersin.org/journal/psychology#about",
+          "publishing_rights": "True"
+        },
+        "identifier": [
+          {
+            "type": "eissn",
+            "id": "1664-1078"
+          }
+        ]
+      },
+      "created_date": "2010-11-23T16:45:11Z"
+    }
+  ],
+  "query": "issn:1664-1078",
+  "total": 1,
+  "page": 1
+}
