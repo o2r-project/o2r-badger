@@ -155,7 +155,7 @@ function readReleaseTime(passon) {
             if(issued['date-parts'] !== undefined || issued['date-parts'] !== ''){
                 // get the date part (containing the release date)
                 let date = issued['date-parts'][0];
-                if (isNaN(date[0]) || isNaN(date[0]) || isNaN(date[0])) {
+                if (isNaN(date[0])) {
                     let error = new Error();
                     error.msg = 'date is not a number';
                     error.status = 403;
@@ -167,6 +167,10 @@ function readReleaseTime(passon) {
                 passon.releaseDay = date[2];
                 passon.releaseMonth = date[1];
                 passon.releaseYear = date[0];
+                //Assign default values
+                passon.releaseMonth = (!date[1]) ? 0 : date[1];
+                passon.releaseDay = (!date[2]) ? 0 : date[2];
+
                 debug('Release date is %s/%s/%s', passon.releaseYear, passon.releaseMonth, passon.releaseDay);
                 fulfill(passon);
             } else {
@@ -194,7 +198,8 @@ function sendResponse(passon) {
             passon.releaseMonth,
             passon.releaseDay);
 
-        if (isNaN(passon.releaseYear) || isNaN(passon.releaseMonth) || isNaN(passon.releaseDay)) {
+        if (isNaN(passon.releaseYear) /*|| isNaN(passon.releaseMonth) || isNaN(passon.releaseDay)*/) {
+            // only year is required for more results
             let error = new Error();
             error.msg = 'date is not a number';
             error.status = 403;

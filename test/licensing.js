@@ -8,8 +8,6 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 const request = require('request');
 const md5 = require('js-md5');
-
-//const request = require('supertest');
 const assert = require('chai').assert;
 
 chai.use(chaiHttp);
