@@ -120,7 +120,14 @@ function getISSN(passon) {
                 reject(error);
             }
 
-            let data = JSON.parse(body);
+            let data;
+            try {
+                data = JSON.parse(body);
+            } catch (err) {
+                err.msg = 'error accessing doaj';
+                err.badgeNA = true;
+                reject(error);
+            }
 
             if (typeof data.results === 'undefined') {
                 let error = new Error();

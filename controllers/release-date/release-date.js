@@ -60,12 +60,12 @@ exports.getBadgeFromReference = (req, res) => {
         id = id.substring(4);
     } else {
         debug('doi is invalid');
-        res.redirect("https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg");
+        res.redirect(badgeNASmall);
         return;
     }
 
-    if (typeof req.query.extended !== 'undefined') {
-        extended = req.query.extended;
+    if (typeof req.params.extended !== 'undefined') {
+        extended = req.params.extended;
     }
 
     let passon = {
@@ -110,7 +110,7 @@ exports.getBadgeFromReference = (req, res) => {
 
 function getReleaseTime(passon) {
     return new Promise((fulfill, reject) => {
-        let requestURL = crossref + passon.id;
+        let requestURL = crossref + encodeURIComponent(passon.id);
         debug('Fetching release time from %s with URL %s', config.ext.crossref, requestURL);
 
         // Request to crossref to get information for the paper with the given doi
@@ -128,8 +128,9 @@ function getReleaseTime(passon) {
                 }
                 if (!response || response.status === 404 || response.statusCode === 404) {
                     let error = new Error();
-                    error.msg = 'crossref api call failed';
-                    error.status = 500;
+                    error.badgeNA = true;
+                    error.msg = 'crossref did not find doi';
+                    error.status = 404;
                     reject(error);
                 } else if (response.status === 500 || response.statusCode === 500) {
                     let error = new Error();
@@ -138,15 +139,13 @@ function getReleaseTime(passon) {
                     reject(error);
                 }
 
-                // get the created date (if available)
-                if(response.body !== undefined) {
-                    // parse the response to json
-                    passon.body = JSON.parse(response.body);
-                } else {
-                    let error = new Error();
-                    error.msg = 'could not fetch crossref data';
-                    error.badgeNA = true;
-                    reject(error);
+                try {
+                    passon.body = JSON.parse(body);
+                    fulfill(passon);
+                } catch (err) {
+                    err.msg = 'could not fetch crossref data';
+                    err.badgeNA = true;
+                    reject(err);
                 }
             });
     });
@@ -172,7 +171,7 @@ function readReleaseTime(passon) {
                 passon.releaseDay = date[2];
                 passon.releaseMonth = date[1];
                 passon.releaseYear = date[0];
-                debug('Release date is %s', date);
+                debug('Release date is %s/%s/%s', passon.releaseYear, passon.releaseMonth, passon.releaseDay);
                 fulfill(passon);
             } else {
                 let error = new Error();
