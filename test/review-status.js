@@ -76,10 +76,10 @@ describe('peer review badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('GET /api/1.0/badge/peerreview/doaj/doi:10.3390%2Frs9030290', () => {
+    describe('GET /api/1.0/badge/peerreview/doaj/10.3390%2Frs9030290', () => {
         it('badge via doi: should respond with a small badge indicating peer-review status "blind"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/peerreview/doaj/' + 'doi:10.3390%2Frs9030290',
+                uri: baseURL + '/api/1.0/badge/peerreview/doaj/' + '10.3390%2Frs9030290',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false

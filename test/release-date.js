@@ -49,10 +49,10 @@ describe('peer review badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('GET /api/1.0/badge/releasetime/crossref/doi:99.9999%2Fabcdefgh', () => {
+    describe('GET /api/1.0/badge/releasetime/crossref/99.9999%2Fabcdefgh', () => {
         it('badge via doi: should respond with a small badge with release data "n/a"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/releasetime/crossref/' + 'doi:99.9999%2Fabcdefgh',
+                uri: baseURL + '/api/1.0/badge/releasetime/crossref/' + '99.9999%2Fabcdefgh',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false
@@ -66,10 +66,10 @@ describe('peer review badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('GET /api/1.0/badge/releasetime/crossref/doi:10.3390%2Frs9030290', () => {
+    describe('GET /api/1.0/badge/releasetime/crossref/10.3390%2Frs9030290', () => {
         it('badge via doi: should respond with a small badge indicating release date "2017"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/releasetime/crossref/' + 'doi:10.3390%2Frs9030290',
+                uri: baseURL + '/api/1.0/badge/releasetime/crossref/' + '10.3390%2Frs9030290',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false

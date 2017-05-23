@@ -8,8 +8,6 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 const request = require('request');
 const md5 = require('js-md5');
-
-//const request = require('supertest');
 const assert = require('chai').assert;
 
 chai.use(chaiHttp);
@@ -128,10 +126,10 @@ describe('executability badge (small):', function () {
 
 
 
-    describe('GET /api/1.0/badge/executable/o2r/doi:10.99999%2Funknown', () => {
+    describe('GET /api/1.0/badge/executable/o2r/10.99999%2Funknown', () => {
         it('unassigned doi: should respond with a small badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r/' + 'doi:10.99999%2Funknown',
+                uri: baseURL + '/api/1.0/badge/executable/o2r/' + '10.99999%2Funknown',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false
@@ -245,10 +243,10 @@ describe('executability badge (small):', function () {
     });
 
 
-    describe('GET /api/1.0/badge/executable/o2r/doi:10.99999%2Funknown', () => {
+    describe('GET /api/1.0/badge/executable/o2r/10.99999%2Funknown', () => {
         it('unassigned doi: should respond with a small badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r/' + 'doi:10.99999%2Funknown',
+                uri: baseURL + '/api/1.0/badge/executable/o2r/' + '10.99999%2Funknown',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false

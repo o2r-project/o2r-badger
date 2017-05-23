@@ -128,10 +128,10 @@ describe('Location badge:', function () {
         }).timeout(20000);
     });
 
-    describe('GET /api/1.0/badge/spatial/o2r/doi:10.99999%2Funknown', () => {
+    describe('GET /api/1.0/badge/spatial/o2r/10.99999%2Funknown', () => {
         it('unassigned doi: should respond with a small badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/spatial/o2r/' + 'doi:10.99999%2Funknown',
+                uri: baseURL + '/api/1.0/badge/spatial/o2r/' + '10.99999%2Funknown',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false
