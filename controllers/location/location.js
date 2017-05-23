@@ -219,12 +219,13 @@ function getCenterFromData(passon) {
 
         let coordinates = passon.body;
 
-        if (typeof coordinates.metadata.spatial.union.geojson.bbox === 'undefined') {
-            let error = new Error();
-            error.msg = 'compendium does not have bbox';
-            error.status = 404;
-            error.badgeNA = true;
-            reject(error);
+        try {
+            let coords = coordinates.metadata.spatial.union.geojson.bbox;
+            debug('Bounding box is %s, %s, %s, %s', coords[0], coords[1], coords[2], coords[3]);
+        } catch (err) {
+            err.badgeNA = true;
+            err.msg = 'o2r compendium does not contain spatial information (bbox)';
+            reject(err);
         }
 
         //calculate the center of the polygon
@@ -252,9 +253,14 @@ function getGeoName(passon) {
                         proxy: config.net.proxy}, function (error,response,body){
                         if(response.statusCode === 200) {
                             geoname_ocean = JSON.parse(body);
-                            passon.geoName = geoname_ocean.ocean.name;
+                            try {
+                                passon.geoName = geoname_ocean.ocean.name;
+                            } catch (err) {
+                                err.badgeNA = true;
+                                err.msg = 'no ocean name found';
+                                reject(err);
+                            }
                             fulfill(passon);
-                            //res.redirect("https://img.shields.io/badge/research%20location-" + geoname_ocean.ocean.name + "-blue.svg");
                         } else {
                             let error = new Error();
                             error.msg = 'could not get geoname ocean';
@@ -267,11 +273,9 @@ function getGeoName(passon) {
                     if (geoname.adminName1) {
                         passon.geoName = geoname.adminName1+"%2C%20"+geoname.countryName;
                         fulfill(passon);
-                        //res.redirect("https://img.shields.io/badge/research%20location-"+geoname.adminName1+"%2C%20"+geoname.countryName+"-blue.svg");
                     } else {
                         passon.geoName = geoname.countryName;
                         fulfill(passon);
-                        //res.redirect("https://img.shields.io/badge/research%20location-"+geoname.countryName+"-blue.svg");
                     }
                 }
             } else {
@@ -496,11 +500,11 @@ exports.getBigSpatialBadge = (req, res) => {
 function calculateMeanCenter(json) {
 	let bbox = json.metadata.spatial.union.geojson.bbox;
 
-	let x1 = bbox[1];
-	let y1 = bbox[0];
-	let x2 = bbox[3];
-	let y2 = bbox[2];
-	let centerX= x1+((x2 - x1) / 2);
-	let centerY= y1+((y2 - y1) / 2);
+	let x1 = parseFloat(bbox[1]);
+	let y1 = parseFloat(bbox[0]);
+	let x2 = parseFloat(bbox[3]);
+	let y2 = parseFloat(bbox[2]);
+	let centerX= x1 + ((x2 - x1) / 2);
+	let centerY= y1 + ((y2 - y1) / 2);
 	return [centerX,centerY];
 }
