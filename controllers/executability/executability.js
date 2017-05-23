@@ -63,8 +63,8 @@ exports.getBadgeFromReference = (req, res) => {
         return;
     }
 
-    if (typeof req.query.extended !== 'undefined') {
-        extended = req.query.extended;
+    if (typeof req.params.extended !== 'undefined') {
+        extended = req.params.extended;
     }
 
     let passon = {
@@ -232,8 +232,7 @@ function sendResponse(passon) {
         debug('Sending response for status %s', passon.jobStatus);
 
         try {
-            let data = JSON.parse(passon.body);
-            passon.jobStatus = data.status;
+            passon.jobStatus = passon.body.status;
         } catch (err) {
             err.badgeNA = true;
             err.msg = 'error reading job status';
