@@ -17,11 +17,7 @@ chai.use(chaiHttp);
 let baseURL = config.net.endpoint + ':' + config.net.port;
 let form;
 let requestLoadingTimeout = 10000;
-
-let md5_1 = 'c0aaab1e2b28e53746d005cdd239087d';
-let md5_13 = 'ae64c5bf25cb2f69939f9635eabde1f3';
-
-let substring_svg = 'license:</tspan><tspansodipodi:role="line"id="tspan13903"x="30.581934"y="34.958702">partially open</tspan>';
+let badgeString = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\r\n<svg';
 
 describe('License badge:', function () {
 
@@ -43,7 +39,7 @@ describe('License badge:', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.equal(md5(res.body), md5_1);
+                assert.isTrue(res.body.startsWith(badgeString));
                 done();
             });
         }).timeout(20000);
@@ -67,7 +63,7 @@ describe('License badge:', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.equal(md5(res.body), md5_13);
+                assert.isTrue(res.body.startsWith(badgeString));
                 done();
             });
         }).timeout(20000);

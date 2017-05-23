@@ -124,8 +124,6 @@ describe('executability badge (small):', function () {
         }).timeout(20000);
     });
 
-
-
     describe('GET /api/1.0/badge/executable/o2r/10.99999%2Funknown', () => {
         it('unassigned doi: should respond with a small badge indicating no information', (done) => {
             request({
