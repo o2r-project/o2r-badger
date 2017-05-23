@@ -1,72 +1,69 @@
-//test file with mocha
+'use strict';
 const debug = require('debug')('badger');
-var server = require('../index');
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var sizeOf = require('image-size');
-var fs = require('fs');
-var StringDecoder = require('string_decoder').StringDecoder;
-var decoder = new StringDecoder('utf8');
-var should = chai.should();
-var expect = chai.expect;
+const config = require('../config/config');
+
+const fs = require('fs');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const should = chai.should();
+const request = require('request');
+const md5 = require('js-md5');
+const assert = require('chai').assert;
+
 chai.use(chaiHttp);
 
-//test the png
-describe('Test the get.app method with png and width', function () {
-  describe('GET localhost:3000/api/1.0/badge/executable/o2r/2?format=png&width=100', function () {
-    it('should have OK response status', function (done) {
-      chai.request(server)
-        .get('/api/1.0/badge/executable/o2r/2?format=png&width=100')
-        .end(function (err, res) {
-          res.should.have.status(200);
-          done();
-        });
-    }).timeout(3000);
-    it('should return some content', function (done) {
-      chai.request(server)
-        .get('/api/1.0/badge/executable/o2r/2?format=png')
-        .end(function (err, res) {
-          res.body.should.not.be.empty;
-          done();
-        });
-    });
-    it('should return the correct image type', function (done) {
-      chai.request(server)
-        .get('/api/1.0/badge/executable/o2r/3?format=png')
-        .end(function (err, res) {
-          var dimensions = sizeOf(res.body);
-          expect(dimensions.type).to.eql('png');
-          res.type.should.eql('image/png');
-          res.headers['content-type'].should.eql('image/png');
-          done();
-        });
-    });
-    it('should return the correct image size', function (done) {
-      chai.request(server)
-        .get('/api/1.0/badge/executable/o2r/3?format=png&width=42')
-        .end(function (err, res) {
-          var dimensions = sizeOf(res.body);
-          expect(dimensions.width).to.eql(42);
-          done();
-        });
-    });
-  });
-});
+let baseURL = config.net.endpoint + ':' + config.net.port;
+let form;
+let requestLoadingTimeout = 10000;
 
-//test the svg
-describe('Test the get.app method with svg', function () {
-  describe('GET localhost:3000/api/1.0/badge/executable/o2r/1?format=svg', function () {
-    it('should return svg', function (done) {
-      chai.request(server)
-        .get('/api/1.0/badge/executable/o2r/1?format=svg')
-        .end(function (err, res) {
-          res.should.have.status(200);
-          res.should.not.be.empty;
-          var svgstring = decoder.end(res.body);
-          svgstring.should.include('<svg');
-          done();
-        });
-    }).timeout(3000);
-  });
-});
+describe('Scalability of badges:', function () {
 
+    describe('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson1.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
+        it('should respond with a big badge as PNG (license open)', (done) => {
+            request({
+                uri: baseURL + '/api/1.0/badge/licence/o2r/extended?format=png',
+                method: 'POST',
+                form: form,
+                timeout: requestLoadingTimeout
+            }, (err, res, body) => {
+                if (err) done(err);
+                assert.ifError(err);
+                assert.equal(res.statusCode, 200);
+                assert.equal(res.headers['content-type'], 'image/png');
+                done();
+            });
+        }).timeout(20000);
+    });
+
+    describe('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+        before(function (done) {
+            fs.readFile('./test/data/licence/testjson1.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
+        it('should respond with a big badge as PNG in 400x400 (license open)', (done) => {
+            request({
+                uri: baseURL + '/api/1.0/badge/licence/o2r/extended?format=png&width=200',
+                method: 'POST',
+                form: form,
+                timeout: requestLoadingTimeout
+            }, (err, res, body) => {
+                if (err) done(err);
+                assert.ifError(err);
+                assert.equal(res.statusCode, 200);
+                assert.equal(res.headers['content-type'], 'image/png');
+                assert.equal(res.headers['content-length'], '8802');
+                done();
+            });
+        }).timeout(20000);
+    });
+});
