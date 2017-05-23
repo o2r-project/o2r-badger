@@ -12,7 +12,7 @@ exports.getBadgeFromData = (req, res) => {
 
     let passon = {
         body: req.body,
-        extended: req.query.extended,
+        extended: req.params.extended,
         req: req,
         res: res
     };

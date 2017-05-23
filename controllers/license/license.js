@@ -9,7 +9,6 @@ const fs = require('fs');
 const scaling = require('../scaling/scaling');
 const path = require('path');
 
-let server = config.ext.testserver;
 let badgeNASmall = 'https://img.shields.io/badge/licence-n%2Fa-9f9f9f.svg';
 let badgeNABig = 'badges/license_noInformation.svg';
 
@@ -17,7 +16,7 @@ exports.getBadgeFromData = (req, res) => {
 
     let passon = {
         body: req.body,
-        extended: req.query.extended,
+        extended: req.params.extended,
         req: req,
         res: res
     };
@@ -256,7 +255,7 @@ function getLicenseInformation(passon) {
 
 function sendResponse(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Sending badge for review status %s', passon.reviewStatus);
+        debug('Sending badge for review status code %s, data %s, text %s', passon.osiCode, passon.odData, passon.odText);
 
         if (typeof passon.osiCode === 'undefined' ||
             typeof passon.odData === 'undefined' ||
