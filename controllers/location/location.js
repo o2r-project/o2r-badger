@@ -78,8 +78,18 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
-    let getBadge;
+    let service = config.spatial.mainService;
+    //ToDo: Implement multiple services and a fallback when there is no result
+    let allServices = config.spatial.services;
+    if (allServices.indexOf(service) !== -1) {
+        debug('Using service %s for badge %s', service, passon.id);
+        //ToDo: Return a different promise based on the service
+    } else {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+    }
 
+    let getBadge;
     if (passon.extended === 'extended') {
         getBadge = getCompendiumID(passon)
             .then(getCompendium)

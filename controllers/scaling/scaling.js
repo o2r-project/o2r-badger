@@ -18,11 +18,6 @@ exports.getBase = (req, res) => {
 			"licence",
 			"spatial",
 			"releasetime"
-		],
-		"services": [
-			"o2r",
-			"doaj",
-			"crossref"
 		]
 	}));
 };
@@ -32,43 +27,22 @@ exports.getType = (req, res) => {
 	switch (type) {
 		case "executable":
 			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"o2r"
-				]
-			}));
+			res.send();    
 			break;
 		case "peerreview":
 			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"doaj"
-				]
-			}));
-			break;
+			res.send();
 		case "licence":
 			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"o2r"
-				]
-			}));
+			res.send();
 			break;
 		case "spatial":
 			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"o2r"
-				]
-			}));
+			res.send();
 			break;
 		case "releasetime":
 			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"crossref"
-				]
-			}));
+			res.send();    
 			break;
 		default:
 			debug("Please insert a valid type parameter");
@@ -77,10 +51,21 @@ exports.getType = (req, res) => {
 	}    
 };
 
-exports.getService = (req, res) => {
+exports.getAllServices = (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	res.send();    
+	res.send(JSON.stringify({
+		"services": [
+			"o2r",
+			"doaj",
+			"crossref"
+		]
+	}));
 };
+
+function mergeUnique( arr )
+{
+  return [ ...new Set( [].concat( ...arr ) ) ];
+}
 
 exports.getBadge = (req, res) => {
 	let type = req.params.type;

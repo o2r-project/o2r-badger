@@ -19,6 +19,11 @@ c.version = {};
 c.fs = {};
 c.net = {};
 c.ext = {};
+c.executable = {};
+c.peerreview = {};
+c.licence = {};
+c.spatial = {};
+c.releasetime = {};
 var env = process.env;
 
 // Information about badger
@@ -30,10 +35,26 @@ c.net.endpoint = env.BADGER_ENDPOINT || 'http://localhost';
 c.net.proxy = '';
 
 //external resources/APIs
-c.ext.testserver = 'http://localhost:8080';
 c.ext.crossref = 'https://api.crossref.org/works/';
 c.ext.o2r = env.BADGER_O2R_HOST || 'https://o2r.uni-muenster.de';
 c.ext.DOAJ = 'https://doaj.org/api/v1/search/articles/';
+
+//services
+c.executable.services = ['o2r'];
+c.executable.mainService = 'o2r';
+
+c.peerreview.services = ['doaj'];
+c.peerreview.mainService = 'doaj';
+
+c.licence.services = ['o2r'];
+c.licence.mainService = 'o2r';
+
+c.spatial.services = ['o2r'];
+c.spatial.mainService = 'o2r';
+
+c.releasetime.services = ['crossref'];
+c.releasetime.mainService = 'crossref';
+
 
 // fs paths
 c.fs.base = env.BADGER_BASEPATH || '/tmp/o2r/';

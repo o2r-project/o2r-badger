@@ -66,6 +66,17 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
+    let service = config.releasetime.mainService;
+    //ToDo: Implement multiple services and a fallback when there is no result
+    let allServices = config.releasetime.services;
+    if (allServices.indexOf(service) !== -1) {
+        debug('Using service %s for badge %s', service, passon.id);
+        //ToDo: Return a different promise based on the service
+    } else {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+    }
+
     return getReleaseTime(passon)
         .then(readReleaseTime)
         .then(sendResponse)
