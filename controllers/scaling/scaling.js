@@ -26,22 +26,17 @@ exports.getType = (req, res) => {
 	let type = req.params.type;
 	switch (type) {
 		case "executable":
-			res.setHeader('Content-Type', 'application/json');
 			res.send();    
 			break;
 		case "peerreview":
-			res.setHeader('Content-Type', 'application/json');
 			res.send();
 		case "licence":
-			res.setHeader('Content-Type', 'application/json');
 			res.send();
 			break;
 		case "spatial":
-			res.setHeader('Content-Type', 'application/json');
 			res.send();
 			break;
 		case "releasetime":
-			res.setHeader('Content-Type', 'application/json');
 			res.send();    
 			break;
 		default:
@@ -61,11 +56,6 @@ exports.getAllServices = (req, res) => {
 		]
 	}));
 };
-
-function mergeUnique( arr )
-{
-  return [ ...new Set( [].concat( ...arr ) ) ];
-}
 
 exports.getBadge = (req, res) => {
 	let type = req.params.type;

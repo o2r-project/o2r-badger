@@ -61,7 +61,7 @@ describe('Scalability of badges:', function () {
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
                 assert.equal(res.headers['content-type'], 'image/png');
-                assert.equal(res.headers['content-length'], '8802');
+                assert.equal(res.headers['content-length'], '11226');
                 done();
             });
         }).timeout(20000);

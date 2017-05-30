@@ -16,13 +16,12 @@ let baseURL = config.net.endpoint + ':' + config.net.port;
 let form;
 let requestLoadingTimeout = 10000;
 
-// read the file for the green badge
-const md5Green = "8ccab8ed40e5ba373d38a35d719f7ee6";
-const md5Red = "371692e0511a776ab35e8e50a5610be0";
-const md5NoInfo = "03ab48bb044a4958cccf2108be2eeccc";
-const md5Running = "14e140e5aeade88767e750540add7c98";
+const executable_yes_string = '<ellipse style="opacity:1;fill:#008a00;fill-opacity:1;fill-rule:nonzero;stroke:#003100;stroke-width:14.13867092;stroke-linecap:butt;stroke-linejoin:round;';
+const executable_no_string = '<ellipse style="opacity:1;fill:#bf0000;fill-opacity:1;fill-rule:nonzero;stroke:#590000;stroke-width:14.73308754;stroke-linecap:butt;stroke-linejoin:round;';
+const executable_running_string = '<ellipse style="opacity:1;fill:#ffe300;fill-opacity:1;fill-rule:nonzero;stroke:#f7aa0f;stroke-width:14.82154179;stroke-linecap:butt;stroke-linejoin:round;';
+const executable_na_string = '<ellipse style="opacity:1;fill:#aaaaaa;fill-opacity:1;fill-rule:nonzero;';
 
-describe('executability badge (small):', function () {
+describe('executability badge:', function () {
 
     describe('POST /api/1.0/badge/executable with jobStatus "success"', () => {
         before(function (done) {
@@ -160,7 +159,9 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.equal(md5(res.body), md5Green.toLowerCase());
+                //let rawString = res.body.replace(/\s+/g, ''); //remove whitespace
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes(executable_yes_string));
                 done();
             });
         }).timeout(20000);
@@ -185,7 +186,8 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.equal(md5(res.body), md5Red.toLowerCase());
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes(executable_no_string));
                 done();
             });
         }).timeout(20000);
@@ -210,7 +212,8 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.equal(md5(res.body), md5Running.toLowerCase());
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes(executable_running_string));
                 done();
             });
         }).timeout(20000);
@@ -235,6 +238,8 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes(executable_na_string));
                 done();
             });
         }).timeout(20000);
@@ -252,7 +257,7 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 302);
-                assert.equal(md5(res.body), md5NoInfo.toLowerCase());
+                assert.equal(res.headers['location'], 'https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg');
                 done();
             });
         }).timeout(20000);

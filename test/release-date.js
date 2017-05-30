@@ -83,6 +83,34 @@ describe('peer review badge (small):', function () {
         }).timeout(20000);
     });
 
-    // todo add tests for extended badges
+    // todo add more tests for extended badges
+
+    describe('POST /api/1.0/badge/releasetime/extended with release-time 1935 (over 40 years ago)"', () => {
+        before(function (done) {
+            fs.readFile('./test/data/release-date/test2.json', 'utf8', function (err, fileContents) {
+                if (err) throw err;
+                form = JSON.parse(fileContents);
+                done();
+            });
+        });
+        it('should respond with a big badge "over 40 years ago"', (done) => {
+            request({
+                uri: baseURL + '/api/1.0/badge/releasetime/extended',
+                method: 'POST',
+                form: form,
+                timeout: requestLoadingTimeout,
+                followRedirect: false
+            }, (err, res, body) => {
+                if (err) done(err);
+                assert.ifError(err);
+                assert.equal(res.statusCode, 200);
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes('sodipodi:docname="released_over_40_years.svg"'));
+                done();
+            });
+        }).timeout(20000);
+    });
+
+
 
 });

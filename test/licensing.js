@@ -15,7 +15,7 @@ chai.use(chaiHttp);
 let baseURL = config.net.endpoint + ':' + config.net.port;
 let form;
 let requestLoadingTimeout = 10000;
-let badgeString = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\r\n<svg';
+let badgeString = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>';
 
 describe('License badge:', function () {
 
@@ -37,7 +37,8 @@ describe('License badge:', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.isTrue(res.body.startsWith(badgeString));
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes('sodipodi:docname="license_open.svg">'));
                 done();
             });
         }).timeout(20000);
@@ -61,7 +62,8 @@ describe('License badge:', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.isTrue(res.body.startsWith(badgeString));
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes('sodipodi:docname="license_text.svg">'));
                 done();
             });
         }).timeout(20000);
