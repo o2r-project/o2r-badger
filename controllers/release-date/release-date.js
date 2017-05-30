@@ -245,7 +245,7 @@ function sendResponse(passon) {
             }
             else if (releaseDate < currentDate-1261440000000) {
                 // todo insert new badge
-                passon.req.filePath = path.join(__dirname, 'badges/released_over_50_years.svg');
+                passon.req.filePath = path.join(__dirname, 'badges/released_over_40_years.svg');
             }
             // Scale the file and send the request
             scaling.resizeAndSend(passon.req, passon.res);
