@@ -19,7 +19,7 @@ let badgeString = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\r\n<sv
 
 describe('License badge:', function () {
 
-    describe('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         before(function (done) {
             fs.readFile('./test/data/licence/testjson1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -29,7 +29,7 @@ describe('License badge:', function () {
         });
         it('should respond with a big badge: license open', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/licence/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/licence/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout
@@ -43,7 +43,7 @@ describe('License badge:', function () {
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         before(function (done) {
             fs.readFile('./test/data/licence/testjson13.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -53,7 +53,7 @@ describe('License badge:', function () {
         });
         it('should respond with a big badge: license partially open', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/licence/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/licence/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout
@@ -67,22 +67,22 @@ describe('License badge:', function () {
         }).timeout(20000);
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         it('should respond with a big badge: license mostly open', (done) => {
         });
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         it('should respond with a big badge: license closed', (done) => {
         });
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         it('should respond with a big badge: license unknown', (done) => {
         });
     });
 
-    describe('POST /api/1.0/badge/licence/o2r', () => {
+    describe('POST /api/1.0/badge/licence', () => {
         before(function (done) {
             fs.readFile('./test/data/licence/testjson1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -92,7 +92,7 @@ describe('License badge:', function () {
         });
         it('should respond with a small badge: license open', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/licence/o2r',
+                uri: baseURL + '/api/1.0/badge/licence',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -107,17 +107,17 @@ describe('License badge:', function () {
         }).timeout(20000);
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence with json including licence information', () => {
         it('should respond with a small badge: license mostly open', (done) => {
         });
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence with json including licence information', () => {
         it('should respond with a small badge: license closed', (done) => {
         });
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence with json including licence information', () => {
         it('should respond with a small badge: license unknown', (done) => {
         });
     });

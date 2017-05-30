@@ -24,7 +24,7 @@ const md5Running = "14e140e5aeade88767e750540add7c98";
 
 describe('peer review badge (small):', function () {
 
-    describe('POST /api/1.0/badge/releasetime/crossref with release-time 2017"', () => {
+    describe('POST /api/1.0/badge/releasetime with release-time 2017"', () => {
         before(function (done) {
             fs.readFile('./test/data/release-date/test1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -34,7 +34,7 @@ describe('peer review badge (small):', function () {
         });
         it('should respond with a small badge with a research release date 2017', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/releasetime/crossref',
+                uri: baseURL + '/api/1.0/badge/releasetime',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -49,10 +49,10 @@ describe('peer review badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('GET /api/1.0/badge/releasetime/crossref/99.9999%2Fabcdefgh', () => {
+    describe('GET /api/1.0/badge/releasetime/99.9999%2Fabcdefgh', () => {
         it('badge via doi: should respond with a small badge with release data "n/a"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/releasetime/crossref/' + '99.9999%2Fabcdefgh',
+                uri: baseURL + '/api/1.0/badge/releasetime/' + '99.9999%2Fabcdefgh',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false
@@ -66,10 +66,10 @@ describe('peer review badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('GET /api/1.0/badge/releasetime/crossref/10.3390%2Frs9030290', () => {
+    describe('GET /api/1.0/badge/releasetime/10.3390%2Frs9030290', () => {
         it('badge via doi: should respond with a small badge indicating release date "2017"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/releasetime/crossref/' + '10.3390%2Frs9030290',
+                uri: baseURL + '/api/1.0/badge/releasetime/' + '10.3390%2Frs9030290',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false

@@ -26,7 +26,7 @@ const md5Running = "14e140e5aeade88767e750540add7c98";
 
 describe('peer review badge (small):', function () {
 
-    describe('POST /api/1.0/badge/peerreview/doaj with review-status "blind"', () => {
+    describe('POST /api/1.0/badge/peerreview with review-status "blind"', () => {
         before(function (done) {
             fs.readFile('./test/data/review-status/test1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -36,7 +36,7 @@ describe('peer review badge (small):', function () {
         });
         it('should respond with a small badge with a research executability', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/peerreview/doaj',
+                uri: baseURL + '/api/1.0/badge/peerreview',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -51,7 +51,7 @@ describe('peer review badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/peerreview/doaj with json without peerreview information', () => {
+    describe('POST /api/1.0/badge/peerreview with json without peerreview information', () => {
         before(function (done) {
             fs.readFile('./test/data/review-status/test2.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -61,7 +61,7 @@ describe('peer review badge (small):', function () {
         });
         it('should respond with a small badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/peerreview/doaj',
+                uri: baseURL + '/api/1.0/badge/peerreview',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -76,10 +76,10 @@ describe('peer review badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('GET /api/1.0/badge/peerreview/doaj/10.3390%2Frs9030290', () => {
+    describe('GET /api/1.0/badge/peerreview/10.3390%2Frs9030290', () => {
         it('badge via doi: should respond with a small badge indicating peer-review status "blind"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/peerreview/doaj/' + '10.3390%2Frs9030290',
+                uri: baseURL + '/api/1.0/badge/peerreview/' + '10.3390%2Frs9030290',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false
