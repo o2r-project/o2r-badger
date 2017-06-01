@@ -8,7 +8,6 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 const request = require('request');
 
-//const request = require('supertest');
 const assert = require('chai').assert;
 
 const jsdom = require("jsdom");

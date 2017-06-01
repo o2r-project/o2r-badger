@@ -7,9 +7,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 const request = require('request');
-const md5 = require('js-md5');
 
-//const request = require('supertest');
 const assert = require('chai').assert;
 
 chai.use(chaiHttp);
@@ -39,7 +37,7 @@ describe('peer review badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 302);
-                assert.equal(res.headers['location'], 'https://img.shields.io/badge/Peer%20Review-Blind-green.svg');
+                assert.equal(res.headers['location'], 'https://img.shields.io/badge/peer%20review-blind-green.svg');
                 done();
             });
         }).timeout(20000);
@@ -64,7 +62,7 @@ describe('peer review badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 302);
-                assert.equal(res.headers['location'], 'https://img.shields.io/badge/Peer%20Review-n%2Fa-lightgrey.svg');
+                assert.equal(res.headers['location'], 'https://img.shields.io/badge/peer%20review-n%2Fa-lightgrey.svg');
                 done();
             });
         }).timeout(20000);
@@ -81,7 +79,7 @@ describe('peer review badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 302);
-                assert.equal(res.headers['location'], 'https://img.shields.io/badge/Peer%20Review-Blind-green.svg');
+                assert.equal(res.headers['location'], 'https://img.shields.io/badge/peer%20review-blind-green.svg');
                 done();
             });
         }).timeout(20000);

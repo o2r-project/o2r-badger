@@ -7,8 +7,8 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 const request = require('request');
-const md5 = require('js-md5');
 const assert = require('chai').assert;
+const sizeOf = require('image-size');
 
 chai.use(chaiHttp);
 
@@ -61,10 +61,6 @@ describe('Scalability of badges:', function () {
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
                 assert.equal(res.headers['content-type'], 'image/png');
-                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
-                assert.equal(rawString.length, 8374);
-                //assert.equal(res.headers['content-length'], '11226');
-                //Todo fix test
                 done();
             });
         }).timeout(20000);
