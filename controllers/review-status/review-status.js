@@ -4,7 +4,7 @@ const request = require('request');
 const scaling = require('../scaling/scaling');
 const path = require('path');
 
-let badgeNASmall = 'https://img.shields.io/badge/Peer%20Review-n%2Fa-lightgrey.svg';
+let badgeNASmall = 'https://img.shields.io/badge/peer%20review-n%2Fa-lightgrey.svg';
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -210,12 +210,12 @@ function sendResponse(passon) {
             reject(error);
             return;
         } else {
-            if (process.startsWith('Blind')) {
-                passon.reviewStatus = 'Blind';
-            } else if (process.startsWith('Double blind')) {
-                passon.reviewStatus = 'Double blind';
+            if (process.toLowerCase().startsWith('blind')) {
+                passon.reviewStatus = 'blind';
+            } else if (process.toLowerCase().startsWith('double blind')) {
+                passon.reviewStatus = 'double blind';
             } else {
-                passon.reviewStatus = 'Yes';
+                passon.reviewStatus = 'yes';
             }
             debug('Sending badge for review status %s', passon.reviewStatus);
             passon.res.redirect(generateBadge(passon.reviewStatus));
@@ -225,7 +225,7 @@ function sendResponse(passon) {
 }
 
 function generateBadge(text) {
-    let shieldsIO = 'https://img.shields.io/badge/Peer%20Review-';
+    let shieldsIO = 'https://img.shields.io/badge/peer%20review-';
     let color = '-green.svg';
     return shieldsIO + encodeURIComponent(text) + color;
 }

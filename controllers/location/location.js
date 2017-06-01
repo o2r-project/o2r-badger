@@ -78,8 +78,8 @@ exports.getBadgeFromReference = (req, res) => {
 
     debug('Handling badge generation for id %s', req.params.id);
 
-    if (typeof req.query.extended !== 'undefined') {
-        extended = req.query.extended;
+    if (typeof req.params.extended !== 'undefined') {
+        extended = req.params.extended;
     }
 
     let passon = {

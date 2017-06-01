@@ -70,8 +70,8 @@ exports.getBadgeFromReference = (req, res) => {
 
     debug('Handling badge generation for id %s', req.params.id);
 
-    if (typeof req.query.extended !== 'undefined') {
-        extended = req.query.extended;
+    if (typeof req.params.extended !== 'undefined') {
+        extended = req.params.extended;
     }
 
     let passon = {
@@ -140,7 +140,7 @@ function getCompendiumID(passon) {
                 return;
             }
             // status responses
-            if(response.statusCode === 404 || !body.results) {
+            if(response.statusCode === 404) {
                 let error = new Error();
                 error.msg = 'no compendium found';
                 error.status = 404;
@@ -165,7 +165,7 @@ function getCompendiumID(passon) {
             } else {
                 debug('Found more than one compendium for DOI %s', passon.id);
                 let error = new Error();
-                error.msg = 'no compendium found';
+                error.msg = 'more than one compendium found for DOI';
                 error.status = 404;
                 error.badgeNA = true;
                 reject(error);
@@ -284,7 +284,7 @@ function sendResponse(passon) {
             error.status = 404;
             error.badgeNA = true;
             reject(error);
-return;
+            return;
         }
 
         let localPath;
