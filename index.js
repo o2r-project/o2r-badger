@@ -23,7 +23,7 @@ peerReview = require('./controllers/review-status/review-status');
 //Misc services
 scaling = require('./controllers/scaling/scaling');
 
-let server = config.net.endpoint;
+let server = config.net.testEndpoint;
 debug('Server: ', server);
 
 /*

@@ -12,15 +12,9 @@ const assert = require('chai').assert;
 
 chai.use(chaiHttp);
 
-let baseURL = config.net.endpoint + ':' + config.net.port;
+let baseURL = config.net.testEndpoint + ':' + config.net.port;
 let form;
 let requestLoadingTimeout = 10000;
-
-// read the file for the green badge
-const md5Green = "8ccab8ed40e5ba373d38a35d719f7ee6";
-const md5Red = "371692e0511a776ab35e8e50a5610be0";
-const md5NoInfo = "03ab48bb044a4958cccf2108be2eeccc";
-const md5Running = "14e140e5aeade88767e750540add7c98";
 
 describe('peer review badge (small):', function () {
 

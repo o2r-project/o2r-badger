@@ -95,7 +95,7 @@ exports.getBadgeFromReference = (req, res) => {
 
 function getISSN(passon) {
     return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.DOAJ + 'doi:' + encodeURIComponent(passon.id);
+        let requestURL = config.ext.doajArticles + 'doi:' + encodeURIComponent(passon.id);
         debug('Fetching ISSN ID from DOAJ with URL %s', requestURL);
 
         //request DOAJ API to get ISSN
@@ -161,8 +161,8 @@ function getISSN(passon) {
 function getReviewStatus(passon) {
     return new Promise((fulfill, reject) => {
 
-        let requestURL = 'https://doaj.org/api/v1/search/journals/' + encodeURIComponent('issn:' + passon.issn);
-        debug('Fetching review status from %s with URL', config.ext.DOAJ, requestURL);
+        let requestURL = config.ext.doajJournals + encodeURIComponent('issn:' + passon.issn);
+        debug('Fetching review status from %s with URL', config.ext.doajJournals, requestURL);
 
         //request DOIJ API to find out if journal with ISSN is peer reviewed
         //e.g. https://doaj.org/api/v1/search/journals/issn%3A1664-1078

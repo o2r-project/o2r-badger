@@ -16,7 +16,7 @@ const { JSDOM } = jsdom;
 
 chai.use(chaiHttp);
 
-let baseURL = config.net.endpoint + ':' + config.net.port;
+let baseURL = config.net.testEndpoint + ':' + config.net.port;
 let form;
 let requestLoadingTimeout = 10000;
 

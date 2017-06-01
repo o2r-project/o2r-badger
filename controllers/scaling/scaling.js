@@ -7,7 +7,7 @@ const XMLSerializer = require('xmldom').XMLSerializer;
 const path = require('path');
 const fs = require('fs');
 
-let server = config.net.endpoint + ':';
+let server = config.net.testEndpoint + ':';
 
 exports.getBase = (req, res) => {
 	res.setHeader('Content-Type', 'application/json');

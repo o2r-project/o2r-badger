@@ -31,13 +31,14 @@ c.api_version = 1;
 
 // network
 c.net.port = env.BADGER_PORT || 8089;
-c.net.endpoint = env.BADGER_ENDPOINT || 'http://localhost';
+c.net.testEndpoint = env.BADGER_ENDPOINT || 'http://localhost';
 c.net.proxy = '';
 
 //external resources/APIs
 c.ext.crossref = 'https://api.crossref.org/works/';
 c.ext.o2r = env.BADGER_O2R_HOST || 'https://o2r.uni-muenster.de';
-c.ext.DOAJ = 'https://doaj.org/api/v1/search/articles/';
+c.ext.doajArticles = 'https://doaj.org/api/v1/search/articles/';
+c.ext.doajJournals = 'https://doaj.org/api/v1/search/journals/';
 
 //services
 c.executable.services = ['o2r'];
