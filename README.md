@@ -12,7 +12,130 @@ Based on the following microservices (part of the "Badges for computational geos
 - [geocontainer-badges/peer-review](https://zivgitlab.uni-muenster.de/geocontainer-badges/peer-review)
 - [geocontainer-badges/testservers](https://zivgitlab.uni-muenster.de/geocontainer-badges/testservers)
 
-Documentation of the subprojects:
+## Requirements
+
+- Node.js `>= 6.2`
+- npm
+- Docker
+- Access to the following services:
+    - o2r (https://o2r.uni-muenster.de)
+    - crossref (https://www.crossref.org/)
+    - DOAJ (https://doaj.org/)
+    
+Note that the badger will only find results if the respective service has the publication listed.
+
+Services and what they are used for:
+
+o2r:
+
+    - executability
+    - license
+    - location
+    
+crossref:
+
+    - release time
+    
+DOAJ: 
+
+    - peer review status
+
+## Remote installation
+
+```bash
+docker pull o2rproject/o2r-badger
+
+## Start the badger:
+DEBUG=* docker run -it -e -p 8089:8089 o2rproject/o2r-badger
+```
+
+## Local installation
+
+First, clone the repository:
+
+```bash
+git clone https://github.com/o2r-project/o2r-badger
+```
+
+This project includes a `Dockerfile` which can be built with:
+
+```bash
+docker build -t badger -f Dockerfile.local .
+
+## Start the badger:
+DEBUG=* docker run -it -e -p 8089:8089 badger
+```
+
+The badger is running and can be accessed via `http://localhost:8089/`. To display badges for common research aggregators, install the o2r-extender, a chrome extension. More info [here](https://github.com/o2r-project/o2r-extender/)
+
+### Examples:
+
+1) GET (peer review badge):
+
+`curl http://…/api/1.0/badge/peerreview/doaj/10.5194%2Fgmdd-8-3905-2015`
+
+`GET /api/1.0/badge/peerreview/doaj/10.5194%2Fgmdd-8-3905-2015`
+
+Will return a small badge for the DOI `10.5194/gmdd-8-3905-2015`.
+
+2) POST (license badge):
+
+```bash
+curl -o output.svg -H "Content-Type: application/json" --data '{  
+   "id":"opxYU",
+   "created":"2016-08-19T13:59:13.134Z",
+   "metadata":{  
+      "licence":{  
+         "data":"Against-DRM",
+         "text":"CC-BY-4.0",
+         "code":"AAL"
+      }
+   }
+}' http://.../api/1.0/badge/licence/o2r/extended
+```
+
+Will return a big badge for the license data contained in the json document (o2r compendium).
+
+
+## API Documentation
+
+### Routes
+
+### URL parameters
+
+## Configuration
+
+Environment variables:
+
+You can override these environment variables (configured in `config/config.js`) when starting the service.
+
+- `BADGER_PORT`
+  Defines the port the badger is listening to. Defaults to `8089`.
+- `BADGER_O2R_HOST`
+  The address used to query the o2r [API](http://o2r.info/o2r-web-api/) . Defaults to `https://o2r.uni-muenster.de`.
+- `BADGER_TEST_ENDPOINT`
+  The address used for tests. Defaults to `http://localhost`
+
+config.js:
+
+- `c.net.proxy` 
+  Proxy used for all outgoing requests (o2r, crossref, doaj). Not tested.
+- `c.ext.crossref`
+  Crossref API endpoint for works.
+- `c.ext.o2r`
+  o2r endpoint. Can be modified `BADGER_O2R_HOST`.
+- `c.ext.doajArticles` and `c.ext.doajJournals`
+  DOAJ search endpoint for articles and journals.
+
+## Tests
+
+First start the badger locally, then run:
+
+`npm test`
+
+# Study project documentation
+ 
+**May be outdated!**
 
 ## 1 Scalable badges (geocontainer-badges/scalability)
 
