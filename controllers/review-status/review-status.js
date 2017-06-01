@@ -21,7 +21,7 @@ exports.getBadgeFromData = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found: %s", err);
+                debug("No badge information found: %s", err.msg);
                 res.redirect(badgeNASmall);
             } else { // Send error response
                 debug("Error generating badge: %s", err);
@@ -76,7 +76,7 @@ exports.getBadgeFromReference = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found", err);
+                debug("No badge information found: %s", err.msg);
                 res.redirect(badgeNASmall);
             } else { // Send error response
                 debug("Error generating badge:", err);
@@ -95,9 +95,8 @@ exports.getBadgeFromReference = (req, res) => {
 
 function getISSN(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Fetching ISSN ID from %s for DOI %s', config.ext.DOAJ, passon.id);
-
         let requestURL = config.ext.DOAJ + 'doi:' + encodeURIComponent(passon.id);
+        debug('Fetching ISSN ID from DOAJ with URL %s', requestURL);
 
         //request DOAJ API to get ISSN
         //e.g. https://doaj.org/api/v1/search/articles/doi%3A10.3389%2Ffpsyg.2013.00479
@@ -195,6 +194,7 @@ function sendResponse(passon) {
 
         try {
             process = data.results[0].bibjson.editorial_review.process;
+            debug('Review process for DOI %s is "%s"', passon.id, process);
         } catch (error) {
             error.msg = 'error accessing doaj';
             error.badgeNA = true;

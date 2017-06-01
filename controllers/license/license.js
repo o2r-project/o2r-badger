@@ -21,6 +21,17 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    let service = config.licence.mainService;
+    //ToDo: Implement multiple services and a fallback when there is no result
+    let allServices = config.licence.services;
+    if (allServices.indexOf(service) !== -1) {
+        debug('Using service %s for badge %s', service, passon.id);
+        //ToDo: Return a different promise based on the service
+    } else {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+    }
+
     return getLicenseInformation(passon)
         .then(sendResponse)
         .then((passon) => {
@@ -28,7 +39,7 @@ exports.getBadgeFromData = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send 'N/A' badge
-                debug("No badge information found: %s", err);
+                debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
@@ -91,7 +102,7 @@ exports.getBadgeFromReference = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found", err);
+                debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     scaling.resizeAndSend(passon.req, passon.res);
