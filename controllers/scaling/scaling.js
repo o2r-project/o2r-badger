@@ -26,22 +26,23 @@ exports.getType = (req, res) => {
 	let type = req.params.type;
 	switch (type) {
 		case "executable":
-			res.send();    
+            res.status(404).send('{"error":"no id provided"}');
 			break;
 		case "peerreview":
-			res.send();
+            res.status(404).send('{"error":"no id provided"}');
+			break;
 		case "licence":
-			res.send();
+            res.status(404).send('{"error":"no id provided"}');;
 			break;
 		case "spatial":
-			res.send();
+            res.status(404).send('{"error":"no id provided"}');
 			break;
 		case "releasetime":
-			res.send();    
+            res.status(404).send('{"error":"no id provided"}');
 			break;
 		default:
 			debug("Please insert a valid type parameter");
-			res.send("Please insert a valid type parameter");
+			res.status(404).send('{"error":"type not found"}');
 			break;
 	}    
 };
