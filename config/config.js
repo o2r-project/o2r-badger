@@ -39,6 +39,7 @@ c.ext.crossref = 'https://api.crossref.org/works/';
 c.ext.o2r = env.BADGER_O2R_HOST || 'https://o2r.uni-muenster.de';
 c.ext.doajArticles = 'https://doaj.org/api/v1/search/articles/';
 c.ext.doajJournals = 'https://doaj.org/api/v1/search/journals/';
+c.ext.geonames = 'http://api.geonames.org/countrySubdivisionJSON';
 
 //services
 c.executable.services = ['o2r'];

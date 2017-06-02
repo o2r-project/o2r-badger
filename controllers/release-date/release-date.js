@@ -137,6 +137,7 @@ function getReleaseTime(passon) {
                 // error handling of request to crossref
                 if (error) {
                     debug(error);
+                    error.msg = 'error accessing crossref API'
                     reject(error);
                     return;
                 }

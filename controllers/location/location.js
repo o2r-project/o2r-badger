@@ -152,7 +152,8 @@ function getCompendiumID(passon) {
 
             // no job for the given id available
             if(error) {
-                debug(error);
+                error.msg = 'error accessing o2r';
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -168,7 +169,7 @@ function getCompendiumID(passon) {
             else if(response.statusCode === 500 || response.status === 500) {
                 let error = new Error();
                 error.msg = 'error filtering for doi';
-                error.status = 500;
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -201,6 +202,8 @@ function getCompendium(passon) {
         // request to the o2r server
         request(requestURL, function(error, response, body) {
             if (error) {
+                error.msg = 'error accessing o2r';
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -256,12 +259,18 @@ function getCenterFromData(passon) {
 
 function getGeoName(passon) {
     return new Promise((fulfill, reject) => {
-        let requestURL = 'http://api.geonames.org/countrySubdivisionJSON?lat=' + passon.latitude + '&lng=' + passon.longitude +'&username=badges';
+        let requestURL = config.ext.geonames + '?lat=' + passon.latitude + '&lng=' + passon.longitude +'&username=badges';
         debug('Fetching geoname for compendium %s from %s', passon.compendiumID, requestURL);
 
         //and get the reversed geocoding for it
         request({url: requestURL,
             proxy: config.net.proxy}, function (error,response,body){
+            if (error) {
+                error.msg = 'Could not access geonames.org'
+                reject(error);
+                return;
+            }
+
             if(response.statusCode === 200) {
                 let geoname = JSON.parse(body);
                 let geoname_ocean;

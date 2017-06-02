@@ -103,7 +103,8 @@ function getISSN(passon) {
         request(requestURL, function(error, response, body) {
 
             if (error || typeof body.error !== 'undefined') {
-                debug('DOAJ API not accessible: %s', error);
+                error.msg = 'error accessing doaj';
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -168,7 +169,8 @@ function getReviewStatus(passon) {
         //e.g. https://doaj.org/api/v1/search/journals/issn%3A1664-1078
         request(requestURL, function(error, response, body) {
             if (error) {
-                debug('DOAJ API not accessible: %s', error);
+                error.msg = 'error accessing doaj';
+                error.status = 404;
                 reject(error);
                 return;
             }

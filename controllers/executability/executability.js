@@ -130,7 +130,8 @@ function getCompendiumID(passon) {
 
             // no job for the given id available
             if(error) {
-                debug(error);
+                error.msg = 'error accessing o2r';
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -146,7 +147,7 @@ function getCompendiumID(passon) {
             else if(response.statusCode === 500 || response.status === 500) {
                 let error = new Error();
                 error.msg = 'error filtering for doi';
-                error.status = 500;
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -181,7 +182,8 @@ function getJobID(passon) {
 
             // no job for the given id available
             if(error) {
-                debug(error);
+                error.msg = 'error accessing o2r';
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -197,7 +199,7 @@ function getJobID(passon) {
             else if(response.status === 500) {
                 let error = new Error();
                 error.msg = 'Unable to find data on server';
-                error.status = 500;
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -219,7 +221,8 @@ function getJob(passon) {
 
             // no job for the given id available
             if(error) {
-                debug(error);
+                error.msg = 'error accessing o2r';
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -235,7 +238,7 @@ function getJob(passon) {
             else if(response.status === 500) {
                 let error = new Error();
                 error.msg = 'Unable to find data on server';
-                error.status = 500;
+                error.status = 404;
                 reject(error);
                 return;
             }
