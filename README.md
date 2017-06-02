@@ -22,31 +22,26 @@ Note that the badger will only find results if the respective service has the pu
 
 ## Requirements
 
-- Node.js `>= 6.2` (optional; for development)
-- npm (optional; for development)
+- Node.js `>= 6.2` and npm (optional; for development)
 - docker
 - Access to the following services:
     - o2r API (https://o2r.uni-muenster.de)
     - Crossref API (https://www.crossref.org/)
     - DOAJ API (https://doaj.org/)
-    - GeoNames API (http://api.geonames.org)
+    - GeoNames API (http://geonames.org)
 
 ## Remote installation
 
 ```bash
 docker pull o2rproject/o2r-badger
 
-## Start the badger:
+# Start the badger:
 docker run -it -e DEBUG=* -p 8089:8089 o2rproject/o2r-badger
 ```
 
 ## Local installation
 
-First, clone the repository:
-
-```bash
-git clone https://github.com/o2r-project/o2r-badger
-```
+First, clone the repository: `git clone https://github.com/o2r-project/o2r-badger`
 
 This project includes a `Dockerfile` which can be built with:
 
@@ -61,17 +56,13 @@ The badger is running and can be accessed via `http://localhost:8089/`. To displ
 
 ### Examples:
 
-1) GET (peer review badge, small):
+1) **GET** (peer review badge, small):
 
 `curl http://localhost:8089/api/1.0/badge/peerreview/10.5194%2Fgmdd-8-3905-2015`
 
-`GET /api/1.0/badge/peerreview/10.5194%2Fgmdd-8-3905-2015`
+Returns a small badge for the DOI `10.5194/gmdd-8-3905-2015`: ![small-badge-yes](https://img.shields.io/badge/peer%20review-yes-green.svg)
 
-Will return a small badge for the DOI `10.5194/gmdd-8-3905-2015` with peer review status "yes":
-
-![small-badge-yes](https://img.shields.io/badge/peer%20review-yes-green.svg)
-
-2) POST (license badge, extended):
+2) **POST** (license badge, extended):
 
 ```bash
 curl -o output.svg -H "Content-Type: application/json" --data '{  
@@ -93,22 +84,26 @@ Will return a big badge for the license data contained in the json document (o2r
 
 ## API Documentation
 
-Small badges:
+**Small badges:**
 
-`GET /api/1.0/badge/:type/:id`
+`GET /api/1.0/badge/:type/:doi`
+
+The badger can also create a badge for information that is sent via a POST request (see the [example](#Examples) above):
 
 `POST /api/1.0/badge/:type`
 
-Extended badges:
+**Extended badges:**
 
-`GET /api/1.0/badge/:type/:id/extended`
+`GET /api/1.0/badge/:type/:doi/extended`
 
 `POST /api/1.0/badge/:type/extended`
 
 ### Path paramters
 
 - `:type`: Badge type, one of `executable`, `spatial`, `licence`, `releasetime` or `peerreview`
-- `:id`: A [DOI](https://doi.org) to identify the publication, in the form `10.999/test`
+- `:doi`: A [DOI](https://doi.org) to identify the publication, in the form `10.999/test`
+
+The DOI **must** be URL encoded!
 
 ### Body parameters (for extended badges only)
 
@@ -117,16 +112,12 @@ Extended badges:
 
 ### Error responses
 
-If the badger finds no data for a given DOI a grey "n/a" badge is returned:
-
-![na badge](https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg)
-
+If the badger finds no data for a given DOI a grey "n/a" badge is returned: ![na badge](https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg)
 
 If there is an unexpected error during execution, or if the services are not accessbile, an error will be returned:
 
 ```bash
 404 Not found
-
 {"error":"error accessing crossref API"}
 ```
 
@@ -190,10 +181,6 @@ The project developed an API for retrieving information on the executability of 
 It was established in the context of the [o2R project](http://o2r.info/page2/). 
 The information about the executablility of a compendia are requested from the o2R API. 
 
-### License
-
-Apache License 2.0
-
 ## 4 License badges (geocontainer-badges/licencing)
 
 The project's aim is to provide an API, which gives information about the licencing of a research compendium.
@@ -203,10 +190,6 @@ For licences of code (software) the list of licences available at [Open Definiti
 with this ```json``` [file](http://licenses.opendefinition.org/licenses/groups/osi.json) is provided.
 For licences of data and text of the research compendia the licences from [Open Definition](http://opendefinition.org/licenses/) is used
 with the list in this ```json``` [file](http://licenses.opendefinition.org/licenses/groups/od.json).
-
-### Licence
-
-The licence for the projct is licenced under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
 ## 5 Release date badges (geocontainer-badges/release)
 
@@ -218,9 +201,6 @@ In this project we developed an API for retrieving badges which provide informat
 with **id** being an URL-encoded DOI of an published compendium. To receive a "big badge" for a paper page, "extended" has to be added at the end of the API.
 
 The information about the release date are requested through the [crossref API](https://github.com/CrossRef/rest-api-doc/blob/master/rest_api.md). 
-
-## License
-This project is licenced under Apache License 2.0.
 
 ## 6 Peer-review badges (geocontainer-badges/peer-review)
 
@@ -249,5 +229,6 @@ As you will notice currently the only service supported is DOAJ, with a DOI as i
 
 * There are only 'peer-reviewed' journals in the DOAJ so we just get a green badge in return having no case of 'non peer-reviewed'
  
-### License
-Apache License 2.0
+## Licence
+
+This project is licensed under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
