@@ -60,7 +60,9 @@ The badger is running and can be accessed via `http://localhost:8089/`. To displ
 
 `curl http://localhost:8089/api/1.0/badge/peerreview/10.5194%2Fgmdd-8-3905-2015`
 
-Returns a small badge for the DOI `10.5194/gmdd-8-3905-2015`: ![small-badge-yes](https://img.shields.io/badge/peer%20review-yes-green.svg)
+Returns a small badge for the DOI `10.5194/gmdd-8-3905-2015`:
+
+![small-badge-yes](https://img.shields.io/badge/peer%20review-yes-green.svg)
 
 2) **POST** (license badge, extended):
 
@@ -112,7 +114,9 @@ The DOI **must** be URL encoded!
 
 ### Error responses
 
-If the badger finds no data for a given DOI a grey "n/a" badge is returned: ![na badge](https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg)
+If the badger finds no data for a given DOI a grey "n/a" badge is returned: 
+
+![na badge](https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg)
 
 If there is an unexpected error during execution, or if the services are not accessbile, an error will be returned:
 
@@ -161,10 +165,6 @@ For tests run `npm test`.
 ## 1 Scalable badges (geocontainer-badges/scalability)
 
 This project provides an API for retrieving a scalable badge as svg or png.
-
-### License
-
-[Apache License 2.0](https://zivgitlab.uni-muenster.de/geocontainer-badges/scalability/blob/master/LICENSE)
 
 ## 2 Spatial information badges (geocontainer-badges/spatial-information)
 
