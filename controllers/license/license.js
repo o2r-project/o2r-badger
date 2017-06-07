@@ -14,6 +14,10 @@ const steps = require('../base/commonSteps');
 let badgeNASmall = config.licence.badgeNASmall;
 let badgeNABig = config.licence.badgeNABig;
 
+// read json file osi.json and od.json to compare whether the licence of the compendia is in the list of licences
+const osi = JSON.parse(fs.readFileSync('./controllers/license/osi.json'));
+const od = JSON.parse(fs.readFileSync('./controllers/license/od.json'));
+
 exports.getBadgeFromData = (req, res) => {
 
     let passon = {
@@ -145,10 +149,6 @@ function getLicenseInformation(passon) {
                 codelicence = compendiumJSON.metadata.licence.code;
             }
             else codelicence = 'unknown';
-
-            // read json file osi.json and od.json to compare whether the licence of the compendia is in the list of licences
-            let osi = JSON.parse(fs.readFileSync('./controllers/license/osi.json'));
-            let od = JSON.parse(fs.readFileSync('./controllers/license/od.json'));
 
             //check for all licences if they are included in our list of compatible compendia
             if(datalicence === 'unknown') {
