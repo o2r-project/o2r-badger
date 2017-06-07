@@ -1,4 +1,6 @@
-# O2R-Badger
+# o2r badger
+
+[![](https://images.microbadger.com/badges/image/o2rproject/o2r-badger.svg)](https://microbadger.com/images/o2rproject/o2r-badger "Get your own image badge on microbadger.com")
 
 API for retrieving scalable badges for scientific publications. Used by the [o2r-extender](https://github.com/o2r-project/o2r-extender), which is a Chrome extension that integrates these badges into several research aggregators.
 
@@ -23,14 +25,18 @@ Note that the badger will only find results if the respective service has the pu
 ## Requirements
 
 - Node.js `>= 6.2` and npm (optional; for development)
-- docker
+- Docker
 - Access to the following services:
     - o2r API (https://o2r.uni-muenster.de)
     - Crossref API (https://www.crossref.org/)
     - DOAJ API (https://doaj.org/)
     - GeoNames API (http://geonames.org)
 
-## Remote installation
+## Installation
+
+There are three options to get the badger running on your system:
+
+1) with Docker, via Docker Hub:
 
 ```bash
 docker pull o2rproject/o2r-badger
@@ -39,7 +45,7 @@ docker pull o2rproject/o2r-badger
 docker run -it -e DEBUG=* -p 8089:8089 o2rproject/o2r-badger
 ```
 
-## Local installation
+2) with Docker, manually:
 
 First, clone the repository: `git clone https://github.com/o2r-project/o2r-badger`
 
@@ -50,6 +56,17 @@ docker build -t badger -f Dockerfile.local .
 
 ## Start the badger:
 docker run -it -e DEBUG=* -p 8089:8089 badger
+```
+
+3) with Node.js:
+
+```bash
+git clone https://github.com/o2r-project/o2r-badger
+cd o2r-badger
+npm install --production
+
+# Start the badger:
+DEBUG=* npm start
 ```
 
 The badger is running and can be accessed via `http://localhost:8089/`. To display badges for common research aggregators, install the o2r-extender, a chrome extension. More info [here](https://github.com/o2r-project/o2r-extender/)
@@ -84,7 +101,7 @@ Will return a big badge for the license data contained in the json document (o2r
 
 ![big-badge-open](https://cdn.rawgit.com/o2r-project/o2r-badger/2d50423e/controllers/license/badges/license_open.svg)
 
-## API Documentation
+## API Documentation (Version 0.2)
 
 **Small badges:**
 
@@ -178,8 +195,8 @@ where the bounding box of the research location is highlighted.
 ## 3 Executability badges (geocontainer-badges/executable-code)
 
 The project developed an API for retrieving information on the executability of compendia. 
-It was established in the context of the [o2R project](http://o2r.info/page2/). 
-The information about the executablility of a compendia are requested from the o2R API. 
+It was established in the context of the [o2r project](http://o2r.info/page2/). 
+The information about the executablility of a compendia are requested from the o2r API. 
 
 ## 4 License badges (geocontainer-badges/licencing)
 
