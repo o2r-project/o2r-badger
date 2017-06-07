@@ -91,7 +91,6 @@ exports.resizeAndSend = (req, res) => {
 				else debug('Sent file');
 			});  
 		}
-
 	}
 };
 
