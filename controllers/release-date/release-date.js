@@ -2,11 +2,11 @@ const debug = require('debug')('badger');
 const config = require('../../config/config');
 const path = require('path');
 const request = require('request');
-const scaling = require('../scaling/scaling');
+const base = require('../base/base');
 
 let crossref = config.ext.crossref;
-let badgeNASmall = 'https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg';
-let badgeNABig = 'badges/released_no_information.svg';
+let badgeNASmall = config.releasetime.badgeNASmall;
+let badgeNABig = config.releasetime.badgeNABig;
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -17,15 +17,11 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
-    let service = config.releasetime.mainService;
-    //ToDo: Implement multiple services and a fallback when there is no result
-    let allServices = config.releasetime.services;
-    if (allServices.indexOf(service) !== -1) {
-        debug('Using service %s for badge %s', service, passon.id);
-        //ToDo: Return a different promise based on the service
-    } else {
+    // check if there is a service for "releasetime" badges
+    if (base.hasSupportedService(config.releasetime) === false) {
         debug('No service for badge %s found', passon.id);
         res.status(404).send('{"error":"no service for this type found"}');
+        return;
     }
 
     return readReleaseTime(passon)
@@ -38,7 +34,7 @@ exports.getBadgeFromData = (req, res) => {
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -77,15 +73,11 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
-    let service = config.releasetime.mainService;
-    //ToDo: Implement multiple services and a fallback when there is no result
-    let allServices = config.releasetime.services;
-    if (allServices.indexOf(service) !== -1) {
-        debug('Using service %s for badge %s', service, passon.id);
-        //ToDo: Return a different promise based on the service
-    } else {
+    // check if there is a service for "releasetime" badges
+    if (base.hasSupportedService(config.releasetime) === false) {
         debug('No service for badge %s found', passon.id);
         res.status(404).send('{"error":"no service for this type found"}');
+        return;
     }
 
     return getReleaseTime(passon)
@@ -100,7 +92,7 @@ exports.getBadgeFromReference = (req, res) => {
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -260,7 +252,7 @@ function sendResponse(passon) {
                 passon.req.filePath = path.join(__dirname, 'badges/released_over_40_years.svg');
             }
             // Scale the file and send the request
-            scaling.resizeAndSend(passon.req, passon.res);
+            base.resizeAndSend(passon.req, passon.res);
             fulfill(passon);
         }
 

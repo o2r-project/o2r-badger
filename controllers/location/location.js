@@ -6,10 +6,10 @@ const config = require('../../config/config');
 const request = require('request');
 const fs = require ('fs');
 const path = require('path');
-const scaling = require('../scaling/scaling');
+const base = require('../base/base');
 
-let badgeNASmall = 'https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg';
-let badgeNABig = 'indexNoMap.html';
+let badgeNASmall = config.spatial.badgeNASmall;
+let badgeNABig = config.spatial.badgeNABig;
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -20,15 +20,11 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
-    let service = config.spatial.mainService;
-    //ToDo: Implement multiple services and a fallback when there is no result
-    let allServices = config.spatial.services;
-    if (allServices.indexOf(service) !== -1) {
-        debug('Using service %s for badge %s', service, passon.id);
-        //ToDo: Return a different promise based on the service
-    } else {
+    // check if there is a service for "spatial" badges
+    if (base.hasSupportedService(config.spatial) === false) {
         debug('No service for badge %s found', passon.id);
         res.status(404).send('{"error":"no service for this type found"}');
+        return;
     }
 
     let getBadge;
@@ -50,7 +46,7 @@ exports.getBadgeFromData = (req, res) => {
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -89,15 +85,11 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
-    let service = config.spatial.mainService;
-    //ToDo: Implement multiple services and a fallback when there is no result
-    let allServices = config.spatial.services;
-    if (allServices.indexOf(service) !== -1) {
-        debug('Using service %s for badge %s', service, passon.id);
-        //ToDo: Return a different promise based on the service
-    } else {
+    // check if there is a service for "spatial" badges
+    if (base.hasSupportedService(config.spatial) === false) {
         debug('No service for badge %s found', passon.id);
         res.status(404).send('{"error":"no service for this type found"}');
+        return;
     }
 
     let getBadge;
@@ -122,7 +114,7 @@ exports.getBadgeFromReference = (req, res) => {
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -382,7 +374,7 @@ function sendBigBadge(passon) {
                 passon.req.type = 'location';
                 passon.req.options = options;
                 debug('Sending map %s', passon.req.filePath);
-                scaling.resizeAndSend(passon.req, passon.res);
+                base.resizeAndSend(passon.req, passon.res);
                 fulfill(passon);
             }
         });

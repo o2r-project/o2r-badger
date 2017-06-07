@@ -1,10 +1,10 @@
 const debug = require('debug')('badger');
 const config = require('../../config/config');
 const request = require('request');
-const scaling = require('../scaling/scaling');
+const base = require('../base/base');
 const path = require('path');
 
-let badgeNASmall = 'https://img.shields.io/badge/peer%20review-n%2Fa-lightgrey.svg';
+let badgeNASmall = config.peerreview.badgeNASmall;
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -14,6 +14,13 @@ exports.getBadgeFromData = (req, res) => {
         req: req,
         res: res
     };
+
+    // check if there is a service for "peerreview" badges
+    if (base.hasSupportedService(config.peerreview) === false) {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+        return;
+    }
 
     return sendResponse(passon)
         .then((passon) => {
@@ -56,15 +63,11 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
-    let service = config.peerreview.mainService;
-    //ToDo: Implement multiple services and a fallback when there is no result
-    let allServices = config.peerreview.services;
-    if (allServices.indexOf(service) !== -1) {
-        debug('Using service %s for badge %s', service, passon.id);
-        //ToDo: Return a different promise based on the service
-    } else {
+    // check if there is a service for "peerreview" badges
+    if (base.hasSupportedService(config.peerreview) === false) {
         debug('No service for badge %s found', passon.id);
         res.status(404).send('{"error":"no service for this type found"}');
+        return;
     }
 
     return getISSN(passon)

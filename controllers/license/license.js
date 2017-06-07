@@ -6,11 +6,11 @@ const config = require('../../config/config');
 const express = require('express');
 const request = require('request');
 const fs = require('fs');
-const scaling = require('../scaling/scaling');
+const base = require('../base/base');
 const path = require('path');
 
-let badgeNASmall = 'https://img.shields.io/badge/licence-n%2Fa-9f9f9f.svg';
-let badgeNABig = 'badges/license_noInformation.svg';
+let badgeNASmall = config.licence.badgeNASmall;
+let badgeNABig = config.licence.badgeNABig;
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -21,15 +21,11 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
-    let service = config.licence.mainService;
-    //ToDo: Implement multiple services and a fallback when there is no result
-    let allServices = config.licence.services;
-    if (allServices.indexOf(service) !== -1) {
-        debug('Using service %s for badge %s', service, passon.id);
-        //ToDo: Return a different promise based on the service
-    } else {
+    // check if there is a service for "licence"
+    if (base.hasSupportedService(config.licence) === false) {
         debug('No service for badge %s found', passon.id);
         res.status(404).send('{"error":"no service for this type found"}');
+        return;
     }
 
     return getLicenseInformation(passon)
@@ -42,7 +38,7 @@ exports.getBadgeFromData = (req, res) => {
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -81,15 +77,11 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
-    let service = config.licence.mainService;
-    //ToDo: Implement multiple services and a fallback when there is no result
-    let allServices = config.licence.services;
-    if (allServices.indexOf(service) !== -1) {
-        debug('Using service %s for badge %s', service, passon.id);
-        //ToDo: Return a different promise based on the service
-    } else {
+    // check if there is a service for "licence"
+    if (base.hasSupportedService(config.licence) === false) {
         debug('No service for badge %s found', passon.id);
         res.status(404).send('{"error":"no service for this type found"}');
+        return;
     }
 
     return getCompendiumID(passon)
@@ -105,7 +97,7 @@ exports.getBadgeFromReference = (req, res) => {
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -403,7 +395,7 @@ function sendResponse(passon) {
             passon.req.filePath = path.join(__dirname, localPath);
             passon.req.options = options;
             debug('Sending SVG %s to scaling service', passon.req.filePath);
-            scaling.resizeAndSend(passon.req, passon.res);
+            base.resizeAndSend(passon.req, passon.res);
         }
         else {
             if(osicode===true && oddata===true && odtext===true){

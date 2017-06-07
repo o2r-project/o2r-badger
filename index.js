@@ -21,7 +21,7 @@ release = require('./controllers/release-date/release-date');
 location = require('./controllers/location/location');
 peerReview = require('./controllers/review-status/review-status');
 //Misc services
-scaling = require('./controllers/scaling/scaling');
+base = require('./controllers/base/base');
 
 let server = config.net.testEndpoint;
 debug('Server: ', server);
@@ -31,9 +31,9 @@ debug('Server: ', server);
 */
 
 //Scalability:
-app.get('/api/1.0/badge', scaling.getBase);
-app.get('/api/1.0/badge/:type', scaling.getType);
-app.get('/api/1.0/badge/:type/?all_services', scaling.getAllServices);
+app.get('/api/1.0/badge', base.getBase);
+app.get('/api/1.0/badge/:type', base.getType);
+app.get('/api/1.0/badge/:type/?all_services', base.getAllServices);
 
 //Executability
 app.get('/api/1.0/badge/executable/:id/:extended?', executability.getBadgeFromReference);
@@ -56,7 +56,8 @@ app.get('/api/1.0/badge/peerreview/:id/:extended?', peerReview.getBadgeFromRefer
 app.post('/api/1.0/badge/peerreview/:extended?', peerReview.getBadgeFromData);
 
 app.listen(config.net.port, () => {
-	debug('badger with API version %s waiting for requests on port %s',
+	debug('badger %s with API version %s waiting for requests on port %s',
+	config.version,
 	config.api_version,
 	config.net.port);
 });

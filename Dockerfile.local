@@ -15,4 +15,4 @@ CMD ["npm", "start"]
 
 # local start:
 # docker build -t badger -f Dockerfile.local .
-# DEBUG=* docker run -it -e -p 8089:8089 badger
+# docker run -it -e DEBUG=* -p 8089:8089 badger

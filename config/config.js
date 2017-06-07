@@ -40,20 +40,30 @@ c.ext.doajArticles = 'https://doaj.org/api/v1/search/articles/';
 c.ext.doajJournals = 'https://doaj.org/api/v1/search/journals/';
 c.ext.geonames = 'http://api.geonames.org/countrySubdivisionJSON';
 
-//services
+//badges
 c.executable.services = ['o2r'];
 c.executable.mainService = 'o2r';
-
-c.peerreview.services = ['doaj'];
-c.peerreview.mainService = 'doaj';
+c.executable.badgeNASmall = 'https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg';
+c.executable.badgeNABig = 'badges/Executable_noInfo.svg';
 
 c.licence.services = ['o2r'];
 c.licence.mainService = 'o2r';
+c.licence.badgeNASmall = 'https://img.shields.io/badge/licence-n%2Fa-9f9f9f.svg';
+c.licence.badgeNABig = 'badges/license_noInformation.svg';
 
 c.spatial.services = ['o2r'];
 c.spatial.mainService = 'o2r';
+c.spatial.badgeNASmall = 'https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg';
+c.spatial.badgeNABig = 'indexNoMap.html';
 
 c.releasetime.services = ['crossref'];
 c.releasetime.mainService = 'crossref';
+c.releasetime.badgeNASmall = 'https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg';
+c.releasetime.badgeNABig = 'badges/released_no_information.svg';
+
+c.peerreview.services = ['doaj'];
+c.peerreview.mainService = 'doaj';
+c.peerreview.badgeNASmall = 'https://img.shields.io/badge/peer%20review-n%2Fa-lightgrey.svg';
+c.peerreview.badgeNABig = '';
 
 module.exports = c;
