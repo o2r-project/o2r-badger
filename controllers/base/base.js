@@ -144,15 +144,17 @@ function convert(format, width, file) {
 	}
 }
 
-function hasSupportedService(service) {
+exports.hasSupportedService = function (service) {
 	//ToDo: Implement multiple services and a fallback when there is no result
-	let service = service.mainService;
+	let mainService = service.mainService;
 	let allServices = service.services;
 	//ToDo: Return a different promise based on the service
-	if (allServices.indexOf(service) === -1) {
+	if (allServices.indexOf(mainService) === -1) {
 		return false;
 	} else {
 		return true;
 	}
 }
+
+
 

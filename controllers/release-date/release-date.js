@@ -1,8 +1,10 @@
 const debug = require('debug')('badger');
-const config = require('../../config/config');
 const path = require('path');
 const request = require('request');
+
+const config = require('../../config/config');
 const base = require('../base/base');
+const steps = require('../base/commonSteps');
 
 let crossref = config.ext.crossref;
 let badgeNASmall = config.releasetime.badgeNASmall;

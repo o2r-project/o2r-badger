@@ -1,8 +1,10 @@
 const debug = require('debug')('badger');
-const config = require('../../config/config');
 const request = require('request');
-const base = require('../base/base');
 const path = require('path');
+
+const config = require('../../config/config');
+const base = require('../base/base');
+const steps = require('../base/commonSteps');
 
 let badgeNASmall = config.peerreview.badgeNASmall;
 

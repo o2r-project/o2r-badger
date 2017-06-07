@@ -2,12 +2,14 @@
  * Include services used for the application
  */
 const debug = require('debug')('badger');
-const config = require('../../config/config');
 const express = require('express');
 const request = require('request');
 const fs = require('fs');
-const base = require('../base/base');
 const path = require('path');
+
+const config = require('../../config/config');
+const base = require('../base/base');
+const steps = require('../base/commonSteps');
 
 let badgeNASmall = config.licence.badgeNASmall;
 let badgeNABig = config.licence.badgeNABig;
@@ -84,8 +86,8 @@ exports.getBadgeFromReference = (req, res) => {
         return;
     }
 
-    return getCompendiumID(passon)
-        .then(getCompendium)
+    return steps.getCompendiumID(passon)
+        .then(steps.getCompendium)
         .then(getLicenseInformation)
         .then(sendResponse)
         .then((passon) => {
@@ -117,96 +119,6 @@ exports.getBadgeFromReference = (req, res) => {
             }
         });
 };
-
-function getCompendiumID(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/compendium?doi=' + passon.id;
-        debug('Fetching compendium ID from %s with URL', config.ext.o2r, requestURL);
-
-        request(requestURL, function(error, response, body) {
-
-            // no job for the given id available
-            if(error) {
-                error.msg = 'error accessing o2r';
-                error.status = 404;
-                reject(error);
-                return;
-            }
-            // status responses
-            if(response.statusCode === 404) {
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.statusCode === 500 || response.status === 500) {
-                let error = new Error();
-                error.msg = 'error filtering for doi';
-                error.status = 404;
-                reject(error);
-                return;
-            }
-
-            let data = JSON.parse(body);
-
-            // If exactly one compendium was found, contiune. Otherwise, redirect to the 'N/A badge'
-            if (data.results && data.results.length === 1) {
-                passon.compendiumID = data.results[0];
-                fulfill(passon);
-            } else {
-                debug('Found more than one compendium for DOI %s', passon.id);
-                let error = new Error();
-                error.msg = 'more than one compendium found for DOI';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-
-        });
-
-    });
-}
-
-function getCompendium(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/compendium/' + passon.compendiumID;
-        debug('Fetching license status for compendium %s from %s', passon.compendiumID, requestURL);
-
-        request(requestURL, function(error, response, body) {
-
-            // no job for the given id available
-            if(error) {
-                error.msg = 'error accessing o2r';
-                error.status = 404;
-                reject(error);
-                return;
-            }
-            // status responses
-            if(response.status === 404 || !body.results) {
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.status === 500) {
-                let error = new Error();
-                error.msg = 'Unable to access server';
-                error.status = 500;
-                reject(error);
-                return;
-            }
-
-            // Continue with metadata
-            passon.body = JSON.parse(body);
-            fulfill(passon);
-        });
-    });
-}
 
 function getLicenseInformation(passon) {
     return new Promise((fulfill, reject) => {

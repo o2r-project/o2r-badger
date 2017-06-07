@@ -2,11 +2,13 @@
 * Include services used for the application 
 */
 const debug = require('debug')('badger');
-const config = require('../../config/config');
 const request = require('request');
 const fs = require ('fs');
 const path = require('path');
+
+const config = require('../../config/config');
 const base = require('../base/base');
+const steps = require('../base/commonSteps');
 
 let badgeNASmall = config.spatial.badgeNASmall;
 let badgeNABig = config.spatial.badgeNABig;
@@ -94,12 +96,12 @@ exports.getBadgeFromReference = (req, res) => {
 
     let getBadge;
     if (passon.extended === 'extended') {
-        getBadge = getCompendiumID(passon)
-            .then(getCompendium)
+        getBadge = steps.getCompendiumID(passon)
+            .then(steps.getCompendium)
             .then(sendBigBadge)
     } else {
-        getBadge = getCompendiumID(passon)
-            .then(getCompendium)
+        getBadge = steps.getCompendiumID(passon)
+            .then(steps.getCompendium)
             .then(getCenterFromData)
             .then(getGeoName)
             .then(sendSmallBadge)
@@ -135,89 +137,9 @@ exports.getBadgeFromReference = (req, res) => {
         });
 };
 
-function getCompendiumID(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/compendium?doi=' + passon.id;
-        debug('Fetching compendium ID from %s with URL', config.ext.o2r, requestURL);
-
-        request(requestURL, function(error, response, body) {
-
-            // no job for the given id available
-            if(error) {
-                error.msg = 'error accessing o2r';
-                error.status = 404;
-                reject(error);
-                return;
-            }
-            // status responses
-            if(response.statusCode === 404 || !body.results) {
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.statusCode === 500 || response.status === 500) {
-                let error = new Error();
-                error.msg = 'error filtering for doi';
-                error.status = 404;
-                reject(error);
-                return;
-            }
-
-            let data = JSON.parse(body);
-
-            // If exactly one compendium was found, contiune. Otherwise, redirect to the 'N/A badge'
-            if (data.results && data.results.length === 1) {
-                passon.compendiumID = data.results[0];
-                fulfill(passon);
-            } else {
-                debug('Found more than one compendium for DOI %s', passon.id);
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-        });
-    });
-}
-
-function getCompendium(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/compendium/' + passon.compendiumID;
-        // example compendium: https://o2r.uni-muenster.de/api/v1/compendium/cUgvE
-        debug('Fetching location for compendium %s from %s', passon.compendiumID, requestURL);
-
-        // request to the o2r server
-        request(requestURL, function(error, response, body) {
-            if (error) {
-                error.msg = 'error accessing o2r';
-                error.status = 404;
-                reject(error);
-                return;
-            }
-
-            if (response.statusCode !== 200) {
-                let error = new Error();
-                error.msg = 'error accessing o2r metadata';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-
-            passon.body = JSON.parse(body);
-            fulfill(passon);
-        });
-    });
-}
-
-// from o2r json to bbox
 function getCenterFromData(passon) {
     return new Promise((fulfill, reject) => {
+        // from o2r json to bbox
         debug('Reading spatial information from o2r data');
 
         if (typeof passon.body === 'undefined') {
