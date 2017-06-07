@@ -2,14 +2,16 @@
 * Include services used for the application 
 */
 const debug = require('debug')('badger');
-const config = require('../../config/config');
 const request = require('request');
 const fs = require ('fs');
 const path = require('path');
-const scaling = require('../scaling/scaling');
 
-let badgeNASmall = 'https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg';
-let badgeNABig = 'indexNoMap.html';
+const config = require('../../config/config');
+const base = require('../base/base');
+const steps = require('../base/commonSteps');
+
+let badgeNASmall = config.spatial.badgeNASmall;
+let badgeNABig = config.spatial.badgeNABig;
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -19,6 +21,13 @@ exports.getBadgeFromData = (req, res) => {
         req: req,
         res: res
     };
+
+    // check if there is a service for "spatial" badges
+    if (base.hasSupportedService(config.spatial) === false) {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+        return;
+    }
 
     let getBadge;
 
@@ -36,10 +45,10 @@ exports.getBadgeFromData = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send 'N/A' badge
-                debug("No badge information found: %s", err);
+                debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -67,8 +76,8 @@ exports.getBadgeFromReference = (req, res) => {
 
     debug('Handling badge generation for id %s', req.params.id);
 
-    if (typeof req.query.extended !== 'undefined') {
-        extended = req.query.extended;
+    if (typeof req.params.extended !== 'undefined') {
+        extended = req.params.extended;
     }
 
     let passon = {
@@ -78,15 +87,21 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
-    let getBadge;
+    // check if there is a service for "spatial" badges
+    if (base.hasSupportedService(config.spatial) === false) {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+        return;
+    }
 
+    let getBadge;
     if (passon.extended === 'extended') {
-        getBadge = getCompendiumID(passon)
-            .then(getCompendium)
+        getBadge = steps.getCompendiumID(passon)
+            .then(steps.getCompendium)
             .then(sendBigBadge)
     } else {
-        getBadge = getCompendiumID(passon)
-            .then(getCompendium)
+        getBadge = steps.getCompendiumID(passon)
+            .then(steps.getCompendium)
             .then(getCenterFromData)
             .then(getGeoName)
             .then(sendSmallBadge)
@@ -98,10 +113,10 @@ exports.getBadgeFromReference = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send 'N/A' badge
-                debug('No badge information found', err);
+                debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -122,86 +137,9 @@ exports.getBadgeFromReference = (req, res) => {
         });
 };
 
-function getCompendiumID(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/compendium?doi=' + passon.id;
-        debug('Fetching compendium ID from %s with URL', config.ext.o2r, requestURL);
-
-        request(requestURL, function(error, response, body) {
-
-            // no job for the given id available
-            if(error) {
-                debug(error);
-                reject(error);
-                return;
-            }
-            // status responses
-            if(response.statusCode === 404 || !body.results) {
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.statusCode === 500 || response.status === 500) {
-                let error = new Error();
-                error.msg = 'error filtering for doi';
-                error.status = 500;
-                reject(error);
-                return;
-            }
-
-            let data = JSON.parse(body);
-
-            // If exactly one compendium was found, contiune. Otherwise, redirect to the 'N/A badge'
-            if (data.results && data.results.length === 1) {
-                passon.compendiumID = data.results[0];
-                fulfill(passon);
-            } else {
-                debug('Found more than one compendium for DOI %s', passon.id);
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-        });
-    });
-}
-
-function getCompendium(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/compendium/' + passon.compendiumID;
-        // example compendium: https://o2r.uni-muenster.de/api/v1/compendium/cUgvE
-        debug('Fetching location for compendium %s from %s', passon.compendiumID, requestURL);
-
-        // request to the o2r server
-        request(requestURL, function(error, response, body) {
-            if (error) {
-                reject(error);
-                return;
-            }
-
-            if (response.statusCode !== 200) {
-                let error = new Error();
-                error.msg = 'error accessing o2r metadata';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-
-            passon.body = JSON.parse(body);
-            fulfill(passon);
-        });
-    });
-}
-
-// from o2r json to bbox
 function getCenterFromData(passon) {
     return new Promise((fulfill, reject) => {
+        // from o2r json to bbox
         debug('Reading spatial information from o2r data');
 
         if (typeof passon.body === 'undefined') {
@@ -235,12 +173,18 @@ function getCenterFromData(passon) {
 
 function getGeoName(passon) {
     return new Promise((fulfill, reject) => {
-        let requestURL = 'http://api.geonames.org/countrySubdivisionJSON?lat=' + passon.latitude + '&lng=' + passon.longitude +'&username=badges';
+        let requestURL = config.ext.geonames + '?lat=' + passon.latitude + '&lng=' + passon.longitude +'&username=badges';
         debug('Fetching geoname for compendium %s from %s', passon.compendiumID, requestURL);
 
         //and get the reversed geocoding for it
         request({url: requestURL,
             proxy: config.net.proxy}, function (error,response,body){
+            if (error) {
+                error.msg = 'Could not access geonames.org'
+                reject(error);
+                return;
+            }
+
             if(response.statusCode === 200) {
                 let geoname = JSON.parse(body);
                 let geoname_ocean;
@@ -352,7 +296,7 @@ function sendBigBadge(passon) {
                 passon.req.type = 'location';
                 passon.req.options = options;
                 debug('Sending map %s', passon.req.filePath);
-                scaling.resizeAndSend(passon.req, passon.res);
+                base.resizeAndSend(passon.req, passon.res);
                 fulfill(passon);
             }
         });

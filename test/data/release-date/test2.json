@@ -1,0 +1,144 @@
+{
+    "status": "ok",
+    "message-type": "work",
+    "message-version": "1.0.0",
+    "message": {
+        "indexed": {
+            "date-parts": [
+                [
+                    2017,
+                    5,
+                    30
+                ]
+            ],
+            "date-time": "2017-05-30T08:02:42Z",
+            "timestamp": 1496131362319
+        },
+        "reference-count": 0,
+        "publisher": "American Physical Society (APS)",
+        "issue": "10",
+        "license": [
+            {
+                "URL": "http:\/\/link.aps.org\/licenses\/aps-default-license",
+                "start": {
+                    "date-parts": [
+                        [
+                            1935,
+                            5,
+                            15
+                        ]
+                    ],
+                    "date-time": "1935-05-15T00:00:00Z",
+                    "timestamp": -1092960000000
+                },
+                "delay-in-days": 0,
+                "content-version": "vor"
+            }
+        ],
+        "content-domain": {
+            "domain": [],
+            "crossmark-restriction": false
+        },
+        "short-container-title": [
+            "Phys. Rev."
+        ],
+        "DOI": "10.1103\/physrev.47.777",
+        "type": "journal-article",
+        "created": {
+            "date-parts": [
+                [
+                    2002,
+                    7,
+                    27
+                ]
+            ],
+            "date-time": "2002-07-27T04:27:42Z",
+            "timestamp": 1027744062000
+        },
+        "page": "777-780",
+        "source": "Crossref",
+        "is-referenced-by-count": 6084,
+        "title": [
+            "Can Quantum-Mechanical Description of Physical Reality Be Considered Complete?"
+        ],
+        "prefix": "10.1103",
+        "volume": "47",
+        "author": [
+            {
+                "given": "A.",
+                "family": "Einstein",
+                "affiliation": []
+            },
+            {
+                "given": "B.",
+                "family": "Podolsky",
+                "affiliation": []
+            },
+            {
+                "given": "N.",
+                "family": "Rosen",
+                "affiliation": []
+            }
+        ],
+        "member": "16",
+        "published-online": {
+            "date-parts": [
+                [
+                    1935,
+                    5,
+                    15
+                ]
+            ]
+        },
+        "container-title": [
+            "Physical Review"
+        ],
+        "original-title": [],
+        "link": [
+            {
+                "URL": "http:\/\/link.aps.org\/article\/10.1103\/PhysRev.47.777",
+                "content-type": "unspecified",
+                "content-version": "vor",
+                "intended-application": "syndication"
+            }
+        ],
+        "deposited": {
+            "date-parts": [
+                [
+                    2017,
+                    4,
+                    5
+                ]
+            ],
+            "date-time": "2017-04-05T17:03:23Z",
+            "timestamp": 1491411803000
+        },
+        "score": 1.0,
+        "subtitle": [],
+        "short-title": [],
+        "issued": {
+            "date-parts": [
+                [
+                    1935,
+                    5,
+                    15
+                ]
+            ]
+        },
+        "references-count": 0,
+        "URL": "http:\/\/dx.doi.org\/10.1103\/physrev.47.777",
+        "relation": {},
+        "ISSN": [
+            "0031-899X"
+        ],
+        "issn-type": [
+            {
+                "value": "0031-899X",
+                "type": "print"
+            }
+        ],
+        "subject": [
+            "Physics and Astronomy(all)"
+        ]
+    }
+}

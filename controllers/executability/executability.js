@@ -1,12 +1,13 @@
 const debug = require('debug')('badger');
-const config = require('../../config/config');
 const request = require('request');
-const scaling = require('../scaling/scaling');
 const path = require('path');
 
-let badgeNASmall = 'https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg';
-let badgeNABig = 'badges/Executable_noInfo.svg';
+const config = require('../../config/config');
+const base = require('../base/base');
+const steps = require('../base/commonSteps');
 
+let badgeNASmall = config.executable.badgeNASmall;
+let badgeNABig = config.executable.badgeNABig;
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -17,16 +18,23 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    // check if there is a service for "executable"
+    if (base.hasSupportedService(config.executable) === false) {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+        return;
+    }
+
     return sendResponse(passon)
         .then((passon) => {
             debug('Completed generating badge');
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found", err);
+                debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -65,19 +73,26 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
-    return getCompendiumID(passon)
-        .then(getJobID)
-        .then(getJob)
+    // check if there is a service for "executable"
+    if (base.hasSupportedService(config.executable) === false) {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+        return;
+    }
+
+    return steps.getCompendiumID(passon)
+        .then(steps.getJobID)
+        .then(steps.getJob)
         .then(sendResponse)
         .then((passon) => {
             debug('Completed generating badge for %s', passon.id);
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found: %s", err);
+                debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -97,133 +112,6 @@ exports.getBadgeFromReference = (req, res) => {
             }
         });
 };
-
-
-function getCompendiumID(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/compendium?doi=' + passon.id;
-        debug('Fetching compendium ID from %s with URL', config.ext.o2r, requestURL);
-
-        request(requestURL, function(error, response, body) {
-
-            // no job for the given id available
-            if(error) {
-                debug(error);
-                reject(error);
-                return;
-            }
-            // status responses
-            if(response.statusCode === 404 || !body.results) {
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.statusCode === 500 || response.status === 500) {
-                let error = new Error();
-                error.msg = 'error filtering for doi';
-                error.status = 500;
-                reject(error);
-                return;
-            }
-
-            let data = JSON.parse(body);
-
-            // If exactly one compendium was found, contiune. Otherwise, redirect to the 'N/A badge'
-            if (data.results && data.results.length === 1) {
-                passon.compendiumID = data.results[0];
-                fulfill(passon);
-            } else {
-                debug('Found more than one compendium for DOI %s', passon.id);
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-
-        });
-
-    });
-}
-
-function getJobID(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/job?compendium_id=' + passon.compendiumID;
-        debug('Fetching job ID for compendium %s from %s', passon.compendiumID, requestURL);
-
-        request(requestURL, function(error, response, body) {
-
-            // no job for the given id available
-            if(error) {
-                debug(error);
-                reject(error);
-                return;
-            }
-            // status responses
-            if(response.status === 404 || !body.results) {
-                let error = new Error();
-                error.msg = 'no job found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.status === 500) {
-                let error = new Error();
-                error.msg = 'Unable to find data on server';
-                error.status = 500;
-                reject(error);
-                return;
-            }
-
-            // Continue with jobID
-            let data = JSON.parse(body);
-            passon.jobID = data.results[0];
-            fulfill(passon);
-        });
-    });
-}
-
-function getJob(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/job/' + passon.jobID;
-        debug('Fetching job status for job %s from %s', passon.jobID, requestURL);
-
-        request(requestURL, function(error, response, body) {
-
-            // no job for the given id available
-            if(error) {
-                debug(error);
-                reject(error);
-                return;
-            }
-            // status responses
-            if(response.status === 404 || !body.results) {
-                let error = new Error();
-                error.msg = 'no job data found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.status === 500) {
-                let error = new Error();
-                error.msg = 'Unable to find data on server';
-                error.status = 500;
-                reject(error);
-                return;
-            }
-
-            // Continue with jobID
-            passon.body = JSON.parse(body);
-            fulfill(passon);
-        });
-    });
-}
 
 function sendResponse(passon) {
     return new Promise((fulfill, reject) => {
@@ -256,7 +144,7 @@ function sendResponse(passon) {
             }
 
             // Send the request
-            scaling.resizeAndSend(passon.req, passon.res);
+            base.resizeAndSend(passon.req, passon.res);
             fulfill(passon);
 
         } else if (passon.extended === undefined) {

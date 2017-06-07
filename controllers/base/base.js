@@ -7,7 +7,7 @@ const XMLSerializer = require('xmldom').XMLSerializer;
 const path = require('path');
 const fs = require('fs');
 
-let server = config.net.endpoint + ':';
+let server = config.net.testEndpoint + ':';
 
 exports.getBase = (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
@@ -18,11 +18,6 @@ exports.getBase = (req, res) => {
 			"licence",
 			"spatial",
 			"releasetime"
-		],
-		"services": [
-			"o2r",
-			"doaj",
-			"crossref"
 		]
 	}));
 };
@@ -31,141 +26,36 @@ exports.getType = (req, res) => {
 	let type = req.params.type;
 	switch (type) {
 		case "executable":
-			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"o2r"
-				]
-			}));
+            res.status(404).send('{"error":"no id provided"}');
 			break;
 		case "peerreview":
-			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"doaj"
-				]
-			}));
+            res.status(404).send('{"error":"no id provided"}');
 			break;
 		case "licence":
-			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"o2r"
-				]
-			}));
+            res.status(404).send('{"error":"no id provided"}');;
 			break;
 		case "spatial":
-			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"o2r"
-				]
-			}));
+            res.status(404).send('{"error":"no id provided"}');
 			break;
 		case "releasetime":
-			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify({
-				"service": [
-					"crossref"
-				]
-			}));
+            res.status(404).send('{"error":"no id provided"}');
 			break;
 		default:
 			debug("Please insert a valid type parameter");
-			res.send("Please insert a valid type parameter");
+			res.status(404).send('{"error":"type not found"}');
 			break;
 	}    
 };
 
-exports.getService = (req, res) => {
+exports.getAllServices = (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
-	res.send();    
-};
-
-exports.getBadge = (req, res) => {
-	let type = req.params.type;
-	let width = req.query.width;
-	let format = req.query.format;
-	let port;
-
-	debug("path= " + req.path);
-
-	switch (type) {
-		case "executable":
-			port = 3001;
-			break;
-		case "peerreview":
-			port = 3002;
-			break;
-		case "licence":
-			port = 3003;
-			break;
-		case "releasetime":
-			port = 3004;
-			break;
-		case "spatial":
-			port = 3005;
-			break;
-		default:
-			debug("No such type, please check the URL");
-			break;
-	}
-
-	debug("type: " + type + " and port: " + port);
-
-	// Redirection to requested badge api
-	if (port === 3001 || port === 3002 || port === 3003 || port === 3004 || port === 3005) {
-		debug("request: " + server + port + req.path);
-
-		request({
-			//url: server + port + req.path, //
-			url: server + config.net.port + req.path,
-			//proxy: "http://wwwproxy.uni-muenster.de:80/"
-			proxy: config.net.proxy
-		},
-			function (error, response, body) {
-
-				if (!error) {
-					//check if body is a svg
-					if (body.includes('<svg')) {
-
-						// convert svg to png and send the result
-						if (format === "png") {
-							result = convert(format, width, body);
-							if (!result) {
-								res.status(500).send('Converting of svg to png not possible!')
-							} else {
-								let img = new Buffer(result, "base64");
-								res.writeHead(200, {
-									'Access-Control-Allow-Origin': '*',
-									'Content-Type': 'image/png',
-									'Content-Length': img.length
-								});
-								res.end(img);
-							}
-						}
-						//send svg
-						else {
-							res.writeHead(200, {
-								'Access-Control-Allow-Origin': '*',
-								'Content-Type': 'image/svg+xml'
-							});
-							res.end(body);
-						}
-					}
-					//send forward
-					else{
-						res.send(body);
-					}
-				}
-				else {
-					debug(error);
-				}
-			});
-	}
-	else {
-		debug("wrong url");
-	}    
+	res.send(JSON.stringify({
+		"services": [
+			"o2r",
+			"doaj",
+			"crossref"
+		]
+	}));
 };
 
 exports.resizeAndSend = (req, res) => {
@@ -253,3 +143,18 @@ function convert(format, width, file) {
 		return output;
 	}
 }
+
+exports.hasSupportedService = function (service) {
+	//ToDo: Implement multiple services and a fallback when there is no result
+	let mainService = service.mainService;
+	let allServices = service.services;
+	//ToDo: Return a different promise based on the service
+	if (allServices.indexOf(mainService) === -1) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+
+

@@ -7,24 +7,22 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 const request = require('request');
-const md5 = require('js-md5');
 const assert = require('chai').assert;
 
 chai.use(chaiHttp);
 
-let baseURL = config.net.endpoint + ':' + config.net.port;
+let baseURL = config.net.testEndpoint + ':' + config.net.port;
 let form;
 let requestLoadingTimeout = 10000;
 
-// read the file for the green badge
-const md5Green = "8ccab8ed40e5ba373d38a35d719f7ee6";
-const md5Red = "371692e0511a776ab35e8e50a5610be0";
-const md5NoInfo = "03ab48bb044a4958cccf2108be2eeccc";
-const md5Running = "14e140e5aeade88767e750540add7c98";
+const executable_yes_string = '<ellipse style="opacity:1;fill:#008a00;fill-opacity:1;fill-rule:nonzero;stroke:#003100;stroke-width:14.13867092;stroke-linecap:butt;stroke-linejoin:round;';
+const executable_no_string = '<ellipse style="opacity:1;fill:#bf0000;fill-opacity:1;fill-rule:nonzero;stroke:#590000;stroke-width:14.73308754;stroke-linecap:butt;stroke-linejoin:round;';
+const executable_running_string = '<ellipse style="opacity:1;fill:#ffe300;fill-opacity:1;fill-rule:nonzero;stroke:#f7aa0f;stroke-width:14.82154179;stroke-linecap:butt;stroke-linejoin:round;';
+const executable_na_string = '<ellipse style="opacity:1;fill:#aaaaaa;fill-opacity:1;fill-rule:nonzero;';
 
-describe('executability badge (small):', function () {
+describe('executability badge:', function () {
 
-    describe('POST /api/1.0/badge/executable/o2r with jobStatus "success"', () => {
+    describe('POST /api/1.0/badge/executable with jobStatus "success"', () => {
         before(function (done) {
             fs.readFile('./test/data/executable/testfile1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -34,7 +32,7 @@ describe('executability badge (small):', function () {
         });
         it('should respond with a small badge with a research executability', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r',
+                uri: baseURL + '/api/1.0/badge/executable',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -49,7 +47,7 @@ describe('executability badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/executable/o2r with json with jobStatus "failure"', () => {
+    describe('POST /api/1.0/badge/executable with json with jobStatus "failure"', () => {
         before(function (done) {
             fs.readFile('./test/data/executable/testfile2.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -59,7 +57,7 @@ describe('executability badge (small):', function () {
         });
         it('should respond with a small red badge: "executable no"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r',
+                uri: baseURL + '/api/1.0/badge/executable',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -74,7 +72,7 @@ describe('executability badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/executable/o2r with json with jobStatus "running"', () => {
+    describe('POST /api/1.0/badge/executable with json with jobStatus "running"', () => {
         before(function (done) {
             fs.readFile('./test/data/executable/testfile3.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -84,7 +82,7 @@ describe('executability badge (small):', function () {
         });
         it('should respond with a small red badge: "executable no"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r',
+                uri: baseURL + '/api/1.0/badge/executable',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -99,7 +97,7 @@ describe('executability badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/executable/o2r with json without executable information', () => {
+    describe('POST /api/1.0/badge/executable with json without executable information', () => {
         before(function (done) {
             fs.readFile('./test/data/executable/testfile4.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -109,7 +107,7 @@ describe('executability badge (small):', function () {
         });
         it('should respond with a small badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r',
+                uri: baseURL + '/api/1.0/badge/executable',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -124,10 +122,10 @@ describe('executability badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('GET /api/1.0/badge/executable/o2r/10.99999%2Funknown', () => {
+    describe('GET /api/1.0/badge/executable/10.99999%2Funknown', () => {
         it('unassigned doi: should respond with a small badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r/' + '10.99999%2Funknown',
+                uri: baseURL + '/api/1.0/badge/executable/' + '10.99999%2Funknown',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false
@@ -141,7 +139,7 @@ describe('executability badge (small):', function () {
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/executable/o2r/extended with jobStatus "success"', () => {
+    describe('POST /api/1.0/badge/executable/extended with jobStatus "success"', () => {
         before(function (done) {
             fs.readFile('./test/data/executable/testfile1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -151,7 +149,7 @@ describe('executability badge (small):', function () {
         });
         it('should respond with a big badge with positive executability', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/executable/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -160,13 +158,15 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.equal(md5(res.body), md5Green.toLowerCase());
+                //let rawString = res.body.replace(/\s+/g, ''); //remove whitespace
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes(executable_yes_string));
                 done();
             });
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/executable/o2r/extended with json with jobStatus "failure"', () => {
+    describe('POST /api/1.0/badge/executable/extended with json with jobStatus "failure"', () => {
         before(function (done) {
             fs.readFile('./test/data/executable/testfile2.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -176,7 +176,7 @@ describe('executability badge (small):', function () {
         });
         it('should respond with a big red badge: "executable no"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/executable/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -185,13 +185,14 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.equal(md5(res.body), md5Red.toLowerCase());
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes(executable_no_string));
                 done();
             });
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/executable/o2r with json with jobStatus "running"', () => {
+    describe('POST /api/1.0/badge/executable with json with jobStatus "running"', () => {
         before(function (done) {
             fs.readFile('./test/data/executable/testfile3.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -201,7 +202,7 @@ describe('executability badge (small):', function () {
         });
         it('should respond with a big yellow badge: "executable running"', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/executable/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -210,13 +211,14 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.equal(md5(res.body), md5Running.toLowerCase());
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes(executable_running_string));
                 done();
             });
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/executable/o2r/extended with json without executable information', () => {
+    describe('POST /api/1.0/badge/executable/extended with json without executable information', () => {
         before(function (done) {
             fs.readFile('./test/data/executable/testfile4.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -226,7 +228,7 @@ describe('executability badge (small):', function () {
         });
         it('should respond with a big grey badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/executable/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -235,16 +237,18 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes(executable_na_string));
                 done();
             });
         }).timeout(20000);
     });
 
 
-    describe('GET /api/1.0/badge/executable/o2r/10.99999%2Funknown', () => {
+    describe('GET /api/1.0/badge/executable/10.99999%2Funknown', () => {
         it('unassigned doi: should respond with a small badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/executable/o2r/' + '10.99999%2Funknown',
+                uri: baseURL + '/api/1.0/badge/executable/' + '10.99999%2Funknown',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false
@@ -252,7 +256,7 @@ describe('executability badge (small):', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 302);
-                assert.equal(md5(res.body), md5NoInfo.toLowerCase());
+                assert.equal(res.headers['location'], 'https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg');
                 done();
             });
         }).timeout(20000);

@@ -8,7 +8,6 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 const request = require('request');
 
-//const request = require('supertest');
 const assert = require('chai').assert;
 
 const jsdom = require("jsdom");
@@ -16,14 +15,14 @@ const { JSDOM } = jsdom;
 
 chai.use(chaiHttp);
 
-let baseURL = config.net.endpoint + ':' + config.net.port;
+let baseURL = config.net.testEndpoint + ':' + config.net.port;
 let form;
 let requestLoadingTimeout = 10000;
 
 describe('Location badge:', function () {
 
 
-    describe('POST /api/1.0/badge/spatial/o2r/extended with json including spatial information', () => {
+    describe('POST /api/1.0/badge/spatial/extended with json including spatial information', () => {
         before(function (done) {
             fs.readFile('./test/data/spatial/sample1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -33,7 +32,7 @@ describe('Location badge:', function () {
         });
         it('should respond with a big badge: index.html including a map', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/spatial/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/spatial/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout
@@ -50,7 +49,7 @@ describe('Location badge:', function () {
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/spatial/o2r/extended with json missing spatial information', () => {
+    describe('POST /api/1.0/badge/spatial/extended with json missing spatial information', () => {
         before(function (done) {
             fs.readFile('./test/data/spatial/sample2.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -60,7 +59,7 @@ describe('Location badge:', function () {
         });
         it('should respond with a big badge without a location', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/spatial/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/spatial/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout
@@ -78,7 +77,7 @@ describe('Location badge:', function () {
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/spatial/o2r with json including spatial information', () => {
+    describe('POST /api/1.0/badge/spatial with json including spatial information', () => {
         before(function (done) {
             fs.readFile('./test/data/spatial/sample1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -88,7 +87,7 @@ describe('Location badge:', function () {
         });
         it('should respond with a small badge with a research location', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/spatial/o2r',
+                uri: baseURL + '/api/1.0/badge/spatial',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -103,7 +102,7 @@ describe('Location badge:', function () {
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/spatial/o2r with json without spatial information', () => {
+    describe('POST /api/1.0/badge/spatial with json without spatial information', () => {
         before(function (done) {
             fs.readFile('./test/data/spatial/sample2.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -113,7 +112,7 @@ describe('Location badge:', function () {
         });
         it('should respond with a small badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/spatial/o2r',
+                uri: baseURL + '/api/1.0/badge/spatial',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -128,10 +127,10 @@ describe('Location badge:', function () {
         }).timeout(20000);
     });
 
-    describe('GET /api/1.0/badge/spatial/o2r/10.99999%2Funknown', () => {
+    describe('GET /api/1.0/badge/spatial/10.99999%2Funknown', () => {
         it('unassigned doi: should respond with a small badge indicating no information', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/spatial/o2r/' + '10.99999%2Funknown',
+                uri: baseURL + '/api/1.0/badge/spatial/' + '10.99999%2Funknown',
                 method: 'GET',
                 timeout: requestLoadingTimeout,
                 followRedirect: false

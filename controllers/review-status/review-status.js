@@ -1,10 +1,12 @@
 const debug = require('debug')('badger');
-const config = require('../../config/config');
 const request = require('request');
-const scaling = require('../scaling/scaling');
 const path = require('path');
 
-let badgeNASmall = 'https://img.shields.io/badge/Peer%20Review-n%2Fa-lightgrey.svg';
+const config = require('../../config/config');
+const base = require('../base/base');
+const steps = require('../base/commonSteps');
+
+let badgeNASmall = config.peerreview.badgeNASmall;
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -15,13 +17,20 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    // check if there is a service for "peerreview" badges
+    if (base.hasSupportedService(config.peerreview) === false) {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+        return;
+    }
+
     return sendResponse(passon)
         .then((passon) => {
             debug('Completed generating badge');
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found: %s", err);
+                debug("No badge information found: %s", err.msg);
                 res.redirect(badgeNASmall);
             } else { // Send error response
                 debug("Error generating badge: %s", err);
@@ -56,6 +65,13 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
+    // check if there is a service for "peerreview" badges
+    if (base.hasSupportedService(config.peerreview) === false) {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+        return;
+    }
+
     return getISSN(passon)
         .then(getReviewStatus)
         .then(sendResponse)
@@ -65,7 +81,7 @@ exports.getBadgeFromReference = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found", err);
+                debug("No badge information found: %s", err.msg);
                 res.redirect(badgeNASmall);
             } else { // Send error response
                 debug("Error generating badge:", err);
@@ -84,16 +100,16 @@ exports.getBadgeFromReference = (req, res) => {
 
 function getISSN(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Fetching ISSN ID from %s for DOI %s', config.ext.DOAJ, passon.id);
-
-        let requestURL = config.ext.DOAJ + 'doi:' + encodeURIComponent(passon.id);
+        let requestURL = config.ext.doajArticles + 'doi:' + encodeURIComponent(passon.id);
+        debug('Fetching ISSN ID from DOAJ with URL %s', requestURL);
 
         //request DOAJ API to get ISSN
         //e.g. https://doaj.org/api/v1/search/articles/doi%3A10.3389%2Ffpsyg.2013.00479
         request(requestURL, function(error, response, body) {
 
             if (error || typeof body.error !== 'undefined') {
-                debug('DOAJ API not accessible: %s', error);
+                error.msg = 'error accessing doaj';
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -151,14 +167,15 @@ function getISSN(passon) {
 function getReviewStatus(passon) {
     return new Promise((fulfill, reject) => {
 
-        let requestURL = 'https://doaj.org/api/v1/search/journals/' + encodeURIComponent('issn:' + passon.issn);
-        debug('Fetching review status from %s with URL', config.ext.DOAJ, requestURL);
+        let requestURL = config.ext.doajJournals + encodeURIComponent('issn:' + passon.issn);
+        debug('Fetching review status from %s with URL', config.ext.doajJournals, requestURL);
 
         //request DOIJ API to find out if journal with ISSN is peer reviewed
         //e.g. https://doaj.org/api/v1/search/journals/issn%3A1664-1078
         request(requestURL, function(error, response, body) {
             if (error) {
-                debug('DOAJ API not accessible: %s', error);
+                error.msg = 'error accessing doaj';
+                error.status = 404;
                 reject(error);
                 return;
             }
@@ -184,6 +201,7 @@ function sendResponse(passon) {
 
         try {
             process = data.results[0].bibjson.editorial_review.process;
+            debug('Review process for DOI %s is "%s"', passon.id, process);
         } catch (error) {
             error.msg = 'error accessing doaj';
             error.badgeNA = true;
@@ -199,12 +217,12 @@ function sendResponse(passon) {
             reject(error);
             return;
         } else {
-            if (process.startsWith('Blind')) {
-                passon.reviewStatus = 'Blind';
-            } else if (process.startsWith('Double blind')) {
-                passon.reviewStatus = 'Double blind';
+            if (process.toLowerCase().startsWith('blind')) {
+                passon.reviewStatus = 'blind';
+            } else if (process.toLowerCase().startsWith('double blind')) {
+                passon.reviewStatus = 'double blind';
             } else {
-                passon.reviewStatus = 'Yes';
+                passon.reviewStatus = 'yes';
             }
             debug('Sending badge for review status %s', passon.reviewStatus);
             passon.res.redirect(generateBadge(passon.reviewStatus));
@@ -214,7 +232,7 @@ function sendResponse(passon) {
 }
 
 function generateBadge(text) {
-    let shieldsIO = 'https://img.shields.io/badge/Peer%20Review-';
+    let shieldsIO = 'https://img.shields.io/badge/peer%20review-';
     let color = '-green.svg';
     return shieldsIO + encodeURIComponent(text) + color;
 }

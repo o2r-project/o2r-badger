@@ -7,19 +7,17 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 const request = require('request');
-const md5 = require('js-md5');
 const assert = require('chai').assert;
 
 chai.use(chaiHttp);
 
-let baseURL = config.net.endpoint + ':' + config.net.port;
+let baseURL = config.net.testEndpoint + ':' + config.net.port;
 let form;
 let requestLoadingTimeout = 10000;
-let badgeString = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\r\n<svg';
 
 describe('License badge:', function () {
 
-    describe('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         before(function (done) {
             fs.readFile('./test/data/licence/testjson1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -29,7 +27,7 @@ describe('License badge:', function () {
         });
         it('should respond with a big badge: license open', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/licence/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/licence/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout
@@ -37,13 +35,14 @@ describe('License badge:', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.isTrue(res.body.startsWith(badgeString));
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes('sodipodi:docname="license_open.svg">'));
                 done();
             });
         }).timeout(20000);
     });
 
-    describe('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         before(function (done) {
             fs.readFile('./test/data/licence/testjson13.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -53,7 +52,7 @@ describe('License badge:', function () {
         });
         it('should respond with a big badge: license partially open', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/licence/o2r/extended',
+                uri: baseURL + '/api/1.0/badge/licence/extended',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout
@@ -61,28 +60,29 @@ describe('License badge:', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 200);
-                assert.isTrue(res.body.startsWith(badgeString));
+                let rawString = body.replace(/\r?\n|\r|\n/g, ''); //remove newlines
+                assert.isTrue(rawString.includes('sodipodi:docname="license_text.svg">'));
                 done();
             });
         }).timeout(20000);
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         it('should respond with a big badge: license mostly open', (done) => {
         });
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         it('should respond with a big badge: license closed', (done) => {
         });
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r/extended with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence/extended with json including licence information', () => {
         it('should respond with a big badge: license unknown', (done) => {
         });
     });
 
-    describe('POST /api/1.0/badge/licence/o2r', () => {
+    describe('POST /api/1.0/badge/licence', () => {
         before(function (done) {
             fs.readFile('./test/data/licence/testjson1.json', 'utf8', function (err, fileContents) {
                 if (err) throw err;
@@ -92,7 +92,7 @@ describe('License badge:', function () {
         });
         it('should respond with a small badge: license open', (done) => {
             request({
-                uri: baseURL + '/api/1.0/badge/licence/o2r',
+                uri: baseURL + '/api/1.0/badge/licence',
                 method: 'POST',
                 form: form,
                 timeout: requestLoadingTimeout,
@@ -107,17 +107,17 @@ describe('License badge:', function () {
         }).timeout(20000);
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence with json including licence information', () => {
         it('should respond with a small badge: license mostly open', (done) => {
         });
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence with json including licence information', () => {
         it('should respond with a small badge: license closed', (done) => {
         });
     });
 
-    describe.skip('POST /api/1.0/badge/licence/o2r with json including licence information', () => {
+    describe.skip('POST /api/1.0/badge/licence with json including licence information', () => {
         it('should respond with a small badge: license unknown', (done) => {
         });
     });

@@ -2,15 +2,21 @@
  * Include services used for the application
  */
 const debug = require('debug')('badger');
-const config = require('../../config/config');
 const express = require('express');
 const request = require('request');
 const fs = require('fs');
-const scaling = require('../scaling/scaling');
 const path = require('path');
 
-let badgeNASmall = 'https://img.shields.io/badge/licence-n%2Fa-9f9f9f.svg';
-let badgeNABig = 'badges/license_noInformation.svg';
+const config = require('../../config/config');
+const base = require('../base/base');
+const steps = require('../base/commonSteps');
+
+let badgeNASmall = config.licence.badgeNASmall;
+let badgeNABig = config.licence.badgeNABig;
+
+// read json file osi.json and od.json to compare whether the licence of the compendia is in the list of licences
+const osi = JSON.parse(fs.readFileSync('./controllers/license/osi.json'));
+const od = JSON.parse(fs.readFileSync('./controllers/license/od.json'));
 
 exports.getBadgeFromData = (req, res) => {
 
@@ -21,6 +27,13 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    // check if there is a service for "licence"
+    if (base.hasSupportedService(config.licence) === false) {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+        return;
+    }
+
     return getLicenseInformation(passon)
         .then(sendResponse)
         .then((passon) => {
@@ -28,10 +41,10 @@ exports.getBadgeFromData = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send 'N/A' badge
-                debug("No badge information found: %s", err);
+                debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -59,8 +72,8 @@ exports.getBadgeFromReference = (req, res) => {
 
     debug('Handling badge generation for id %s', req.params.id);
 
-    if (typeof req.query.extended !== 'undefined') {
-        extended = req.query.extended;
+    if (typeof req.params.extended !== 'undefined') {
+        extended = req.params.extended;
     }
 
     let passon = {
@@ -70,8 +83,15 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
-    return getCompendiumID(passon)
-        .then(getCompendium)
+    // check if there is a service for "licence"
+    if (base.hasSupportedService(config.licence) === false) {
+        debug('No service for badge %s found', passon.id);
+        res.status(404).send('{"error":"no service for this type found"}');
+        return;
+    }
+
+    return steps.getCompendiumID(passon)
+        .then(steps.getCompendium)
         .then(getLicenseInformation)
         .then(sendResponse)
         .then((passon) => {
@@ -80,10 +100,10 @@ exports.getBadgeFromReference = (req, res) => {
         })
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
-                debug("No badge information found", err);
+                debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
-                    scaling.resizeAndSend(passon.req, passon.res);
+                    base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
                     res.redirect(badgeNASmall);
                 } else {
@@ -103,93 +123,6 @@ exports.getBadgeFromReference = (req, res) => {
             }
         });
 };
-
-function getCompendiumID(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/compendium?doi=' + passon.id;
-        debug('Fetching compendium ID from %s with URL', config.ext.o2r, requestURL);
-
-        request(requestURL, function(error, response, body) {
-
-            // no job for the given id available
-            if(error) {
-                debug(error);
-                reject(error);
-                return;
-            }
-            // status responses
-            if(response.statusCode === 404 || !body.results) {
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.statusCode === 500 || response.status === 500) {
-                let error = new Error();
-                error.msg = 'error filtering for doi';
-                error.status = 500;
-                reject(error);
-                return;
-            }
-
-            let data = JSON.parse(body);
-
-            // If exactly one compendium was found, contiune. Otherwise, redirect to the 'N/A badge'
-            if (data.results && data.results.length === 1) {
-                passon.compendiumID = data.results[0];
-                fulfill(passon);
-            } else {
-                debug('Found more than one compendium for DOI %s', passon.id);
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-
-        });
-
-    });
-}
-
-function getCompendium(passon) {
-    return new Promise((fulfill, reject) => {
-        let requestURL = config.ext.o2r + '/api/v1/compendium/' + passon.compendiumID;
-        debug('Fetching license status for compendium %s from %s', passon.compendiumID, requestURL);
-
-        request(requestURL, function(error, response, body) {
-
-            // no job for the given id available
-            if(error) {
-                reject(error);
-                return;
-            }
-            // status responses
-            if(response.status === 404 || !body.results) {
-                let error = new Error();
-                error.msg = 'no compendium found';
-                error.status = 404;
-                error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.status === 500) {
-                let error = new Error();
-                error.msg = 'Unable to access server';
-                error.status = 500;
-                reject(error);
-                return;
-            }
-
-            // Continue with metadata
-            passon.body = JSON.parse(body);
-            fulfill(passon);
-        });
-    });
-}
 
 function getLicenseInformation(passon) {
     return new Promise((fulfill, reject) => {
@@ -216,10 +149,6 @@ function getLicenseInformation(passon) {
                 codelicence = compendiumJSON.metadata.licence.code;
             }
             else codelicence = 'unknown';
-
-            // read json file osi.json and od.json to compare whether the licence of the compendia is in the list of licences
-            let osi = JSON.parse(fs.readFileSync('./controllers/license/osi.json'));
-            let od = JSON.parse(fs.readFileSync('./controllers/license/od.json'));
 
             //check for all licences if they are included in our list of compatible compendia
             if(datalicence === 'unknown') {
@@ -262,7 +191,7 @@ function sendResponse(passon) {
             error.status = 404;
             error.badgeNA = true;
             reject(error);
-return;
+            return;
         }
 
         let localPath;
@@ -378,7 +307,7 @@ return;
             passon.req.filePath = path.join(__dirname, localPath);
             passon.req.options = options;
             debug('Sending SVG %s to scaling service', passon.req.filePath);
-            scaling.resizeAndSend(passon.req, passon.res);
+            base.resizeAndSend(passon.req, passon.res);
         }
         else {
             if(osicode===true && oddata===true && odtext===true){
