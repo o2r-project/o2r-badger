@@ -25,8 +25,8 @@ c.releasetime = {};
 var env = process.env;
 
 // Information about badger
-c.api_version = 1.1;
-c.version = 0.2;
+c.api_version = '1.0';
+c.version = require('../package.json').version;
 
 // network
 c.net.port = env.BADGER_PORT || 8089;
