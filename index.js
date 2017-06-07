@@ -31,29 +31,29 @@ debug('Server: ', server);
 */
 
 //Scalability:
-app.get('/api/1.0/badge', base.getBase);
-app.get('/api/1.0/badge/:type', base.getType);
-app.get('/api/1.0/badge/:type/?all_services', base.getAllServices);
+app.get('/api/' + config.api_version + '/badge', base.getBase);
+app.get('/api/' + config.api_version + '/badge/:type', base.getType);
+app.get('/api/' + config.api_version + '/badge/:type/?all_services', base.getAllServices);
 
 //Executability
-app.get('/api/1.0/badge/executable/:id/:extended?', executability.getBadgeFromReference);
-app.post('/api/1.0/badge/executable/:extended?', executability.getBadgeFromData);
+app.get('/api/' + config.api_version + '/badge/executable/:id/:extended?', executability.getBadgeFromReference);
+app.post('/api/' + config.api_version + '/badge/executable/:extended?', executability.getBadgeFromData);
 
 //Licensing
-app.get('/api/1.0/badge/licence/:id/:extended?', license.getBadgeFromReference);
-app.post('/api/1.0/badge/licence/:extended?', license.getBadgeFromData);
+app.get('/api/' + config.api_version + '/badge/licence/:id/:extended?', license.getBadgeFromReference);
+app.post('/api/' + config.api_version + '/badge/licence/:extended?', license.getBadgeFromData);
 
 //Locating
-app.get('/api/1.0/badge/spatial/:id/:extended?', location.getBadgeFromReference);
-app.post('/api/1.0/badge/spatial/:extended?', location.getBadgeFromData);
+app.get('/api/' + config.api_version + '/badge/spatial/:id/:extended?', location.getBadgeFromReference);
+app.post('/api/' + config.api_version + '/badge/spatial/:extended?', location.getBadgeFromData);
 
 //Release date
-app.get('/api/1.0/badge/releasetime/:id/:extended?', release.getBadgeFromReference);
-app.post('/api/1.0/badge/releasetime/:extended?', release.getBadgeFromData);
+app.get('/api/' + config.api_version + '/badge/releasetime/:id/:extended?', release.getBadgeFromReference);
+app.post('/api/' + config.api_version + '/badge/releasetime/:extended?', release.getBadgeFromData);
 
 //Peer review:
-app.get('/api/1.0/badge/peerreview/:id/:extended?', peerReview.getBadgeFromReference);
-app.post('/api/1.0/badge/peerreview/:extended?', peerReview.getBadgeFromData);
+app.get('/api/' + config.api_version + '/badge/peerreview/:id/:extended?', peerReview.getBadgeFromReference);
+app.post('/api/' + config.api_version + '/badge/peerreview/:extended?', peerReview.getBadgeFromData);
 
 app.listen(config.net.port, () => {
 	debug('badger %s with API version %s waiting for requests on port %s',

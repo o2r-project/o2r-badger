@@ -1,6 +1,6 @@
 {
-  "name": "badgesscalability",
-  "version": "1.0.0",
+  "name": "o2r-badger",
+  "version": "2.0.0",
   "description": "Generate scalable badges for research",
   "main": "index.js",
   "scripts": {
