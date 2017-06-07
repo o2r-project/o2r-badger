@@ -15,8 +15,6 @@
  *
  */
 var c = {};
-c.version = {};
-c.fs = {};
 c.net = {};
 c.ext = {};
 c.executable = {};
@@ -27,7 +25,8 @@ c.releasetime = {};
 var env = process.env;
 
 // Information about badger
-c.api_version = 1;
+c.api_version = 1.1;
+c.version = 0.2;
 
 // network
 c.net.port = env.BADGER_PORT || 8089;
@@ -56,12 +55,5 @@ c.spatial.mainService = 'o2r';
 
 c.releasetime.services = ['crossref'];
 c.releasetime.mainService = 'crossref';
-
-
-// fs paths
-c.fs.base = env.BADGER_BASEPATH || '/tmp/o2r/';
-
-// session secret
-c.sessionsecret = env.SESSION_SECRET || 'o2r';
 
 module.exports = c;
