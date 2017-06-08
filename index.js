@@ -1,5 +1,4 @@
 const config = require('./config/config');
-const svg2png = require("svg2png");
 const debug = require('debug')('badger');
 const request = require('request');
 

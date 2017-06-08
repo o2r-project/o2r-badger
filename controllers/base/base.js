@@ -7,8 +7,6 @@ const XMLSerializer = require('xmldom').XMLSerializer;
 const path = require('path');
 const fs = require('fs');
 
-let server = config.net.testEndpoint + ':';
-
 exports.getBase = (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	res.send(JSON.stringify({
@@ -32,7 +30,7 @@ exports.getType = (req, res) => {
             res.status(404).send('{"error":"no id provided"}');
 			break;
 		case "licence":
-            res.status(404).send('{"error":"no id provided"}');;
+            res.status(404).send('{"error":"no id provided"}');
 			break;
 		case "spatial":
             res.status(404).send('{"error":"no id provided"}');
@@ -91,7 +89,6 @@ exports.resizeAndSend = (req, res) => {
 				else debug('Sent file');
 			});  
 		}
-
 	}
 };
 
@@ -149,12 +146,8 @@ exports.hasSupportedService = function (service) {
 	let mainService = service.mainService;
 	let allServices = service.services;
 	//ToDo: Return a different promise based on the service
-	if (allServices.indexOf(mainService) === -1) {
-		return false;
-	} else {
-		return true;
-	}
-}
+	return allServices.indexOf(mainService) !== -1;
+};
 
 
 
