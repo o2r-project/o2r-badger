@@ -16,17 +16,19 @@ FROM alpine:3.4
 MAINTAINER o2r-project, https://o2r.info
 
 RUN apk add --no-cache \
+    curl \
     nodejs \
     git \
     ca-certificates \
-    wget \
   && update-ca-certificates \
   && git clone --depth 1 -b master https://github.com/o2r-project/o2r-badger /badger \
+  # Fix phantomjs bin for svg2png (see https://github.com/dustinblackman/phantomized)
+  && curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1/dockerized-phantomjs.tar.gz" | tar xz -C / \
   && apk del \
+    curl \
     git \
-    wget \
     ca-certificates \
-  && rm -rf /var/cache
+  && rm -rf /var/cache /usr/share/man /tmp/* /root/.npm /var/tmp
 
 WORKDIR /badger
 RUN npm install --production
