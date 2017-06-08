@@ -180,7 +180,7 @@ function getGeoName(passon) {
         request({url: requestURL,
             proxy: config.net.proxy}, function (error,response,body){
             if (error) {
-                error.msg = 'Could not access geonames.org'
+                error.msg = 'Could not access geonames.org';
                 reject(error);
                 return;
             }

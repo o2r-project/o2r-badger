@@ -1,7 +1,6 @@
 const debug = require('debug')('badger');
 const request = require('request');
 const fs = require('fs');
-const path = require('path');
 
 const config = require('../../config/config');
 

@@ -47,14 +47,14 @@
 				layers: [osm] 
 			});
 			polygon.addTo(map);
-		})
+		});
 
 		function calculateRectangle(line) {
 			var x0 = line[0];
 			var x1 = line[1]; 
 			var x2 = line[2];
 			var x3 = line[3];
-			return [[x3,x0],[x3,x2],[x1,x2],[x1,x0]];;
+			return [[x3,x0],[x3,x2],[x1,x2],[x1,x0]];
 		}
 
 		function calculateMeanCenter(bbox) {

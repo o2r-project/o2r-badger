@@ -4,7 +4,6 @@ const request = require('request');
 
 const config = require('../../config/config');
 const base = require('../base/base');
-const steps = require('../base/commonSteps');
 
 let crossref = config.ext.crossref;
 let badgeNASmall = config.releasetime.badgeNASmall;
@@ -131,7 +130,7 @@ function getReleaseTime(passon) {
                 // error handling of request to crossref
                 if (error) {
                     debug(error);
-                    error.msg = 'error accessing crossref API'
+                    error.msg = 'error accessing crossref API';
                     reject(error);
                     return;
                 }
