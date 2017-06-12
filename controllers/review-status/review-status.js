@@ -32,7 +32,7 @@ exports.getBadgeFromData = (req, res) => {
                 debug("No badge information found: %s", err.msg);
                 res.redirect(badgeNASmall);
             } else { // Send error response
-                debug("Error generating badge: %s", err);
+                debug("Error generating badge: %s Original request: %s.", err, passon.req.url);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -83,7 +83,7 @@ exports.getBadgeFromReference = (req, res) => {
                 debug("No badge information found: %s", err.msg);
                 res.redirect(badgeNASmall);
             } else { // Send error response
-                debug("Error generating badge:", err);
+                debug("Error generating badge: %s Original request: %s.", err, passon.req.url);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
