@@ -9,7 +9,11 @@ function getCompendiumID(passon) {
         let requestURL = config.ext.o2r + '/api/v1/compendium?doi=' + passon.id;
         debug('Fetching compendium ID from %s with URL', config.ext.o2r, requestURL);
 
-        request(requestURL, function(error, response, body) {
+        request({
+            url: requestURL,
+            timeout: config.timeout.o2r,
+            proxy: config.net.proxy
+        }, function(error, response, body) {
 
             // no job for the given id available
             if(error) {
@@ -61,7 +65,11 @@ function getCompendium(passon) {
         let requestURL = config.ext.o2r + '/api/v1/compendium/' + passon.compendiumID;
         debug('Fetching license status for compendium %s from %s', passon.compendiumID, requestURL);
 
-        request(requestURL, function(error, response, body) {
+        request({
+            url: requestURL,
+            timeout: config.timeout.o2r,
+            proxy: config.net.proxy
+        },  function(error, response, body) {
 
             // no job for the given id available
             if(error) {
@@ -99,7 +107,11 @@ function getJobID(passon) {
         let requestURL = config.ext.o2r + '/api/v1/job?compendium_id=' + passon.compendiumID;
         debug('Fetching job ID for compendium %s from %s', passon.compendiumID, requestURL);
 
-        request(requestURL, function(error, response, body) {
+        request({
+            url: requestURL,
+            timeout: config.timeout.o2r,
+            proxy: config.net.proxy
+        }, function(error, response, body) {
 
             // no job for the given id available
             if(error) {
@@ -138,7 +150,11 @@ function getJob(passon) {
         let requestURL = config.ext.o2r + '/api/v1/job/' + passon.jobID;
         debug('Fetching job status for job %s from %s', passon.jobID, requestURL);
 
-        request(requestURL, function(error, response, body) {
+        request({
+            url: requestURL,
+            timeout: config.timeout.o2r,
+            proxy: config.net.proxy
+        }, function(error, response, body) {
 
             // no job for the given id available
             if(error) {

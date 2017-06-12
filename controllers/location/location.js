@@ -55,7 +55,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug("Error generating badge: %s", err);
+                debug("Error generating badge: %s Original request: %s.", err, passon.req.url);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -123,7 +123,7 @@ exports.getBadgeFromReference = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug('Error generating badge:', err);
+                debug("Error generating badge: %s Original request: %s.", err, passon.req.url);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -177,7 +177,9 @@ function getGeoName(passon) {
         debug('Fetching geoname for compendium %s from %s', passon.compendiumID, requestURL);
 
         //and get the reversed geocoding for it
-        request({url: requestURL,
+        request({
+            url: requestURL,
+            timeout: config.timeout.geonames,
             proxy: config.net.proxy}, function (error,response,body){
             if (error) {
                 error.msg = 'Could not access geonames.org';

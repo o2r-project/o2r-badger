@@ -42,7 +42,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug("Error generating badge: %s", err);
+                debug("Error generating badge: %s Original request: %s.", err, passon.req.url);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -100,7 +100,7 @@ exports.getBadgeFromReference = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug("Error generating badge:", err);
+                debug("Error generating badge: %s Original request: %s.", err, passon.req.url);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -124,6 +124,7 @@ function getReleaseTime(passon) {
             {
                 url: requestURL,
                 proxy: config.net.proxy,
+                timeout: config.timeout.crossref
             },
             function (error, response, body) {
 
