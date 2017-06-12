@@ -16,16 +16,20 @@ FROM alpine:3.4
 MAINTAINER o2r-project, https://o2r.info
 
 RUN apk add --no-cache \
+    wget \
     curl \
     nodejs \
     git \
     ca-certificates \
   && update-ca-certificates \
   && git clone --depth 1 -b master https://github.com/o2r-project/o2r-badger /badger \
+  && wget -O /sbin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 \
+  && chmod +x /sbin/dumb-init \
   # Fix phantomjs bin for svg2png (see https://github.com/dustinblackman/phantomized)
   && curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1/dockerized-phantomjs.tar.gz" | tar xz -C / \
   && apk del \
     curl \
+    wget \
     git \
     ca-certificates \
   && rm -rf /var/cache /usr/share/man /tmp/* /root/.npm /var/tmp
@@ -51,4 +55,5 @@ LABEL org.label-schema.vendor="o2r project" \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.docker.schema-version="rc1"
 
+ENTRYPOINT ["/sbin/dumb-init", "--"]
 CMD ["npm", "start" ]
