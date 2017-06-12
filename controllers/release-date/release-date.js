@@ -124,6 +124,7 @@ function getReleaseTime(passon) {
             {
                 url: requestURL,
                 proxy: config.net.proxy,
+                timeout: config.timeout.crossref
             },
             function (error, response, body) {
 

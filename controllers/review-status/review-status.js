@@ -104,7 +104,11 @@ function getISSN(passon) {
 
         //request DOAJ API to get ISSN
         //e.g. https://doaj.org/api/v1/search/articles/doi%3A10.3389%2Ffpsyg.2013.00479
-        request(requestURL, function(error, response, body) {
+        request({
+            url: requestURL,
+            timeout: config.timeout.doaj,
+            proxy: config.net.proxy
+        }, function(error, response, body) {
 
             if (error || typeof body.error !== 'undefined') {
                 error.msg = 'error accessing doaj';
@@ -171,7 +175,11 @@ function getReviewStatus(passon) {
 
         //request DOIJ API to find out if journal with ISSN is peer reviewed
         //e.g. https://doaj.org/api/v1/search/journals/issn%3A1664-1078
-        request(requestURL, function(error, response, body) {
+        request({
+            url: requestURL,
+            timeout: config.timeout.doaj,
+            proxy: config.net.proxy
+        }, function(error, response, body) {
             if (error) {
                 error.msg = 'error accessing doaj';
                 error.status = 404;

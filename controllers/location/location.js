@@ -177,7 +177,9 @@ function getGeoName(passon) {
         debug('Fetching geoname for compendium %s from %s', passon.compendiumID, requestURL);
 
         //and get the reversed geocoding for it
-        request({url: requestURL,
+        request({
+            url: requestURL,
+            timeout: config.timeout.geonames,
             proxy: config.net.proxy}, function (error,response,body){
             if (error) {
                 error.msg = 'Could not access geonames.org';

@@ -17,6 +17,7 @@
 var c = {};
 c.net = {};
 c.ext = {};
+c.timeout = {};
 c.executable = {};
 c.peerreview = {};
 c.licence = {};
@@ -39,6 +40,12 @@ c.ext.o2r = env.BADGER_O2R_HOST || 'https://o2r.uni-muenster.de';
 c.ext.doajArticles = 'https://doaj.org/api/v1/search/articles/';
 c.ext.doajJournals = 'https://doaj.org/api/v1/search/journals/';
 c.ext.geonames = 'http://api.geonames.org/countrySubdivisionJSON';
+
+//timeouts
+c.timeout.crossref = 2500;
+c.timeout.o2r  = 2500;
+c.timeout.doaj  = 2500;
+c.timeout.geonames  = 2500;
 
 //badges
 c.executable.services = ['o2r'];
