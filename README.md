@@ -34,9 +34,9 @@ Note that the badger will only find results if the respective service has the pu
 
 ## Installation
 
-There are three options to get the badger running on your system:
+There are three options to get the badger running on your system.
 
-1) with Docker, via Docker Hub:
+### 1) with Docker, via Docker Hub
 
 ```bash
 docker pull o2rproject/o2r-badger
@@ -45,7 +45,7 @@ docker pull o2rproject/o2r-badger
 docker run -it -e DEBUG=* -p 8089:8089 o2rproject/o2r-badger
 ```
 
-2) with Docker, manually:
+### 2) with Docker, locally build image
 
 First, clone the repository: `git clone https://github.com/o2r-project/o2r-badger`
 
@@ -58,7 +58,7 @@ docker build -t badger -f Dockerfile.local .
 docker run -it -e DEBUG=* -p 8089:8089 badger
 ```
 
-3) with Node.js:
+### 3) with Node.js
 
 ```bash
 git clone https://github.com/o2r-project/o2r-badger
@@ -71,7 +71,7 @@ DEBUG=* npm start
 
 The badger is running and can be accessed via `http://localhost:8089/`. To display badges for common research aggregators, install the o2r-extender, a chrome extension. More info [here](https://github.com/o2r-project/o2r-extender/)
 
-### Examples:
+### Examples
 
 1) **GET** (peer review badge, small):
 
@@ -144,9 +144,8 @@ If there is an unexpected error during execution, or if the services are not acc
 
 ## Configuration
 
-Environment variables:
-
-You can override these environment variables (configured in `config/config.js`) when starting the service.
+Most relevant configuration can be done via the following environment variables when starting the service.
+They are picked up in the file `config/config.js` where all configuration settings can be changed.
 
 - `BADGER_PORT`
   Defines the port the badger is listening to. Defaults to `8089`.
@@ -155,14 +154,14 @@ You can override these environment variables (configured in `config/config.js`) 
 - `BADGER_TEST_ENDPOINT`
   The address used for tests. Defaults to `http://localhost`
 
-config.js:
+Other settings in `config.js` without corresponding environment variable:
 
 - `c.net.proxy` 
-  Proxy used for all outgoing requests (o2r, crossref, doaj). Not tested.
+  Proxy used for all outgoing requests (o2r, crossref, doaj). _Not tested._
 - `c.ext.crossref`
-  Crossref API endpoint for works.
+  Crossref API endpoint.
 - `c.ext.o2r`
-  o2r endpoint. Can be modified `BADGER_O2R_HOST`.
+  o2r endpoint. Can be modified via `BADGER_O2R_HOST`.
 - `c.ext.doajArticles` and `c.ext.doajJournals`
   DOAJ search endpoint for articles and journals.
 
@@ -178,6 +177,9 @@ Then start it with `npm start` or in your development environment.
 For tests run `npm test`.
 
 # Study project documentation (shortened)
+
+This work is based on the study project "Badges for computational geoscience containers", see [here](https://studium.uni-muenster.de/qisserver/rds?state=verpublish&status=init&vmfile=no&publishid=230703&moduleCall=webInfo&publishConfFile=webInfo&publishSubDir=veranstaltung) and the [original code repos](https://zivgitlab.uni-muenster.de/groups/geocontainer-badges).
+We thank the valuable contributions of the students in this project.
 
 ## 1 Scalable badges (geocontainer-badges/scalability)
 
@@ -195,8 +197,8 @@ where the bounding box of the research location is highlighted.
 ## 3 Executability badges (geocontainer-badges/executable-code)
 
 The project developed an API for retrieving information on the executability of compendia. 
-It was established in the context of the [o2r project](http://o2r.info/page2/). 
-The information about the executablility of a compendia are requested from the o2r API. 
+It was established in the context of the [o2r project](http://o2r.info/). 
+The information about the executablility of a compendia are requested from the [o2r API](http://o2r.info/o2r-web-api/). 
 
 ## 4 License badges (geocontainer-badges/licencing)
 
@@ -226,7 +228,7 @@ Creating badges to check if a journel is peer reviewed or not.
 
 Components of our task:
 * Application Sever (Badge API)
-* API for DOAJ (Directory of Open Access Journals)
+* API for [DOAJ](http://doaj.org/) (Directory of Open Access Journals)
 * API for Shields.io (A platform that serves fast and scalable information images a s badges)
 * Web Client
 * Docker Container
@@ -244,7 +246,7 @@ As you will notice currently the only service supported is DOAJ, with a DOI as i
 
 ### Known issues and limitations
 
-* There are only 'peer-reviewed' journals in the DOAJ so we just get a green badge in return having no case of 'non peer-reviewed'
+* There are only 'peer-reviewed' journals in the DOAJ so we just get a green badge in return having no case of 'non peer-reviewed'.
  
 ## Licence
 
