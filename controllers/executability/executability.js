@@ -41,7 +41,7 @@ exports.getBadgeFromData = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug("Error generating badge: %s Original request: %s.", err, passon.req.url);
+                debug('Error generating badge: "%s" Original request: "%s"', err, passon.req.url);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
@@ -99,7 +99,7 @@ exports.getBadgeFromReference = (req, res) => {
                     res.status(404).send('not allowed');
                 }
             } else { // Send error response
-                debug("Error generating badge: %s Original request: %s.", err, passon.req.url);
+                debug('Error generating badge: "%s" Original request: "%s"', err, passon.req.url);
                 let status = 500;
                 if (err.status) {
                     status = err.status;
