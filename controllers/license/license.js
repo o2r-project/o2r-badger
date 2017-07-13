@@ -136,17 +136,17 @@ function getLicenseInformation(passon) {
 
         // those values are in the json then
         //json validation
-        if(compendiumJSON.hasOwnProperty('metadata') && compendiumJSON.metadata.hasOwnProperty('licence')) {
-            if(compendiumJSON.metadata.licence.hasOwnProperty('data')) {
-                datalicence = compendiumJSON.metadata.licence.data;
+        if(compendiumJSON.hasOwnProperty('metadata') && compendiumJSON.metadata.hasOwnProperty('o2r') && compendiumJSON.metadata.o2r.hasOwnProperty('licence')) {
+            if(compendiumJSON.metadata.o2r.licence.hasOwnProperty('data')) {
+                datalicence = compendiumJSON.metadata.o2r.licence.data;
             }
             else datalicence = 'unknown';
-            if(compendiumJSON.metadata.licence.hasOwnProperty('text')) {
-                textlicence = compendiumJSON.metadata.licence.text;
+            if(compendiumJSON.metadata.o2r.licence.hasOwnProperty('text')) {
+                textlicence = compendiumJSON.metadata.o2r.licence.text;
             }
             else textlicence = 'unknown';
-            if(compendiumJSON.metadata.licence.hasOwnProperty('code')) {
-                codelicence = compendiumJSON.metadata.licence.code;
+            if(compendiumJSON.metadata.o2r.licence.hasOwnProperty('code')) {
+                codelicence = compendiumJSON.metadata.o2r.licence.code;
             }
             else codelicence = 'unknown';
 
