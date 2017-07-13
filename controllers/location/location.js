@@ -154,7 +154,7 @@ function getCenterFromData(passon) {
         let coordinates = passon.body;
 
         try {
-            let coords = coordinates.metadata.o2r.spatial.union.geojson.bbox;
+            let coords = coordinates.metadata.o2r.spatial.spatial.union.geojson.bbox;
             debug('Bounding box is %s, %s, %s, %s', coords[0], coords[1], coords[2], coords[3]);
         } catch (err) {
             err.badgeNA = true;
@@ -312,7 +312,7 @@ function sendBigBadge(passon) {
  * @param json geojson file containing the bbox of an area
  */
 function calculateMeanCenter(json) {
-	let bbox = json.metadata.o2r.spatial.union.geojson.bbox;
+	let bbox = json.metadata.o2r.spatial.spatial.union.geojson.bbox;
 
 	let x1 = parseFloat(bbox[1]);
 	let y1 = parseFloat(bbox[0]);

@@ -62,6 +62,7 @@ c.spatial.services = ['o2r'];
 c.spatial.mainService = 'o2r';
 c.spatial.badgeNASmall = 'https://img.shields.io/badge/location-n%2Fa-lightgrey.svg';
 c.spatial.badgeNABig = 'indexNoMap.html';
+c.spatial.bboxPath = 'metadata.o2r.spatial.spatial.union.geojson.bbox';
 
 c.releasetime.services = ['crossref'];
 c.releasetime.mainService = 'crossref';
