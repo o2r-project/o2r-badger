@@ -278,7 +278,7 @@ function sendBigBadge(passon) {
         let bbox;
 
         try {
-            bbox = passon.body.metadata.o2r.spatial.union.geojson.bbox;
+            bbox = passon.body.metadata.o2r.spatial.spatial.union.geojson.bbox;
         } catch (err) {
             sendNA('could not read bbox of compendium');
             return;
