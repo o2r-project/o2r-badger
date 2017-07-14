@@ -35,6 +35,7 @@ exports.getBadgeFromData = (req, res) => {
     }
 
     return getLicenseInformation(passon)
+        .then(getLicenseFromDOAJ)
         .then(sendResponse)
         .then((passon) => {
             debug('Completed generating badge');
@@ -93,6 +94,7 @@ exports.getBadgeFromReference = (req, res) => {
     return steps.getCompendiumID(passon)
         .then(steps.getCompendium)
         .then(getLicenseInformation)
+        .then(getLicenseFromDOAJ)
         .then(sendResponse)
         .then((passon) => {
             debug('Completed generating peer-review badge for %s', passon.id);
@@ -171,11 +173,57 @@ function getLicenseInformation(passon) {
             else {
                 osicode = osi.hasOwnProperty(codelicence);
             }
+        } else {
+            osicode = 'unknown';
+            oddata = 'unknown';
+            odtext = 'unknown';
         }
         passon.osiCode = osicode;
         passon.odData = oddata;
         passon.odText = odtext;
         fulfill(passon);
+    });
+}
+
+function getLicenseFromDOAJ(passon) {
+    return new Promise((fulfill, reject) => {
+        let osicode;
+        let oddata;
+        let odtext;
+
+        //todo: replace "if"" with "multiple services" implementation
+        if (passon.osiCode === 'unknown' && passon.odData === 'unknown' && passon.odText === 'unknown') {
+            let requestURL = config.ext.doajArticles + encodeURIComponent('doi:' + passon.id);
+            debug('Fetching review status from %s with URL', config.ext.doajArticles, requestURL);
+
+            //request DOIJ API to get license
+            //e.g. https://doaj.org/api/v1/search/articles/doi%3A10.3390%2Frs2081892
+            request({
+                url: requestURL,
+                timeout: config.timeout.doaj,
+                proxy: config.net.proxy
+            }, function(error, response, body) {
+                if (error) {
+                    error.msg = 'error accessing doaj';
+                    error.status = 404;
+                    reject(error);
+                    return;
+                }
+
+                try {
+                    let data = JSON.parse(body);
+                    passon.odText = data.results[0].bibjson.journal.license[0].open_access;
+                } catch (err) {
+                    err.msg = 'error getting license from doaj';
+                    err.badgeNA = true;
+                    reject(error);
+                    return;
+                }
+                fulfill(passon); 
+            });
+        } else {
+            fulfill(passon);
+        }
     });
 }
 
