@@ -5,8 +5,9 @@
 API for retrieving scalable badges for scientific publications. Used by the [o2r-extender](https://github.com/o2r-project/o2r-extender), which is a Chrome extension that integrates these badges into several research aggregators.
 
 Based on the [Badges for computational geoscience containers](https://zivgitlab.uni-muenster.de/geocontainer-badges) study project at ifgi.
+We thank the [project team](#contributors) for their contributions for this project.
 
-## Badges:
+## Badges
 
 - `executable`: Information about executability and reproducibility of a publication.
 - `licence`: The license type.
@@ -247,6 +248,20 @@ As you will notice currently the only service supported is DOAJ, with a DOI as i
 ### Known issues and limitations
 
 * There are only 'peer-reviewed' journals in the DOAJ so we just get a green badge in return having no case of 'non peer-reviewed'.
+
+## Contributors
+
+- Antonia van Eek
+- Clara Rendel
+- Lasse Einfeldt
+- Laura Meierkort
+- Marlena Götza
+- Salman Khalid
+- Shahzeib Tariq Jaswal
+- Nimrod Gavish
+- Matthias Mohr
+- Daniel Nüst
+- Lukas Lohoff
  
 ## Licence
 
