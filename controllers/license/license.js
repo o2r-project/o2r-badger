@@ -35,7 +35,6 @@ exports.getBadgeFromData = (req, res) => {
     }
 
     return getLicenseInformation(passon)
-        .then(getLicenseFromDOAJ)
         .then(sendResponse)
         .then((passon) => {
             debug('Completed generating badge');
@@ -94,7 +93,6 @@ exports.getBadgeFromReference = (req, res) => {
     return steps.getCompendiumID(passon)
         .then(steps.getCompendium)
         .then(getLicenseInformation)
-        .then(getLicenseFromDOAJ)
         .then(sendResponse)
         .then((passon) => {
             debug('Completed generating peer-review badge for %s', passon.id);
