@@ -136,17 +136,17 @@ function getLicenseInformation(passon) {
 
         // those values are in the json then
         //json validation
-        if(compendiumJSON.hasOwnProperty('metadata') && compendiumJSON.metadata.hasOwnProperty('o2r') && compendiumJSON.metadata.o2r.hasOwnProperty('licence')) {
-            if(compendiumJSON.metadata.o2r.licence.hasOwnProperty('data')) {
-                datalicence = compendiumJSON.metadata.o2r.licence.data;
+        if(compendiumJSON.hasOwnProperty('metadata') && compendiumJSON.metadata.hasOwnProperty('o2r') && compendiumJSON.metadata.o2r.hasOwnProperty('license')) {
+            if(compendiumJSON.metadata.o2r.license.hasOwnProperty('data')) {
+                datalicence = compendiumJSON.metadata.o2r.license.data;
             }
             else datalicence = 'unknown';
-            if(compendiumJSON.metadata.o2r.licence.hasOwnProperty('text')) {
-                textlicence = compendiumJSON.metadata.o2r.licence.text;
+            if(compendiumJSON.metadata.o2r.license.hasOwnProperty('text')) {
+                textlicence = compendiumJSON.metadata.o2r.license.text;
             }
             else textlicence = 'unknown';
-            if(compendiumJSON.metadata.o2r.licence.hasOwnProperty('code')) {
-                codelicence = compendiumJSON.metadata.o2r.licence.code;
+            if(compendiumJSON.metadata.o2r.license.hasOwnProperty('code')) {
+                codelicence = compendiumJSON.metadata.o2r.license.code;
             }
             else codelicence = 'unknown';
 
@@ -233,7 +233,18 @@ function sendResponse(passon) {
             typeof passon.odData === 'undefined' ||
             typeof passon.odText === 'undefined') {
             let error = new Error();
-            error.msg = 'no review status provided';
+            error.msg = 'no license provided';
+            error.status = 404;
+            error.badgeNA = true;
+            reject(error);
+            return;
+        }
+
+        if (passon.osiCode === 'unknown' &&
+            passon.odData === 'unknown' &&
+            passon.odText === 'unknown') {
+            let error = new Error();
+            error.msg = 'license is unknown';
             error.status = 404;
             error.badgeNA = true;
             reject(error);
