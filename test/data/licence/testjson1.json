@@ -2,11 +2,13 @@
    "id":"opxYU",
    "created":"2016-08-19T13:59:13.134Z",
    "metadata":{  
-      "licence":{  
-         "data":"Against-DRM",
-         "text":"CC-BY-4.0",
-         "code":"AAL"
-      }
+       "o2r":{
+            "license":{  
+               "data":"Against-DRM",
+               "text":"CC-BY-4.0",
+               "code":"AAL"
+            }
+       }
    },
    "user":"0000-0001-8842-8658",
    "files":{  

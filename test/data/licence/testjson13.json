@@ -2,9 +2,11 @@
    "id":"opxYU",
    "created":"2016-08-19T13:59:13.134Z",
    "metadata":{  
-      "licence":{  
-         "text":"CC-BY-4.0"
-      }
+       "o2r":{
+            "license":{  
+                "text":"CC-BY-4.0"
+            }
+       }
    },
    "user":"0000-0001-8842-8658",
    "files":{  
