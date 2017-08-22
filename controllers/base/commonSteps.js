@@ -23,7 +23,7 @@ function getCompendiumID(passon) {
                 return;
             }
             // status responses
-            if(response.statusCode === 404 || !body.results) {
+            if(response.statusCode === 404) {
                 let error = new Error();
                 error.msg = 'no compendium found';
                 error.status = 404;
@@ -79,7 +79,7 @@ function getCompendium(passon) {
                 return;
             }
             // status responses
-            if(response.status === 404 || !body.results) {
+            if(response.status === 404) {
                 let error = new Error();
                 error.msg = 'no compendium found';
                 error.status = 404;
@@ -121,7 +121,7 @@ function getJobID(passon) {
                 return;
             }
             // status responses
-            if(response.status === 404 || !body.results) {
+            if(response.status === 404) {
                 let error = new Error();
                 error.msg = 'no job found';
                 error.status = 404;
@@ -164,7 +164,7 @@ function getJob(passon) {
                 return;
             }
             // status responses
-            if(response.status === 404 || !body.results) {
+            if(response.status === 404) {
                 let error = new Error();
                 error.msg = 'no job data found';
                 error.status = 404;

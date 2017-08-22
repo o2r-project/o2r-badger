@@ -96,7 +96,7 @@ describe('Location badge:', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 302);
-                assert.equal(res.headers['location'], 'https://img.shields.io/badge/research%20location-Utrecht%2C%20Netherlands-blue.svg');
+                assert.equal(res.headers['location'], 'https://img.shields.io/badge/location-Utrecht%2C%20Netherlands-blue.svg');
                 done();
             });
         }).timeout(20000);
@@ -121,7 +121,7 @@ describe('Location badge:', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 302);
-                assert.equal(res.headers['location'], 'https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg');
+                assert.equal(res.headers['location'], config.spatial.badgeNASmall);
                 done();
             });
         }).timeout(20000);
@@ -138,7 +138,7 @@ describe('Location badge:', function () {
                 if (err) done(err);
                 assert.ifError(err);
                 assert.equal(res.statusCode, 302);
-                assert.equal(res.headers['location'], 'https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg');
+                assert.equal(res.headers['location'], config.spatial.badgeNASmall);
                 done();
             });
         }).timeout(20000);

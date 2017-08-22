@@ -154,7 +154,7 @@ function getCenterFromData(passon) {
         let coordinates = passon.body;
 
         try {
-            let coords = coordinates.metadata.spatial.union.geojson.bbox;
+            let coords = coordinates.metadata.o2r.spatial.spatial.union.geojson.bbox;
             debug('Bounding box is %s, %s, %s, %s', coords[0], coords[1], coords[2], coords[3]);
         } catch (err) {
             err.badgeNA = true;
@@ -247,7 +247,9 @@ function sendSmallBadge(passon) {
             reject(error);
             return;
         }
-        passon.res.redirect("https://img.shields.io/badge/research%20location-" + passon.geoName + "-blue.svg");
+        // Encode badge string
+        let locationString = passon.geoName.replace('-', '%20');
+        passon.res.redirect("https://img.shields.io/badge/location-" + locationString + "-blue.svg");
         fulfill(passon);
     });
 }
@@ -276,7 +278,7 @@ function sendBigBadge(passon) {
         let bbox;
 
         try {
-            bbox = passon.body.metadata.spatial.union.geojson.bbox;
+            bbox = passon.body.metadata.o2r.spatial.spatial.union.geojson.bbox;
         } catch (err) {
             sendNA('could not read bbox of compendium');
             return;
@@ -310,7 +312,7 @@ function sendBigBadge(passon) {
  * @param json geojson file containing the bbox of an area
  */
 function calculateMeanCenter(json) {
-	let bbox = json.metadata.spatial.union.geojson.bbox;
+	let bbox = json.metadata.o2r.spatial.spatial.union.geojson.bbox;
 
 	let x1 = parseFloat(bbox[1]);
 	let y1 = parseFloat(bbox[0]);

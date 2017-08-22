@@ -125,3 +125,4 @@ describe('License badge:', function () {
 
 //todo test the GET controllers with a compendium with licence information (https://o2r.uni-muenster.de/api/v1/compendium/cUgvE) (> success badge)
 // --> cUgvE compendium currently does not have a DOI, which means it can't be found
+// not all files in the "test -> data" directory have the correct metadata json structure. Only testjson1.json and testjson13.json were updated.

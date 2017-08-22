@@ -136,17 +136,17 @@ function getLicenseInformation(passon) {
 
         // those values are in the json then
         //json validation
-        if(compendiumJSON.hasOwnProperty('metadata') && compendiumJSON.metadata.hasOwnProperty('licence')) {
-            if(compendiumJSON.metadata.licence.hasOwnProperty('data')) {
-                datalicence = compendiumJSON.metadata.licence.data;
+        if(compendiumJSON.hasOwnProperty('metadata') && compendiumJSON.metadata.hasOwnProperty('o2r') && compendiumJSON.metadata.o2r.hasOwnProperty('license')) {
+            if(compendiumJSON.metadata.o2r.license.hasOwnProperty('data')) {
+                datalicence = compendiumJSON.metadata.o2r.license.data;
             }
             else datalicence = 'unknown';
-            if(compendiumJSON.metadata.licence.hasOwnProperty('text')) {
-                textlicence = compendiumJSON.metadata.licence.text;
+            if(compendiumJSON.metadata.o2r.license.hasOwnProperty('text')) {
+                textlicence = compendiumJSON.metadata.o2r.license.text;
             }
             else textlicence = 'unknown';
-            if(compendiumJSON.metadata.licence.hasOwnProperty('code')) {
-                codelicence = compendiumJSON.metadata.licence.code;
+            if(compendiumJSON.metadata.o2r.license.hasOwnProperty('code')) {
+                codelicence = compendiumJSON.metadata.o2r.license.code;
             }
             else codelicence = 'unknown';
 
@@ -171,11 +171,57 @@ function getLicenseInformation(passon) {
             else {
                 osicode = osi.hasOwnProperty(codelicence);
             }
+        } else {
+            osicode = 'unknown';
+            oddata = 'unknown';
+            odtext = 'unknown';
         }
         passon.osiCode = osicode;
         passon.odData = oddata;
         passon.odText = odtext;
         fulfill(passon);
+    });
+}
+
+function getLicenseFromDOAJ(passon) {
+    return new Promise((fulfill, reject) => {
+        let osicode;
+        let oddata;
+        let odtext;
+
+        //todo: replace "if"" with "multiple services" implementation
+        if (passon.osiCode === 'unknown' && passon.odData === 'unknown' && passon.odText === 'unknown') {
+            let requestURL = config.ext.doajArticles + encodeURIComponent('doi:' + passon.id);
+            debug('Fetching review status from %s with URL', config.ext.doajArticles, requestURL);
+
+            //request DOIJ API to get license
+            //e.g. https://doaj.org/api/v1/search/articles/doi%3A10.3390%2Frs2081892
+            request({
+                url: requestURL,
+                timeout: config.timeout.doaj,
+                proxy: config.net.proxy
+            }, function(error, response, body) {
+                if (error) {
+                    error.msg = 'error accessing doaj';
+                    error.status = 404;
+                    reject(error);
+                    return;
+                }
+
+                try {
+                    let data = JSON.parse(body);
+                    passon.odText = data.results[0].bibjson.journal.license[0].open_access;
+                } catch (err) {
+                    err.msg = 'error getting license from doaj';
+                    err.badgeNA = true;
+                    reject(error);
+                    return;
+                }
+                fulfill(passon); 
+            });
+        } else {
+            fulfill(passon);
+        }
     });
 }
 
@@ -187,7 +233,18 @@ function sendResponse(passon) {
             typeof passon.odData === 'undefined' ||
             typeof passon.odText === 'undefined') {
             let error = new Error();
-            error.msg = 'no review status provided';
+            error.msg = 'no license provided';
+            error.status = 404;
+            error.badgeNA = true;
+            reject(error);
+            return;
+        }
+
+        if (passon.osiCode === 'unknown' &&
+            passon.odData === 'unknown' &&
+            passon.odText === 'unknown') {
+            let error = new Error();
+            error.msg = 'license is unknown';
             error.status = 404;
             error.badgeNA = true;
             reject(error);
