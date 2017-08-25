@@ -236,10 +236,10 @@ function sendResponse(passon) {
         try {
             process = data.results[0].bibjson.editorial_review.process;
             debug('Review process for DOI %s is "%s"', passon.id, process);
-        } catch (error) {
-            error.msg = 'error accessing doaj';
-            error.badgeNA = true;
-            reject(error);
+        } catch (err) {
+            err.msg = 'error accessing doaj';
+            err.badgeNA = true;
+            reject(err);
             return;
         }
 
