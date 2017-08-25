@@ -117,13 +117,26 @@ function getISSN(passon) {
                 return;
             }
 
+            if(response.status >= 400 || response.statusCode >= 400) {
+                let error = new Error();
+                if (response.status >= 500 || response.statusCode >= 500) {
+                    error.msg = 'error accessing doaj'
+                } else {
+                    error.msg = 'no doaj data found';
+                }
+                error.status = 404;
+                error.badgeNA = true;
+                reject(error);
+                return;
+            }
+
             let data;
             try {
                 data = JSON.parse(body);
             } catch (err) {
-                err.msg = 'error accessing doaj';
+                err.msg = 'error parsing doaj response';
                 err.badgeNA = true;
-                reject(error);
+                reject(err);
                 return;
             }
 
@@ -186,6 +199,20 @@ function getReviewStatus(passon) {
                 reject(error);
                 return;
             }
+
+            if(response.status >= 400 || response.statusCode >= 400) {
+                let error = new Error();
+                if (response.status >= 500 || response.statusCode >= 500) {
+                    error.msg = 'error accessing doaj'
+                } else {
+                    error.msg = 'no doaj data found';
+                }
+                error.status = 404;
+                error.badgeNA = true;
+                reject(error);
+                return;
+            }
+
             passon.body = JSON.parse(body);
             fulfill(passon);
         });
@@ -209,10 +236,10 @@ function sendResponse(passon) {
         try {
             process = data.results[0].bibjson.editorial_review.process;
             debug('Review process for DOI %s is "%s"', passon.id, process);
-        } catch (error) {
-            error.msg = 'error accessing doaj';
-            error.badgeNA = true;
-            reject(error);
+        } catch (err) {
+            err.msg = 'error accessing doaj';
+            err.badgeNA = true;
+            reject(err);
             return;
         }
 

@@ -214,7 +214,7 @@ function getLicenseFromDOAJ(passon) {
                 } catch (err) {
                     err.msg = 'error getting license from doaj';
                     err.badgeNA = true;
-                    reject(error);
+                    reject(err);
                     return;
                 }
                 fulfill(passon); 
