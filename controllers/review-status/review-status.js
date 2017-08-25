@@ -117,13 +117,26 @@ function getISSN(passon) {
                 return;
             }
 
+            if(response.status >= 400 || response.statusCode >= 400) {
+                let error = new Error();
+                if (response.status >= 500 || response.statusCode >= 500) {
+                    error.msg = 'error accessing doaj'
+                } else {
+                    error.msg = 'no doaj data found';
+                }
+                error.status = 404;
+                error.badgeNA = true;
+                reject(error);
+                return;
+            }
+
             let data;
             try {
                 data = JSON.parse(body);
             } catch (err) {
-                err.msg = 'error accessing doaj';
+                err.msg = 'error parsing doaj response';
                 err.badgeNA = true;
-                reject(error);
+                reject(err);
                 return;
             }
 
@@ -186,6 +199,20 @@ function getReviewStatus(passon) {
                 reject(error);
                 return;
             }
+
+            if(response.status >= 400 || response.statusCode >= 400) {
+                let error = new Error();
+                if (response.status >= 500 || response.statusCode >= 500) {
+                    error.msg = 'error accessing doaj'
+                } else {
+                    error.msg = 'no doaj data found';
+                }
+                error.status = 404;
+                error.badgeNA = true;
+                reject(error);
+                return;
+            }
+
             passon.body = JSON.parse(body);
             fulfill(passon);
         });

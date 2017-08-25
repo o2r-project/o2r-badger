@@ -142,10 +142,11 @@ function getReleaseTime(passon) {
                     error.status = 404;
                     reject(error);
                     return;
-                } else if (response.status === 500 || response.statusCode === 500) {
+                } else if (response.status >= 400 || response.statusCode >= 400) {
                     let error = new Error();
                     error.msg = 'Unable to find data on server';
                     error.status = 500;
+                    error.badgeNA = true;
                     reject(error);
                     return;
                 }

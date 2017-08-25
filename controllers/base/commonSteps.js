@@ -23,18 +23,15 @@ function getCompendiumID(passon) {
                 return;
             }
             // status responses
-            if(response.statusCode === 404) {
+            if(response.status >= 400 || response.statusCode >= 400) {
                 let error = new Error();
-                error.msg = 'no compendium found';
+                if (response.status >= 500 || response.statusCode >= 500) {
+                    error.msg = 'o2r service not accessible'
+                } else {
+                    error.msg = 'no compendium found';
+                }
                 error.status = 404;
                 error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.statusCode === 500 || response.status === 500) {
-                let error = new Error();
-                error.msg = 'error filtering for doi';
-                error.status = 404;
                 reject(error);
                 return;
             }
@@ -78,19 +75,16 @@ function getCompendium(passon) {
                 reject(error);
                 return;
             }
-            // status responses
-            if(response.status === 404) {
+
+            if(response.status >= 400 || response.statusCode >= 400) {
                 let error = new Error();
-                error.msg = 'no compendium found';
+                if (response.status >= 500 || response.statusCode >= 500) {
+                    error.msg = 'o2r service not accessible'
+                } else {
+                    error.msg = 'no compendium found';
+                }
                 error.status = 404;
                 error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.status === 500) {
-                let error = new Error();
-                error.msg = 'Unable to access server';
-                error.status = 500;
                 reject(error);
                 return;
             }
@@ -120,19 +114,16 @@ function getJobID(passon) {
                 reject(error);
                 return;
             }
-            // status responses
-            if(response.status === 404) {
+
+            if(response.status >= 400 || response.statusCode >= 400) {
                 let error = new Error();
-                error.msg = 'no job found';
+                if (response.status >= 500 || response.statusCode >= 500) {
+                    error.msg = 'o2r service not accessible'
+                } else {
+                    error.msg = 'no job found';
+                }
                 error.status = 404;
                 error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.status === 500) {
-                let error = new Error();
-                error.msg = 'Unable to find data on server';
-                error.status = 404;
                 reject(error);
                 return;
             }
@@ -163,19 +154,16 @@ function getJob(passon) {
                 reject(error);
                 return;
             }
-            // status responses
-            if(response.status === 404) {
+
+            if(response.status >= 400 || response.statusCode >= 400) {
                 let error = new Error();
-                error.msg = 'no job data found';
+                if (response.status >= 500 || response.statusCode >= 500) {
+                    error.msg = 'o2r service not accessible'
+                } else {
+                    error.msg = 'no job data found';
+                }
                 error.status = 404;
                 error.badgeNA = true;
-                reject(error);
-                return;
-            }
-            else if(response.status === 500) {
-                let error = new Error();
-                error.msg = 'Unable to find data on server';
-                error.status = 404;
                 reject(error);
                 return;
             }
