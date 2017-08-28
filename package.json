@@ -10,13 +10,14 @@
   "author": "o2r-project (http://o2r.info)",
   "license": "Apache-2.0",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/o2r-project/o2r-badger.git"
+    "type": "git",
+    "url": "https://github.com/o2r-project/o2r-badger.git"
   },
   "dependencies": {
     "body-parser": "latest",
     "debug": "^2.6.4",
     "express": "^4.14.0",
+    "piwik-tracker": "^1.1.2",
     "request": "^2.79.0",
     "svg2png": "^4.1.0",
     "xmldom": "^0.1.27"
