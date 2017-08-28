@@ -154,6 +154,10 @@ They are picked up in the file `config/config.js` where all configuration settin
   The address used to query the o2r [API](http://o2r.info/o2r-web-api/) . Defaults to `https://o2r.uni-muenster.de`.
 - `BADGER_TEST_ENDPOINT`
   The address used for tests. Defaults to `http://localhost`
+- `DISABLE_TRACKING`
+  Disables [Piwik](https://piwik.org/) API tracking when set to `true`. Defaults to `false`.
+- `PIWIK_TOKEN`
+  The secret piwik token used to access the Piwik tracking server.
 
 Other settings in `config.js` without corresponding environment variable:
 
@@ -165,6 +169,19 @@ Other settings in `config.js` without corresponding environment variable:
   o2r endpoint. Can be modified via `BADGER_O2R_HOST`.
 - `c.ext.doajArticles` and `c.ext.doajJournals`
   DOAJ search endpoint for articles and journals.
+
+Additional Piwik API tracking settings:
+
+- `c.tracking.piwikURL`
+  Piwik server address.
+- `c.tracking.piwikBaseURL`
+  Piwik base URL which is prepended to all API routes.
+- `c.tracking.piwikSiteID`
+  Piwik site ID. Can be found in the [piwik tracking code](https://developer.piwik.org/guides/tracking-javascript-guide#finding-the-piwik-tracking-code).
+
+c.tracking.piwikURL = 'https://o2r.uni-muenster.de/piwik/piwik.php';
+c.tracking.piwikBaseURL = 'https://o2r.uni-muenster.de';
+c.tracking.piwikSiteID = 4;
 
 ## Development
 
