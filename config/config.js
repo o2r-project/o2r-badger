@@ -23,6 +23,7 @@ c.peerreview = {};
 c.licence = {};
 c.spatial = {};
 c.releasetime = {};
+c.tracking = {};
 var env = process.env;
 
 // Information about badger
@@ -33,6 +34,13 @@ c.version = require('../package.json').version;
 c.net.port = env.BADGER_PORT || 8089;
 c.net.testEndpoint = env.BADGER_ENDPOINT || 'http://localhost';
 c.net.proxy = '';
+
+//piwik tracking options
+c.tracking.disableTracking = env.DISABLE_TRACKING || 'false';
+c.tracking.piwikToken = env.PIWIK_TOKEN;
+c.tracking.piwikURL = 'https://o2r.uni-muenster.de/piwik/piwik.php';
+c.tracking.piwikBaseURL = 'https://o2r.uni-muenster.de';
+c.tracking.piwikSiteID = 4;
 
 //external resources/APIs
 c.ext.crossref = 'https://api.crossref.org/works/';
