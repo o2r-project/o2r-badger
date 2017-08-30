@@ -8,13 +8,15 @@ const app = express();
 const bodyParser = require('body-parser');
 const piwikTracker = require('./lib/express-piwik-tracker.js');
 
-//track API requests with piwik
-app.use(piwikTracker({
-    siteId    : config.tracking.piwikSiteID,
-    piwikUrl  : config.tracking.piwikURL,
-    baseUrl   : config.tracking.piwikBaseURL,
-    piwikToken: config.tracking.piwikToken
-}));
+// track all API requests with piwik middleware
+if (config.tracking.disableTracking !== 'true') {
+    app.use(piwikTracker({
+        siteId    : config.tracking.piwikSiteID,
+        piwikUrl  : config.tracking.piwikURL,
+        baseUrl   : config.tracking.piwikBaseURL,
+        piwikToken: config.tracking.piwikToken
+    }));
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
