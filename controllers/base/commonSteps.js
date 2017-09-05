@@ -8,6 +8,7 @@ function getCompendiumID(passon) {
     return new Promise((fulfill, reject) => {
         let requestURL = config.ext.o2r + '/api/v1/compendium?doi=' + passon.id;
         debug('Fetching compendium ID from %s with URL', config.ext.o2r, requestURL);
+        passon.service = 'o2r';
 
         request({
             url: requestURL,
@@ -61,6 +62,7 @@ function getCompendium(passon) {
     return new Promise((fulfill, reject) => {
         let requestURL = config.ext.o2r + '/api/v1/compendium/' + passon.compendiumID;
         debug('Fetching license status for compendium %s from %s', passon.compendiumID, requestURL);
+        passon.service = 'o2r';
 
         request({
             url: requestURL,
@@ -100,6 +102,7 @@ function getJobID(passon) {
     return new Promise((fulfill, reject) => {
         let requestURL = config.ext.o2r + '/api/v1/job?compendium_id=' + passon.compendiumID;
         debug('Fetching job ID for compendium %s from %s', passon.compendiumID, requestURL);
+        passon.service = 'o2r';
 
         request({
             url: requestURL,
@@ -140,6 +143,7 @@ function getJob(passon) {
     return new Promise((fulfill, reject) => {
         let requestURL = config.ext.o2r + '/api/v1/job/' + passon.jobID;
         debug('Fetching job status for job %s from %s', passon.jobID, requestURL);
+        passon.service = 'o2r';
 
         request({
             url: requestURL,

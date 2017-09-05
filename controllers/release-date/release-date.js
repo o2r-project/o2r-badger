@@ -37,7 +37,11 @@ exports.getBadgeFromData = (req, res) => {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    res.redirect(badgeNASmall);
+                    if (passon.service) {
+                        res.redirect(badgeNASmall + '?service=' + passon.service)
+                    } else {
+                        res.redirect(badgeNASmall);
+                    }
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -95,7 +99,11 @@ exports.getBadgeFromReference = (req, res) => {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    res.redirect(badgeNASmall);
+                    if (passon.service) {
+                        res.redirect(badgeNASmall + '?service=' + passon.service)
+                    } else {
+                        res.redirect(badgeNASmall);
+                    }
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -118,6 +126,7 @@ function getReleaseTime(passon) {
     return new Promise((fulfill, reject) => {
         let requestURL = crossref + encodeURIComponent(passon.id);
         debug('Fetching release time from %s with URL %s', config.ext.crossref, requestURL);
+        passon.service = 'crossref';
 
         // Request to crossref to get information for the paper with the given doi
         request(
@@ -217,7 +226,7 @@ function sendResponse(passon) {
             passon.releaseDay);
 
         if (isNaN(passon.releaseYear) /*|| isNaN(passon.releaseMonth) || isNaN(passon.releaseDay)*/) {
-            // only year is required for more results
+            // only year is required (for more results)
             let error = new Error();
             error.msg = 'date is not a number';
             error.status = 403;
@@ -225,6 +234,19 @@ function sendResponse(passon) {
             reject(error);
             return;
         }
+
+        if (passon.service === undefined) {
+            passon.service = 'unknown';
+        }
+        let redirectURL;
+        let options = {
+            dotfiles: 'deny',
+            headers: {
+                'x-timestamp': Date.now(),
+                'x-sent': true,
+                'x-badger-service': passon.service
+            }
+        };
 
         /*************** send big badges *************/
         // todo take leapyears into account
@@ -254,7 +276,11 @@ function sendResponse(passon) {
                 // todo insert new badge
                 passon.req.filePath = path.join(__dirname, 'badges/released_over_40_years.svg');
             }
-            // Scale the file and send the request
+
+            // Send the request (+ scaling)
+            passon.req.service = passon.service;
+            passon.req.options = options;
+            debug('Sending SVG %s to scaling service', passon.req.filePath);
             base.resizeAndSend(passon.req, passon.res);
             fulfill(passon);
         }
@@ -262,7 +288,8 @@ function sendResponse(passon) {
         /************* send small badges ********************/
         else {
             // send a badge showing the created date
-            passon.res.redirect('https://img.shields.io/badge/release%20time-' + passon.releaseYear + '-blue.svg');
+            redirectURL = 'https://img.shields.io/badge/release%20time-' + passon.releaseYear + '-blue.svg';
+            passon.res.redirect(redirectURL + '?service=' + passon.service);
             fulfill(passon);
         }
     });

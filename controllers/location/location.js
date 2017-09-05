@@ -50,7 +50,11 @@ exports.getBadgeFromData = (req, res) => {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    res.redirect(badgeNASmall);
+                    if (passon.service) {
+                        res.redirect(badgeNASmall + '?service=' + passon.service)
+                    } else {
+                        res.redirect(badgeNASmall);
+                    }
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -118,7 +122,11 @@ exports.getBadgeFromReference = (req, res) => {
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    res.redirect(badgeNASmall);
+                    if (passon.service) {
+                        res.redirect(badgeNASmall + '?service=' + passon.service)
+                    } else {
+                        res.redirect(badgeNASmall);
+                    }
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -247,9 +255,16 @@ function sendSmallBadge(passon) {
             reject(error);
             return;
         }
+
+        if (passon.service === undefined) {
+            passon.service = 'unknown';
+        }
+        let redirectURL;
+        
         // Encode badge string
         let locationString = passon.geoName.replace('-', '%20');
-        passon.res.redirect("https://img.shields.io/badge/location-" + locationString + "-blue.svg");
+        redirectURL = "https://img.shields.io/badge/location-" + locationString + "-blue.svg";
+        passon.res.redirect(redirectURL + '?service=' + passon.service);
         fulfill(passon);
     });
 }
@@ -257,6 +272,16 @@ function sendSmallBadge(passon) {
 function sendBigBadge(passon) {
     return new Promise((fulfill, reject) => {
         debug('Sending map');
+
+        let options = {
+            dotfiles: 'deny',
+            headers: {
+                'x-timestamp': Date.now(),
+                'x-sent': true,
+                'x-badger-service': passon.service
+            }
+        };
+        passon.req.service = passon.service;
 
         function sendNA(text)  {
             passon.req.type = 'location';
@@ -266,14 +291,6 @@ function sendBigBadge(passon) {
             error.badgeNA = true;
             reject(error);
         }
-
-        let options = {
-            dotfiles: 'deny',
-            headers: {
-                'x-timestamp': Date.now(),
-                'x-sent': true
-            }
-        };
 
         let bbox;
 

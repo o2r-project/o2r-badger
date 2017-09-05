@@ -30,7 +30,11 @@ exports.getBadgeFromData = (req, res) => {
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err.msg);
-                res.redirect(badgeNASmall);
+                if (passon.service) {
+                    res.redirect(badgeNASmall + '?service=' + passon.service)
+                } else {
+                    res.redirect(badgeNASmall);
+                }
             } else { // Send error response
                 debug('Error generating badge: "%s" Original request: "%s"', err, passon.req.url);
                 let status = 500;
@@ -81,7 +85,11 @@ exports.getBadgeFromReference = (req, res) => {
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err.msg);
-                res.redirect(badgeNASmall);
+                if (passon.service) {
+                    res.redirect(badgeNASmall + '?service=' + passon.service)
+                } else {
+                    res.redirect(badgeNASmall);
+                }
             } else { // Send error response
                 debug('Error generating badge: "%s" Original request: "%s"', err, passon.req.url);
                 let status = 500;
@@ -101,6 +109,7 @@ function getISSN(passon) {
     return new Promise((fulfill, reject) => {
         let requestURL = config.ext.doajArticles + 'doi:' + encodeURIComponent(passon.id);
         debug('Fetching ISSN ID from DOAJ with URL %s', requestURL);
+        passon.service = 'doaj';
 
         //request DOAJ API to get ISSN
         //e.g. https://doaj.org/api/v1/search/articles/doi%3A10.3389%2Ffpsyg.2013.00479
@@ -231,7 +240,12 @@ function sendResponse(passon) {
             reject(error);
             return;
         }
+
         let process;
+        if (passon.service === undefined) {
+            passon.service = 'unknown';
+        }
+        let redirectURL;
 
         try {
             process = data.results[0].bibjson.editorial_review.process;
@@ -259,7 +273,8 @@ function sendResponse(passon) {
                 passon.reviewStatus = 'yes';
             }
             debug('Sending badge for review status %s', passon.reviewStatus);
-            passon.res.redirect(generateBadge(passon.reviewStatus));
+            redirectURL = generateBadge(passon.reviewStatus);
+            passon.res.redirect(redirectURL + '?service=' + passon.service);
             fulfill(passon);
         }
     });
