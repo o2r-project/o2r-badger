@@ -68,10 +68,12 @@ exports.resizeAndSend = (req, res) => {
 					res.status(500).send('Converting of svg to png not possible!');
 				} else {
 					let img = new Buffer(result, "base64");
+					let service = (req.service !== undefined) ? req.service :'unknown';
 					res.writeHead(200, {
 						'Access-Control-Allow-Origin': '*',
 						'Content-Type': 'image/png',
-						'Content-Length': img.length
+						'Content-Length': img.length,
+						'x-badger-service': service
 					});
 					res.end(img);
 				}
@@ -79,7 +81,7 @@ exports.resizeAndSend = (req, res) => {
 		});
 	} else {
 		if (typeof req.options !== 'undefined') {
-			res.sendFile(req.filePath);
+			res.sendFile(req.filePath, req.options);
 		} else {
 			res.sendFile(req.filePath, req.options, function(err) {
 				if(err) {
