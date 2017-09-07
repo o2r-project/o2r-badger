@@ -179,9 +179,11 @@ Additional Piwik API tracking settings:
 - `c.tracking.piwikSiteID`
   Piwik site ID. Can be found in the [piwik tracking code](https://developer.piwik.org/guides/tracking-javascript-guide#finding-the-piwik-tracking-code).
 
-c.tracking.piwikURL = 'https://o2r.uni-muenster.de/piwik/piwik.php';
-c.tracking.piwikBaseURL = 'https://o2r.uni-muenster.de';
-c.tracking.piwikSiteID = 4;
+## Piwik
+
+The badger tracks API requests using [Piwik](https://piwik.org/) except for requests with a "do not track" header.
+
+A (local) piwik server can be set up [manually](https://piwik.org/docs/installation/) or [using Docker Compose](http://www.bauerspace.com/set-up-piwik-in-docker/).
 
 ## Development
 
