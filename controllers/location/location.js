@@ -22,6 +22,15 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended') ? true : false,
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    }
+
     // check if there is a service for "spatial" badges
     if (base.hasSupportedService(config.spatial) === false) {
         debug('No service for badge %s found', passon.id);
@@ -47,14 +56,14 @@ exports.getBadgeFromData = (req, res) => {
             if (err.badgeNA === true) { // Send 'N/A' badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    if (passon.service) {
-                        res.redirect(badgeNASmall + '?service=' + passon.service)
-                    } else {
-                        res.redirect(badgeNASmall);
-                    }
+                    res.na = true;
+                    res.tracking.service = passon.service;
+                    res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -91,6 +100,15 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended') ? true : false,
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    }
+
     // check if there is a service for "spatial" badges
     if (base.hasSupportedService(config.spatial) === false) {
         debug('No service for badge %s found', passon.id);
@@ -119,14 +137,14 @@ exports.getBadgeFromReference = (req, res) => {
             if (err.badgeNA === true) { // Send 'N/A' badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    if (passon.service) {
-                        res.redirect(badgeNASmall + '?service=' + passon.service)
-                    } else {
-                        res.redirect(badgeNASmall);
-                    }
+                    res.na = true;
+                    res.tracking.service = passon.service;
+                    res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -255,7 +273,7 @@ function sendSmallBadge(passon) {
             reject(error);
             return;
         }
-
+        
         if (passon.service === undefined) {
             passon.service = 'unknown';
         }
@@ -264,7 +282,8 @@ function sendSmallBadge(passon) {
         // Encode badge string
         let locationString = passon.geoName.replace('-', '%20');
         redirectURL = "https://img.shields.io/badge/location-" + locationString + "-blue.svg";
-        passon.res.redirect(redirectURL + '?service=' + passon.service);
+        passon.res.tracking.service = passon.service;
+        passon.res.redirect(redirectURL);
         fulfill(passon);
     });
 }
@@ -278,10 +297,9 @@ function sendBigBadge(passon) {
             headers: {
                 'x-timestamp': Date.now(),
                 'x-sent': true,
-                'x-badger-service': passon.service
             }
         };
-        passon.req.service = passon.service;
+        passon.res.tracking.service = passon.service;
 
         function sendNA(text)  {
             passon.req.type = 'location';

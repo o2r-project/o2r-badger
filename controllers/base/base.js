@@ -68,12 +68,10 @@ exports.resizeAndSend = (req, res) => {
 					res.status(500).send('Converting of svg to png not possible!');
 				} else {
 					let img = new Buffer(result, "base64");
-					let service = (req.service !== undefined) ? req.service :'unknown';
 					res.writeHead(200, {
 						'Access-Control-Allow-Origin': '*',
 						'Content-Type': 'image/png',
-						'Content-Length': img.length,
-						'x-badger-service': service
+						'Content-Length': img.length
 					});
 					res.end(img);
 				}

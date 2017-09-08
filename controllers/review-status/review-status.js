@@ -16,6 +16,15 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended') ? true : false,
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    }
+
     // check if there is a service for "peerreview" badges
     if (base.hasSupportedService(config.peerreview) === false) {
         debug('No service for badge %s found', passon.id);
@@ -30,11 +39,9 @@ exports.getBadgeFromData = (req, res) => {
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err.msg);
-                if (passon.service) {
-                    res.redirect(badgeNASmall + '?service=' + passon.service)
-                } else {
-                    res.redirect(badgeNASmall);
-                }
+                res.na = true;
+                res.tracking.service = passon.service;
+                res.redirect(badgeNASmall);
             } else { // Send error response
                 debug('Error generating badge: "%s" Original request: "%s"', err, passon.req.url);
                 let status = 500;
@@ -68,6 +75,15 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended') ? true : false,
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    }
+
     // check if there is a service for "peerreview" badges
     if (base.hasSupportedService(config.peerreview) === false) {
         debug('No service for badge %s found', passon.id);
@@ -85,11 +101,9 @@ exports.getBadgeFromReference = (req, res) => {
         .catch(err => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err.msg);
-                if (passon.service) {
-                    res.redirect(badgeNASmall + '?service=' + passon.service)
-                } else {
-                    res.redirect(badgeNASmall);
-                }
+                res.na = true;
+                res.tracking.service = passon.service;
+                res.redirect(badgeNASmall);
             } else { // Send error response
                 debug('Error generating badge: "%s" Original request: "%s"', err, passon.req.url);
                 let status = 500;
@@ -274,7 +288,8 @@ function sendResponse(passon) {
             }
             debug('Sending badge for review status %s', passon.reviewStatus);
             redirectURL = generateBadge(passon.reviewStatus);
-            passon.res.redirect(redirectURL + '?service=' + passon.service);
+            passon.res.tracking.service = passon.service;
+            passon.res.redirect(redirectURL);
             fulfill(passon);
         }
     });

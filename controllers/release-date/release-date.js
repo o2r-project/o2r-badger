@@ -18,6 +18,15 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended') ? true : false,
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    }
+
     // check if there is a service for "releasetime" badges
     if (base.hasSupportedService(config.releasetime) === false) {
         debug('No service for badge %s found', passon.id);
@@ -34,14 +43,14 @@ exports.getBadgeFromData = (req, res) => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    if (passon.service) {
-                        res.redirect(badgeNASmall + '?service=' + passon.service)
-                    } else {
-                        res.redirect(badgeNASmall);
-                    }
+                    res.na = true;
+                    res.tracking.service = passon.service;
+                    res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -78,6 +87,15 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended') ? true : false,
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    }
+
     // check if there is a service for "releasetime" badges
     if (base.hasSupportedService(config.releasetime) === false) {
         debug('No service for badge %s found', passon.id);
@@ -96,14 +114,14 @@ exports.getBadgeFromReference = (req, res) => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
-                    if (passon.service) {
-                        res.redirect(badgeNASmall + '?service=' + passon.service)
-                    } else {
-                        res.redirect(badgeNASmall);
-                    }
+                    res.na = true;
+                    res.tracking.service = passon.service;
+                    res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
                 }
@@ -244,7 +262,6 @@ function sendResponse(passon) {
             headers: {
                 'x-timestamp': Date.now(),
                 'x-sent': true,
-                'x-badger-service': passon.service
             }
         };
 
@@ -278,7 +295,7 @@ function sendResponse(passon) {
             }
 
             // Send the request (+ scaling)
-            passon.req.service = passon.service;
+            passon.res.tracking.service = passon.service;
             passon.req.options = options;
             debug('Sending SVG %s to scaling service', passon.req.filePath);
             base.resizeAndSend(passon.req, passon.res);
@@ -289,7 +306,8 @@ function sendResponse(passon) {
         else {
             // send a badge showing the created date
             redirectURL = 'https://img.shields.io/badge/release%20time-' + passon.releaseYear + '-blue.svg';
-            passon.res.redirect(redirectURL + '?service=' + passon.service);
+            passon.res.tracking.service = passon.service;
+            passon.res.redirect(redirectURL);
             fulfill(passon);
         }
     });
