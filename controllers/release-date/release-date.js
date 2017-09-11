@@ -256,7 +256,7 @@ function sendResponse(passon) {
         if (passon.service === undefined) {
             passon.service = 'unknown';
         }
-        let redirectURL;
+        let badgeString;
         let options = {
             dotfiles: 'deny',
             headers: {
@@ -305,9 +305,9 @@ function sendResponse(passon) {
         /************* send small badges ********************/
         else {
             // send a badge showing the created date
-            redirectURL = 'https://img.shields.io/badge/release%20time-' + passon.releaseYear + '-blue.svg';
+            badgeString = config.badge.baseURL + 'release%20time-' + passon.releaseYear + '-blue.svg' + config.badge.options;
             passon.res.tracking.service = passon.service;
-            passon.res.redirect(redirectURL);
+            passon.res.redirect(badgeString);
             fulfill(passon);
         }
     });

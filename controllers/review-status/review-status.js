@@ -259,7 +259,7 @@ function sendResponse(passon) {
         if (passon.service === undefined) {
             passon.service = 'unknown';
         }
-        let redirectURL;
+        let badgeString;
 
         try {
             process = data.results[0].bibjson.editorial_review.process;
@@ -287,16 +287,16 @@ function sendResponse(passon) {
                 passon.reviewStatus = 'yes';
             }
             debug('Sending badge for review status %s', passon.reviewStatus);
-            redirectURL = generateBadge(passon.reviewStatus);
+            badgeString = generateBadge(passon.reviewStatus);
             passon.res.tracking.service = passon.service;
-            passon.res.redirect(redirectURL);
+            passon.res.redirect(badgeString);
             fulfill(passon);
         }
     });
 }
 
 function generateBadge(text) {
-    let shieldsIO = 'https://img.shields.io/badge/peer%20review-';
+    let shieldsIO = config.badge.baseURL + 'peer%20review-';
     let color = '-green.svg';
-    return shieldsIO + encodeURIComponent(text) + color;
+    return shieldsIO + encodeURIComponent(text) + color + config.badge.options;
 }

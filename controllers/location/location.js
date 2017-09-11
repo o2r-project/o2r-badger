@@ -277,12 +277,13 @@ function sendSmallBadge(passon) {
         if (passon.service === undefined) {
             passon.service = 'unknown';
         }
-        let redirectURL;
+        let badgeString;
         
         // Encode badge string
         let locationString = passon.geoName.replace('-', '%20');
-        redirectURL = "https://img.shields.io/badge/location-" + locationString + "-blue.svg";
+        badgeString = 'location-' + locationString + '-blue.svg';
         passon.res.tracking.service = passon.service;
+        let redirectURL = config.badge.baseURL + badgeString + config.badge.options;
         passon.res.redirect(redirectURL);
         fulfill(passon);
     });

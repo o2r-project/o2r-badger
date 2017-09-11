@@ -280,7 +280,7 @@ function sendResponse(passon) {
         }
 
         let localPath;
-        let redirectURL;
+        let badgeString;
         let osicode = passon.osiCode;
         let oddata = passon.odData;
         let odtext = passon.odText;
@@ -403,81 +403,82 @@ function sendResponse(passon) {
         }
         else {
             if(osicode===true && oddata===true && odtext===true){
-                redirectURL = 'https://img.shields.io/badge/licence-open-44cc11.svg';
+                badgeString = 'licence-open-44cc11.svg';
             }
             else if(osicode===false && oddata===true && odtext===true || osicode===true && oddata===false && odtext===true || osicode===true && oddata===true && odtext===false){
-                redirectURL = 'https://img.shields.io/badge/licence-mostly%20open-yellow.svg';
+                badgeString = 'licence-mostly%20open-yellow.svg';
             }
             else if(osicode===false && oddata===false && odtext===true || osicode===false && oddata===true && odtext===false || osicode===true && oddata===false && odtext===false){
-                redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                badgeString = 'licence-partially%20open-fe7d00.svg';
             }
             else if(osicode===false && oddata===false && odtext===false){
-                redirectURL = 'https://img.shields.io/badge/licence-closed-ff0000.svg';
+                badgeString = 'licence-closed-ff0000.svg';
             }
             //cases for unknown licences for one tag
             else if(osicode === 'unknown') {
                 if(oddata === true && odtext === true) {
-                    redirectURL = 'https://img.shields.io/badge/licence-mostly%20open-yellow.svg';
+                    badgeString = 'licence-mostly%20open-yellow.svg';
                 }
                 else if(oddata === true && odtext === false) {
-                    redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(oddata === false && odtext === true) {
-                    redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(oddata === false && odtext === false) {
-                    redirectURL = 'https://img.shields.io/badge/licence-closed-ff0000.svg';
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(oddata === 'unknown' && odtext === false) {
-                    redirectURL = 'https://img.shields.io/badge/licence-closed-ff0000.svg';
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(oddata === 'unknown' && odtext === true) {
-                    redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(oddata === false && odtext === 'unknown') {
-                    redirectURL = 'https://img.shields.io/badge/licence-closed-ff0000.svg';
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(oddata === true && odtext === 'unknown') {
-                    redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
             }
             else if(oddata === 'unknown') {
                 if(osicode === true && odtext === true) {
-                    redirectURL = 'https://img.shields.io/badge/licence-mostly%20open-yellow.svg';
+                    badgeString = 'licence-mostly%20open-yellow.svg';
                 }
                 else if(osicode === true && odtext === false) {
-                    redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(osicode === false && odtext === true) {
-                    redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(osicode === false && odtext === false) {
-                    redirectURL = 'https://img.shields.io/badge/licence-closed-ff0000.svg';
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(osicode === false && odtext === 'unknown') {
-                    redirectURL = 'https://img.shields.io/badge/licence-closed-ff0000.svg';
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(osicode === true && odtext === 'unknown') {
-                    redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
             }
             else if(odtext === 'unknown') {
                 if(osicode === true && oddata === true) {
-                    redirectURL = 'https://img.shields.io/badge/licence-mostly%20open-yellow.svg';
+                    badgeString = 'licence-mostly%20open-yellow.svg';
                 }
                 else if(osicode === true && oddata === false) {
-                    redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(osicode === false && oddata === true) {
-                    redirectURL = 'https://img.shields.io/badge/licence-partially%20open-fe7d00.svg';
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(osicode === false && oddata === false) {
-                    redirectURL = 'https://img.shields.io/badge/licence-closed-ff0000.svg';
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
             }
 
             passon.res.tracking.service = passon.service;
-            passon.res.redirect(redirectURL);
+            let redirectURL = config.badge.baseURL + badgeString + config.badge.options;
+            passon.res.redirect(badgeString);
         }
         fulfill(passon);
     });
