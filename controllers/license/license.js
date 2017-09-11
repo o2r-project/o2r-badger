@@ -478,7 +478,7 @@ function sendResponse(passon) {
 
             passon.res.tracking.service = passon.service;
             let redirectURL = config.badge.baseURL + badgeString + config.badge.options;
-            passon.res.redirect(badgeString);
+            passon.res.redirect(redirectURL);
         }
         fulfill(passon);
     });
