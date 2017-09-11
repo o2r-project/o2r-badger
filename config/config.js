@@ -18,6 +18,7 @@ var c = {};
 c.net = {};
 c.ext = {};
 c.timeout = {};
+c.badge = {};
 c.executable = {};
 c.peerreview = {};
 c.licence = {};
@@ -55,31 +56,35 @@ c.timeout.o2r  = 2500;
 c.timeout.doaj  = 2500;
 c.timeout.geonames  = 2500;
 
+//badge settings
+c.badge.baseURL = 'https://img.shields.io/badge/';
+c.badge.options = '?style=flat-square';
+
 //badges
 c.executable.services = ['o2r'];
 c.executable.mainService = 'o2r';
-c.executable.badgeNASmall = 'https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg';
+c.executable.badgeNASmall = 'https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg' + c.badge.options;
 c.executable.badgeNABig = 'badges/Executable_noInfo.svg';
 
 c.licence.services = ['o2r'];
 c.licence.mainService = 'o2r';
-c.licence.badgeNASmall = 'https://img.shields.io/badge/licence-n%2Fa-9f9f9f.svg';
+c.licence.badgeNASmall = 'https://img.shields.io/badge/licence-n%2Fa-9f9f9f.svg' + c.badge.options;
 c.licence.badgeNABig = 'badges/license_noInformation.svg';
 
 c.spatial.services = ['o2r'];
 c.spatial.mainService = 'o2r';
-c.spatial.badgeNASmall = 'https://img.shields.io/badge/location-n%2Fa-lightgrey.svg';
+c.spatial.badgeNASmall = 'https://img.shields.io/badge/location-n%2Fa-lightgrey.svg' + c.badge.options;
 c.spatial.badgeNABig = 'indexNoMap.html';
 c.spatial.bboxPath = 'metadata.o2r.spatial.spatial.union.geojson.bbox';
 
 c.releasetime.services = ['crossref'];
 c.releasetime.mainService = 'crossref';
-c.releasetime.badgeNASmall = 'https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg';
+c.releasetime.badgeNASmall = 'https://img.shields.io/badge/release%20time-n%2Fa-lightgrey.svg' + c.badge.options;
 c.releasetime.badgeNABig = 'badges/released_no_information.svg';
 
 c.peerreview.services = ['doaj'];
 c.peerreview.mainService = 'doaj';
-c.peerreview.badgeNASmall = 'https://img.shields.io/badge/peer%20review-n%2Fa-lightgrey.svg';
+c.peerreview.badgeNASmall = 'https://img.shields.io/badge/peer%20review-n%2Fa-lightgrey.svg' + c.badge.options;
 c.peerreview.badgeNABig = '';
 
 module.exports = c;
