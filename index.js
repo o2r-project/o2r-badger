@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const piwikTracker = require('./lib/express-piwik-tracker.js');
 
 // track all API requests with piwik middleware
-if (config.tracking.disableTracking !== 'true') {
+if(!config.tracking.disableTracking) {
     app.use(piwikTracker({
         siteId    : config.tracking.piwikSiteID,
         piwikUrl  : config.tracking.piwikURL,

@@ -31,10 +31,10 @@ exports.getBadgeFromData = (req, res) => {
     passon.res.tracking = {
         type: req.params.type,
         doi: passon.id,
-        extended: (passon.extended === 'extended') ? true : false,
+        extended: (passon.extended === 'extended'),
         size: req.query.width,
         format: (req.query.format === undefined) ? 'svg' : req.query.format
-    }
+    };
 
     // check if there is a service for "licence"
     if (base.hasSupportedService(config.licence) === false) {
@@ -100,10 +100,10 @@ exports.getBadgeFromReference = (req, res) => {
     passon.res.tracking = {
         type: req.params.type,
         doi: passon.id,
-        extended: (passon.extended === 'extended') ? true : false,
+        extended: (passon.extended === 'extended'),
         size: req.query.width,
         format: (req.query.format === undefined) ? 'svg' : req.query.format
-    }
+    };
 
     // check if there is a service for "licence"
     if (base.hasSupportedService(config.licence) === false) {
@@ -400,6 +400,7 @@ function sendResponse(passon) {
             passon.req.options = options;
             debug('Sending SVG %s to scaling service', passon.req.filePath);
             base.resizeAndSend(passon.req, passon.res);
+            fulfill(passon);
         }
         else {
             if(osicode===true && oddata===true && odtext===true){
@@ -479,7 +480,7 @@ function sendResponse(passon) {
             passon.res.tracking.service = passon.service;
             let redirectURL = config.badge.baseURL + badgeString + config.badge.options;
             passon.res.redirect(redirectURL);
+            fulfill(passon);
         }
-        fulfill(passon);
     });
 }

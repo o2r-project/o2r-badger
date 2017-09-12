@@ -14,6 +14,9 @@
  * limitations under the License.
  *
  */
+
+const yn = require('yn');
+
 var c = {};
 c.net = {};
 c.ext = {};
@@ -37,7 +40,7 @@ c.net.testEndpoint = env.BADGER_ENDPOINT || 'http://localhost';
 c.net.proxy = '';
 
 //piwik tracking options
-c.tracking.disableTracking = env.DISABLE_TRACKING || 'false';
+c.tracking.disableTracking = yn(env.DISABLE_TRACKING) || false;
 c.tracking.piwikToken = env.PIWIK_TOKEN;
 c.tracking.piwikURL = 'https://o2r.uni-muenster.de/piwik/piwik.php';
 c.tracking.piwikBaseURL = 'https://o2r.uni-muenster.de';

@@ -26,10 +26,10 @@ exports.getBadgeFromData = (req, res) => {
     passon.res.tracking = {
         type: req.params.type,
         doi: passon.id,
-        extended: (passon.extended === 'extended') ? true : false,
+        extended: (passon.extended === 'extended'),
         size: req.query.width,
         format: (req.query.format === undefined) ? 'svg' : req.query.format
-    }
+    };
 
     // check if there is a service for "spatial" badges
     if (base.hasSupportedService(config.spatial) === false) {
@@ -104,10 +104,10 @@ exports.getBadgeFromReference = (req, res) => {
     passon.res.tracking = {
         type: req.params.type,
         doi: passon.id,
-        extended: (passon.extended === 'extended') ? true : false,
+        extended: (passon.extended === 'extended'),
         size: req.query.width,
         format: (req.query.format === undefined) ? 'svg' : req.query.format
-    }
+    };
 
     // check if there is a service for "spatial" badges
     if (base.hasSupportedService(config.spatial) === false) {

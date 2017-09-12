@@ -20,7 +20,8 @@
     "piwik-tracker": "^1.1.2",
     "request": "^2.79.0",
     "svg2png": "^4.1.0",
-    "xmldom": "^0.1.27"
+    "xmldom": "^0.1.27",
+    "yn": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
