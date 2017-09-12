@@ -16,6 +16,9 @@ if(!config.tracking.disableTracking) {
         baseUrl   : config.tracking.piwikBaseURL,
         piwikToken: config.tracking.piwikToken
     }));
+    debug('Tracking enabled, configuration is %s', JSON.stringify(config.tracking));
+} else {
+    debug('Tracking DISabled, configuration is %s', JSON.stringify(config.tracking));
 }
 
 app.use(bodyParser.json());
@@ -40,7 +43,7 @@ debug('Server: ', server);
 * configure routes
 */
 
-//Scalability:
+//Scalability
 app.get('/api/' + config.api_version + '/badge', base.getBase);
 app.get('/api/' + config.api_version + '/badge/:type', base.getType);
 app.get('/api/' + config.api_version + '/badge/:type/?all_services', base.getAllServices);
@@ -61,7 +64,7 @@ app.post('/api/' + config.api_version + '/badge/spatial/:extended?', location.ge
 app.get('/api/' + config.api_version + '/badge/releasetime/:id/:extended?', release.getBadgeFromReference);
 app.post('/api/' + config.api_version + '/badge/releasetime/:extended?', release.getBadgeFromData);
 
-//Peer review:
+//Peer review
 app.get('/api/' + config.api_version + '/badge/peerreview/:id/:extended?', peerReview.getBadgeFromReference);
 app.post('/api/' + config.api_version + '/badge/peerreview/:extended?', peerReview.getBadgeFromData);
 
