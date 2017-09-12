@@ -22,6 +22,15 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended'),
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    };
+
     // check if there is a service for "spatial" badges
     if (base.hasSupportedService(config.spatial) === false) {
         debug('No service for badge %s found', passon.id);
@@ -47,9 +56,13 @@ exports.getBadgeFromData = (req, res) => {
             if (err.badgeNA === true) { // Send 'N/A' badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
+                    res.na = true;
+                    res.tracking.service = passon.service;
                     res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
@@ -87,6 +100,15 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended'),
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    };
+
     // check if there is a service for "spatial" badges
     if (base.hasSupportedService(config.spatial) === false) {
         debug('No service for badge %s found', passon.id);
@@ -115,9 +137,13 @@ exports.getBadgeFromReference = (req, res) => {
             if (err.badgeNA === true) { // Send 'N/A' badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
+                    res.na = true;
+                    res.tracking.service = passon.service;
                     res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
@@ -247,9 +273,18 @@ function sendSmallBadge(passon) {
             reject(error);
             return;
         }
+        
+        if (passon.service === undefined) {
+            passon.service = 'unknown';
+        }
+        let badgeString;
+        
         // Encode badge string
         let locationString = passon.geoName.replace('-', '%20');
-        passon.res.redirect("https://img.shields.io/badge/location-" + locationString + "-blue.svg");
+        badgeString = 'location-' + locationString + '-blue.svg';
+        passon.res.tracking.service = passon.service;
+        let redirectURL = config.badge.baseURL + badgeString + config.badge.options;
+        passon.res.redirect(redirectURL);
         fulfill(passon);
     });
 }
@@ -257,6 +292,15 @@ function sendSmallBadge(passon) {
 function sendBigBadge(passon) {
     return new Promise((fulfill, reject) => {
         debug('Sending map');
+
+        let options = {
+            dotfiles: 'deny',
+            headers: {
+                'x-timestamp': Date.now(),
+                'x-sent': true,
+            }
+        };
+        passon.res.tracking.service = passon.service;
 
         function sendNA(text)  {
             passon.req.type = 'location';
@@ -266,14 +310,6 @@ function sendBigBadge(passon) {
             error.badgeNA = true;
             reject(error);
         }
-
-        let options = {
-            dotfiles: 'deny',
-            headers: {
-                'x-timestamp': Date.now(),
-                'x-sent': true
-            }
-        };
 
         let bbox;
 

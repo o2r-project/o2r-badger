@@ -18,6 +18,15 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended'),
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    };
+
     // check if there is a service for "executable"
     if (base.hasSupportedService(config.executable) === false) {
         debug('No service for badge %s found', passon.id);
@@ -33,9 +42,13 @@ exports.getBadgeFromData = (req, res) => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
+                    res.na = true;
+                    res.tracking.service = passon.service;
                     res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
@@ -73,6 +86,15 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended'),
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    };
+
     // check if there is a service for "executable"
     if (base.hasSupportedService(config.executable) === false) {
         debug('No service for badge %s found', passon.id);
@@ -91,9 +113,13 @@ exports.getBadgeFromReference = (req, res) => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
+                    res.na = true;
+                    res.tracking.service = passon.service;
                     res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
@@ -126,6 +152,19 @@ function sendResponse(passon) {
             return;
         }
 
+        let badgeString;
+        // request options
+        let options = {
+            dotfiles: 'deny',
+            headers: {
+                'x-timestamp': Date.now(),
+                'x-sent': true,
+            }
+        };
+        if (passon.service === undefined) {
+            passon.service = 'unknown';
+        }
+
         if(passon.extended === 'extended') {
             //if the status is 'success' the green badge is sent to the client
             if (passon.jobStatus === 'success') {
@@ -144,6 +183,9 @@ function sendResponse(passon) {
             }
 
             // Send the request
+            passon.res.tracking.service = passon.service;
+            passon.req.options = options;
+            debug('Sending SVG %s to scaling service', passon.req.filePath);
             base.resizeAndSend(passon.req, passon.res);
             fulfill(passon);
 
@@ -151,23 +193,22 @@ function sendResponse(passon) {
             //if the status is 'success' the green badge is sent to the client
             if (passon.jobStatus === 'success') {
                 // send the reponse from our server
-                passon.res.redirect('https://img.shields.io/badge/executable-yes-44cc11.svg');
-                fulfill(passon);
+                badgeString = config.badge.baseURL + 'executable-yes-44cc11.svg' + config.badge.options;
             }
             // for a 'fail' the red badge is sent
             else if (passon.jobStatus === 'failure') {
-                passon.res.redirect('https://img.shields.io/badge/executable-no-ff0000.svg');
-                fulfill(passon);
+                badgeString = config.badge.baseURL + 'executable-no-ff0000.svg' + config.badge.options;
             }
             // and for the running status the yellow badge is sent to the client
             else if (passon.jobStatus === 'running') {
-                passon.res.redirect('https://img.shields.io/badge/executable-running-yellow.svg');
-                fulfill(passon);
+                badgeString = config.badge.baseURL + 'executable-running-yellow.svg' + config.badge.options;
             }
             else {
-                passon.res.redirect('https://img.shields.io/badge/executable-n%2Fa-9f9f9f.svg');
-                fulfill(passon);
+                badgeString = config.badge.baseURL + 'executable-n%2Fa-9f9f9f.svg' + config.badge.options;
             }
+            passon.res.tracking.service = passon.service;
+            passon.res.redirect(badgeString);
+            fulfill(passon);
         } else {
             let error = new Error();
             error.msg = 'value for parameter extended not allowed';

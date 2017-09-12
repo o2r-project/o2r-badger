@@ -27,6 +27,15 @@ exports.getBadgeFromData = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended'),
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    };
+
     // check if there is a service for "licence"
     if (base.hasSupportedService(config.licence) === false) {
         debug('No service for badge %s found', passon.id);
@@ -34,7 +43,7 @@ exports.getBadgeFromData = (req, res) => {
         return;
     }
 
-    return getLicenseInformation(passon)
+    return getLicenseFromCompendium(passon)
         .then(sendResponse)
         .then((passon) => {
             debug('Completed generating badge');
@@ -43,9 +52,13 @@ exports.getBadgeFromData = (req, res) => {
             if (err.badgeNA === true) { // Send 'N/A' badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
+                    res.na = true;
+                    res.tracking.service = passon.service;
                     res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
@@ -83,6 +96,15 @@ exports.getBadgeFromReference = (req, res) => {
         res: res
     };
 
+    // save tracking info
+    passon.res.tracking = {
+        type: req.params.type,
+        doi: passon.id,
+        extended: (passon.extended === 'extended'),
+        size: req.query.width,
+        format: (req.query.format === undefined) ? 'svg' : req.query.format
+    };
+
     // check if there is a service for "licence"
     if (base.hasSupportedService(config.licence) === false) {
         debug('No service for badge %s found', passon.id);
@@ -92,7 +114,7 @@ exports.getBadgeFromReference = (req, res) => {
 
     return steps.getCompendiumID(passon)
         .then(steps.getCompendium)
-        .then(getLicenseInformation)
+        .then(getLicenseFromCompendium)
         .then(sendResponse)
         .then((passon) => {
             debug('Completed generating peer-review badge for %s', passon.id);
@@ -102,9 +124,13 @@ exports.getBadgeFromReference = (req, res) => {
             if (err.badgeNA === true) { // Send "N/A" badge
                 debug("No badge information found: %s", err.msg);
                 if (passon.extended === 'extended') {
+                    passon.res.na = true;
+                    passon.res.service = passon.service;
                     passon.req.filePath = path.join(__dirname, badgeNABig);
                     base.resizeAndSend(passon.req, passon.res);
                 } else if (passon.extended === undefined) {
+                    res.na = true;
+                    res.tracking.service = passon.service;
                     res.redirect(badgeNASmall);
                 } else {
                     res.status(404).send('not allowed');
@@ -124,7 +150,7 @@ exports.getBadgeFromReference = (req, res) => {
         });
 };
 
-function getLicenseInformation(passon) {
+function getLicenseFromCompendium(passon) {
     return new Promise((fulfill, reject) => {
         let compendiumJSON = passon.body;
         let osicode;
@@ -171,6 +197,7 @@ function getLicenseInformation(passon) {
             else {
                 osicode = osi.hasOwnProperty(codelicence);
             }
+            passon.service = 'o2r';
         } else {
             osicode = 'unknown';
             oddata = 'unknown';
@@ -189,7 +216,7 @@ function getLicenseFromDOAJ(passon) {
         let oddata;
         let odtext;
 
-        //todo: replace "if"" with "multiple services" implementation
+        //todo: replace "if" with "multiple services" implementation
         if (passon.osiCode === 'unknown' && passon.odData === 'unknown' && passon.odText === 'unknown') {
             let requestURL = config.ext.doajArticles + encodeURIComponent('doi:' + passon.id);
             debug('Fetching review status from %s with URL', config.ext.doajArticles, requestURL);
@@ -217,6 +244,7 @@ function getLicenseFromDOAJ(passon) {
                     reject(err);
                     return;
                 }
+                passon.service = 'doaj';
                 fulfill(passon); 
             });
         } else {
@@ -252,18 +280,10 @@ function sendResponse(passon) {
         }
 
         let localPath;
+        let badgeString;
         let osicode = passon.osiCode;
         let oddata = passon.odData;
         let odtext = passon.odText;
-
-        let options = {
-            //root: __dirname + '/badges/',
-            dotfiles: 'deny',
-            headers: {
-                'x-timestamp': Date.now(),
-                'x-sent': true
-            }
-        };
 
         // compare the boolean values of the code / data / text licences to determine the badge to send it to the client
         if(passon.extended === 'extended') {
@@ -360,87 +380,107 @@ function sendResponse(passon) {
                     localPath = 'badges/license_noData_noCode.svg';
                 }
             }
+
+            if (passon.service === undefined) {
+                passon.service = 'unknown';
+            }
+
+            // request options
+            let options = {
+                dotfiles: 'deny',
+                headers: {
+                    'x-timestamp': Date.now(),
+                    'x-sent': true,
+                }
+            };
+
             // Send the request (+ scaling)
             passon.req.filePath = path.join(__dirname, localPath);
+            passon.res.tracking.service = passon.service;
             passon.req.options = options;
             debug('Sending SVG %s to scaling service', passon.req.filePath);
             base.resizeAndSend(passon.req, passon.res);
+            fulfill(passon);
         }
         else {
             if(osicode===true && oddata===true && odtext===true){
-                passon.res.redirect('https://img.shields.io/badge/licence-open-44cc11.svg');
+                badgeString = 'licence-open-44cc11.svg';
             }
             else if(osicode===false && oddata===true && odtext===true || osicode===true && oddata===false && odtext===true || osicode===true && oddata===true && odtext===false){
-                passon.res.redirect('https://img.shields.io/badge/licence-mostly%20open-yellow.svg');
+                badgeString = 'licence-mostly%20open-yellow.svg';
             }
             else if(osicode===false && oddata===false && odtext===true || osicode===false && oddata===true && odtext===false || osicode===true && oddata===false && odtext===false){
-                passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                badgeString = 'licence-partially%20open-fe7d00.svg';
             }
             else if(osicode===false && oddata===false && odtext===false){
-                passon.res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');
+                badgeString = 'licence-closed-ff0000.svg';
             }
             //cases for unknown licences for one tag
             else if(osicode === 'unknown') {
                 if(oddata === true && odtext === true) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-mostly%20open-yellow.svg');
+                    badgeString = 'licence-mostly%20open-yellow.svg';
                 }
                 else if(oddata === true && odtext === false) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(oddata === false && odtext === true) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(oddata === false && odtext === false) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(oddata === 'unknown' && odtext === false) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(oddata === 'unknown' && odtext === true) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(oddata === false && odtext === 'unknown') {
-                    passon.res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(oddata === true && odtext === 'unknown') {
-                    passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
             }
             else if(oddata === 'unknown') {
                 if(osicode === true && odtext === true) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-mostly%20open-yellow.svg');
+                    badgeString = 'licence-mostly%20open-yellow.svg';
                 }
                 else if(osicode === true && odtext === false) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(osicode === false && odtext === true) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(osicode === false && odtext === false) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(osicode === false && odtext === 'unknown') {
-                    passon.res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
                 else if(osicode === true && odtext === 'unknown') {
-                    passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
             }
             else if(odtext === 'unknown') {
                 if(osicode === true && oddata === true) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-mostly%20open-yellow.svg');
+                    badgeString = 'licence-mostly%20open-yellow.svg';
                 }
                 else if(osicode === true && oddata === false) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(osicode === false && oddata === true) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-partially%20open-fe7d00.svg');
+                    badgeString = 'licence-partially%20open-fe7d00.svg';
                 }
                 else if(osicode === false && oddata === false) {
-                    passon.res.redirect('https://img.shields.io/badge/licence-closed-ff0000.svg');
+                    badgeString = 'licence-closed-ff0000.svg';
                 }
             }
+
+            passon.res.tracking.service = passon.service;
+            let redirectURL = config.badge.baseURL + badgeString + config.badge.options;
+            passon.res.redirect(redirectURL);
+            fulfill(passon);
         }
-        fulfill(passon);
     });
 }

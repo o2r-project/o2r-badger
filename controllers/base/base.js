@@ -79,7 +79,7 @@ exports.resizeAndSend = (req, res) => {
 		});
 	} else {
 		if (typeof req.options !== 'undefined') {
-			res.sendFile(req.filePath);
+			res.sendFile(req.filePath, req.options);
 		} else {
 			res.sendFile(req.filePath, req.options, function(err) {
 				if(err) {
