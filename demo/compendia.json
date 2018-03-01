@@ -1,0 +1,320 @@
+[
+  {
+    "_id": ObjectId("5a9810ff06484e001cba4867"),
+    "createdAt": ISODate("2018-03-01T14:43:33.535Z"),
+    "updatedAt": ISODate("2018-03-01T14:43:33.535Z"),
+    "id": "qCQsu",
+    "user": "0000-0002-1701-2564",
+    "metadata": {
+      "o2r": {
+        "upload_type": "publication",
+        "title": "Capacity of container ships in seaborne trade from 1980 to 2016 (in million dwt)*",
+        "temporal": {
+          "end": "2017-02-28T23:00:00.000Z",
+          "begin": "2017-02-28T23:00:00.000Z"
+        },
+        "spatial": {
+          "union": {
+            "bbox": [
+              [
+                181,
+                181
+              ],
+              [
+                -181,
+                181
+              ],
+              [
+                -181,
+                -181
+              ],
+              [
+                181,
+                -181
+              ]
+            ],
+            "geojson": {
+              "type": "Feature",
+              "bbox": [
+                -181,
+                181,
+                -181,
+                181
+              ],
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                  [
+                    [
+                      82.529296875,
+                      23.40276490540795
+                    ],
+                    [
+                      78.837890625,
+                      23.241346102386135
+                    ],
+                    [
+                      79.541015625,
+                      21.37124437061831
+                    ],
+                    [
+                      82.96875,
+                      20.632784250388028
+                    ],
+                    [
+                      82.529296875,
+                      23.40276490540795
+                    ]
+                  ]
+                ]
+              }
+            }
+          },
+          "files": []
+        },
+        "publication_type": "other",
+        "publication_date": "2018-03-01T00:00:00.000Z",
+        "paperLanguage": [],
+        "mainfile_candidates": [
+          "main.Rmd"
+        ],
+        "mainfile": "main.Rmd",
+        "license": {
+          "uibindings": "MIT",
+          "text": "CC0-1.0",
+          "md": null,
+          "data": "CC0-1.0",
+          "code": "MIT"
+        },
+        "keywords": [
+          "container",
+          "ship",
+          "trade",
+          "statistic"
+        ],
+        "interaction": [],
+        "inputfiles": [],
+        "identifier": {
+          "reserveddoi": null,
+          "doiurl": "https://doi.org/10.5555/666655554444",
+          "doi": "10.5555/666655554444"
+        },
+        "ercIdentifier": "qCQsu",
+        "displayfile_candidates": [
+          "display.html"
+        ],
+        "displayfile": "display.html",
+        "description": "Capacity of container ships in seaborne trade of the world container ship fleet.\n",
+        "depends": [
+          {
+            "version": null,
+            "packageSystem": "https://cloud.r-project.org/",
+            "identifier": "knitr",
+            "category": "geo sciences,CRAN Top100"
+          }
+        ],
+        "creators": [
+          {
+            "orcid": "0000-0002-0024-5046",
+            "name": "Daniel Nüst",
+            "affiliation": "o2r team"
+          }
+        ],
+        "communities": [
+          {
+            "identifier": "o2r"
+          }
+        ],
+        "codefiles": [
+          "main.Rmd"
+        ],
+        "access_right": "open"
+      },
+      "raw": {
+        "source": "https://uni-muenster.sciebo.de/s/hAh8AZLYvHNgNA9",
+        "version": null,
+        "upload_type": "publication",
+        "title": "Capacity of container ships in seaborne trade from 1980 to 2016 (in million dwt)*",
+        "temporal": {
+          "end": "2017-03-01T00:00:00",
+          "begin": "2017-03-01T00:00:00"
+        },
+        "spatial": {
+          "union": {
+            "bbox": [
+              [
+                181,
+                181
+              ],
+              [
+                -181,
+                181
+              ],
+              [
+                -181,
+                -181
+              ],
+              [
+                181,
+                -181
+              ]
+            ]
+          },
+          "files": []
+        },
+        "softwarePaperCitation": null,
+        "researchQuestions": [],
+        "researchHypotheses": [],
+        "recordDateCreated": null,
+        "rdata": {
+          "rdata_files": []
+        },
+        "r_output": [
+          {
+            "text": "plot",
+            "line": 9,
+            "feature": "result"
+          }
+        ],
+        "r_input": [],
+        "r_comment": [],
+        "publication_type": "other",
+        "publicationDate": "2018-03-01",
+        "provenance": [],
+        "paperLanguage": [],
+        "ncdf": {
+          "ncdf_files": []
+        },
+        "mainfile_candidates": [
+          "main.Rmd"
+        ],
+        "mainfile": "main.Rmd",
+        "license": {
+          "uibindings": null,
+          "text": null,
+          "md": null,
+          "data": null,
+          "code": null
+        },
+        "keywords": [
+          "container",
+          "ship",
+          "trade",
+          "statistic"
+        ],
+        "interaction": [],
+        "inputfiles": [],
+        "identifier": {
+          "reserveddoi": null,
+          "doiurl": "https://doi.org/10.5555/666655554444",
+          "doi": "10.5555/666655554444"
+        },
+        "generatedBy": "o2r-meta metaextract.py",
+        "file": {
+          "mimetype": null,
+          "filepath": null,
+          "filename": null
+        },
+        "ercIdentifier": "qCQsu",
+        "displayfile_candidates": [
+          "display.html"
+        ],
+        "displayfile": "display.html",
+        "description": "Capacity of container ships in seaborne trade of the world container ship fleet.\n",
+        "depends": [
+          {
+            "version": null,
+            "packageSystem": "https://cloud.r-project.org/",
+            "identifier": "knitr",
+            "category": "geo sciences,CRAN Top100"
+          }
+        ],
+        "communities": [
+          {
+            "identifier": "o2r"
+          }
+        ],
+        "codefiles": [
+          "main.Rmd"
+        ],
+        "bagit": {
+          "bagittxt_files": []
+        },
+        "author": [
+          {
+            "orcid": "0000-0002-0024-5046",
+            "name": "Daniel Nüst",
+            "affiliation": "o2r team"
+          }
+        ],
+        "access_right": "open"
+      },
+      "zenodo": {
+        "metadata": {
+          "access_right": "open",
+          "communities": [
+            {
+              "identifier": "o2r"
+            }
+          ],
+          "creators": [
+            {
+              "affiliation": "o2r team",
+              "name": "Daniel Nüst",
+              "orcid": "0000-0002-0024-5046"
+            }
+          ],
+          "description": "Capacity of container ships in seaborne trade of the world container ship fleet.\n",
+          "keywords": [
+            "container",
+            "ship",
+            "trade",
+            "statistic"
+          ],
+          "license": "CC0-1.0",
+          "publication_date": "2018-03-01T00:00:00.000Z",
+          "publication_type": "other",
+          "title": "Capacity of container ships in seaborne trade from 1980 to 2016 (in million dwt)*",
+          "upload_type": "publication"
+        }
+      },
+      "zenodo_sandbox": {
+        "metadata": {
+          "access_right": "open",
+          "communities": [
+            {
+              "identifier": "o2r"
+            }
+          ],
+          "creators": [
+            {
+              "affiliation": "o2r team",
+              "name": "Daniel Nüst",
+              "orcid": "0000-0002-0024-5046"
+            }
+          ],
+          "description": "Capacity of container ships in seaborne trade of the world container ship fleet.\n",
+          "keywords": [
+            "container",
+            "ship",
+            "trade",
+            "statistic"
+          ],
+          "license": "CC0-1.0",
+          "publication_date": "2018-03-01T00:00:00.000Z",
+          "publication_type": "other",
+          "title": "Capacity of container ships in seaborne trade from 1980 to 2016 (in million dwt)*",
+          "upload_type": "publication"
+        }
+      }
+    },
+    "substituted": false,
+    "compendium": false,
+    "bag": false,
+    "candidate": false,
+    "jobs": [],
+    "created": ISODate("2018-03-01T14:41:03.668Z"),
+    "__v": 0
+  }
+
+]
