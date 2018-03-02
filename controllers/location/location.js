@@ -180,7 +180,7 @@ function getCenterFromData(passon) {
         let coordinates = passon.body;
 
         try {
-            let coords = coordinates.metadata.o2r.spatial.spatial.union.geojson.bbox;
+            let coords = coordinates.metadata.o2r.spatial.union.geojson.bbox;
             debug('Bounding box is %s, %s, %s, %s', coords[0], coords[1], coords[2], coords[3]);
         } catch (err) {
             err.badgeNA = true;
