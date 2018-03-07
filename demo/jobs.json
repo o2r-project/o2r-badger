@@ -3,45 +3,6 @@
     "_id": ObjectId("599aeddd1163940012bdf2ce"),
     "createdAt": ISODate("2017-08-21T14:27:41.675Z"),
     "updatedAt": ISODate("2017-08-21T14:28:00.479Z"),
-    "steps": {
-        "cleanup": {
-            "text": "Done: removed container.\nDone: kept image with tag bagtainer:baEy8 for job baEy8\nDone: deleted tmp payload file.",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:28:00.308Z"),
-            "end": ISODate("2017-08-21T14:28:00.433Z")
-        },
-        "image_execute": {
-            "text": "metadata test\r\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:27:57.239Z"),
-            "end": ISODate("2017-08-21T14:28:00.234Z"),
-            "statuscode": 0
-        },
-        "image_build": {
-            "text": "Step 1/3 : FROM alpine\nundefinedundefinedundefinedundefinedStep 2/3 : MAINTAINER <http://o2r.info>\n ---> Running in 3921a72712a7\n ---> c3299e188642\nStep 3/3 : CMD echo metadata test\n ---> Running in fbaecf672bde\n ---> e826f1d6c70f\nRemoving intermediate container fbaecf672bde\nSuccessfully built e826f1d6c70f\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:27:49.150Z"),
-            "end": ISODate("2017-08-21T14:27:57.168Z")
-        },
-        "image_prepare": {
-            "text": "payload with 900608 total bytes",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:27:48.659Z"),
-            "end": ISODate("2017-08-21T14:27:49.102Z")
-        },
-        "validate_compendium": {
-            "text": "all checks passed",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:27:48.548Z"),
-            "end": ISODate("2017-08-21T14:27:48.639Z")
-        },
-        "validate_bag": {
-            "text": "Command failed: bagit.py --validate /tmp/o2r/job/baEy8\n2017-08-21 14:27:48,380 - INFO - /tmp/o2r/job/baEy8 is invalid: Oxum error.  Found 15 files and 886201 bytes on disk; expected 11 files and 820709 bytes.\n",
-            "status": "failure",
-            "start": ISODate("2017-08-21T14:27:42.577Z"),
-            "end": ISODate("2017-08-21T14:27:48.502Z")
-        }
-    },
     "status": "success",
     "user": "0000-0001-6230-4374",
     "compendium_id": "b05ym",
@@ -54,45 +15,6 @@
     "_id": ObjectId("599aeebf1163940012bdf2cf"),
     "createdAt": ISODate("2017-08-21T14:31:27.473Z"),
     "updatedAt": ISODate("2017-08-21T14:31:32.640Z"),
-    "steps": {
-        "cleanup": {
-            "text": "Done: removed container.\nDone: kept image with tag bagtainer:UYxhC for job UYxhC\nDone: deleted tmp payload file.",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:31:32.526Z"),
-            "end": ISODate("2017-08-21T14:31:32.632Z")
-        },
-        "image_execute": {
-            "text": "metadata test\r\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:31:28.458Z"),
-            "end": ISODate("2017-08-21T14:31:32.521Z"),
-            "statuscode": 0
-        },
-        "image_build": {
-            "text": "Successfully built e826f1d6c70f\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:31:28.199Z"),
-            "end": ISODate("2017-08-21T14:31:28.386Z")
-        },
-        "image_prepare": {
-            "text": "payload with 900608 total bytes",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:31:28.079Z"),
-            "end": ISODate("2017-08-21T14:31:28.190Z")
-        },
-        "validate_compendium": {
-            "text": "all checks passed",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:31:28.070Z"),
-            "end": ISODate("2017-08-21T14:31:28.075Z")
-        },
-        "validate_bag": {
-            "text": "Command failed: bagit.py --validate /tmp/o2r/job/UYxhC\n2017-08-21 14:31:28,039 - INFO - /tmp/o2r/job/UYxhC is invalid: Oxum error.  Found 15 files and 885797 bytes on disk; expected 11 files and 820613 bytes.\n",
-            "status": "failure",
-            "start": ISODate("2017-08-21T14:31:27.497Z"),
-            "end": ISODate("2017-08-21T14:31:28.065Z")
-        }
-    },
     "status": "failure",
     "user": "0000-0001-6230-4374",
     "compendium_id": "g9uph",
@@ -105,42 +27,6 @@
     "_id": ObjectId("599aeed31163940012bdf2d0"),
     "createdAt": ISODate("2017-08-21T14:31:47.666Z"),
     "updatedAt": ISODate("2017-08-21T14:31:48.626Z"),
-    "steps": {
-        "cleanup": {
-            "text": "Done: nothing provided that could be cleaned up",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:31:48.482Z"),
-            "end": ISODate("2017-08-21T14:31:48.614Z")
-        },
-        "image_execute": {
-            "text": "",
-            "status": "queued"
-        },
-        "image_build": {
-            "text": "Error: (HTTP code 500) server error - {\"message\":\"Error processing tar file(exit status 1): unexpected EOF\"}\n ",
-            "status": "failure",
-            "start": ISODate("2017-08-21T14:31:48.260Z"),
-            "end": ISODate("2017-08-21T14:31:48.471Z")
-        },
-        "image_prepare": {
-            "text": "payload with 900608 total bytes",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:31:48.165Z"),
-            "end": ISODate("2017-08-21T14:31:48.258Z")
-        },
-        "validate_compendium": {
-            "text": "all checks passed",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:31:48.147Z"),
-            "end": ISODate("2017-08-21T14:31:48.159Z")
-        },
-        "validate_bag": {
-            "text": "Command failed: bagit.py --validate /tmp/o2r/job/wOfUr\n2017-08-21 14:31:48,086 - INFO - /tmp/o2r/job/wOfUr is invalid: Oxum error.  Found 15 files and 886233 bytes on disk; expected 11 files and 820670 bytes.\n",
-            "status": "failure",
-            "start": ISODate("2017-08-21T14:31:47.766Z"),
-            "end": ISODate("2017-08-21T14:31:48.143Z")
-        }
-    },
     "status": "running",
     "user": "0000-0001-6230-4374",
     "compendium_id": "4hm64",
@@ -148,50 +34,59 @@
     "__v": 0
 },
 
+{
+    "_id": ObjectId("599aeddd1163940012bdf2ce"),
+    "createdAt": ISODate("2017-08-21T14:27:41.675Z"),
+    "updatedAt": ISODate("2017-08-21T14:28:00.479Z"),
+    "status": "success",
+    "user": "0000-0001-6230-4374",
+    "compendium_id": "okced",
+    "id": "buiY2",
+    "__v": 0
+},
+
+{
+    "_id": ObjectId("599aeebf1163940012bdf2cf"),
+    "createdAt": ISODate("2017-08-21T14:31:27.473Z"),
+    "updatedAt": ISODate("2017-08-21T14:31:32.640Z"),
+    "status": "failure",
+    "user": "0000-0001-6230-4374",
+    "compendium_id": "DzCxr",
+    "id": "UBcdF",
+    "__v": 0
+},
+
+{
+    "_id": ObjectId("599aeed31163940012bdf2d0"),
+    "createdAt": ISODate("2017-08-21T14:31:47.666Z"),
+    "updatedAt": ISODate("2017-08-21T14:31:48.626Z"),
+    "status": "running",
+    "user": "0000-0001-6230-4374",
+    "compendium_id": "jzBR8",
+    "id": "vIfAr",
+    "__v": 0
+},
+
+{
+    "_id": ObjectId("599aeebf1163940012bdf2cf"),
+    "createdAt": ISODate("2017-08-21T14:31:27.473Z"),
+    "updatedAt": ISODate("2017-08-21T14:31:32.640Z"),
+    "status": "failure",
+    "user": "0000-0001-6230-4374",
+    "compendium_id": "HBB7y",
+    "id": "WBadV",
+    "__v": 0
+},
+
+
+
+
+
 
 {
     "_id": ObjectId("599aeeec1163940012bdf2d1"),
     "createdAt": ISODate("2017-08-21T14:32:12.557Z"),
     "updatedAt": ISODate("2017-08-21T14:32:15.377Z"),
-    "steps": {
-        "cleanup": {
-            "text": "Done: removed container.\nDone: kept image with tag bagtainer:sbtUK for job sbtUK\nDone: deleted tmp payload file.",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:15.210Z"),
-            "end": ISODate("2017-08-21T14:32:15.345Z")
-        },
-        "image_execute": {
-            "text": "metadata test\r\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:13.499Z"),
-            "end": ISODate("2017-08-21T14:32:15.198Z"),
-            "statuscode": 0
-        },
-        "image_build": {
-            "text": " ---> Using cache\nSuccessfully built e826f1d6c70f\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:13.277Z"),
-            "end": ISODate("2017-08-21T14:32:13.489Z")
-        },
-        "image_prepare": {
-            "text": "payload with 900608 total bytes",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:13.156Z"),
-            "end": ISODate("2017-08-21T14:32:13.268Z")
-        },
-        "validate_compendium": {
-            "text": "all checks passed",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:13.083Z"),
-            "end": ISODate("2017-08-21T14:32:13.122Z")
-        },
-        "validate_bag": {
-            "text": "Command failed: bagit.py --validate /tmp/o2r/job/sbtUK\n2017-08-21 14:32:12,885 - INFO - /tmp/o2r/job/sbtUK is invalid: Oxum error.  Found 15 files and 886130 bytes on disk; expected 11 files and 820698 bytes.\n",
-            "status": "failure",
-            "start": ISODate("2017-08-21T14:32:12.622Z"),
-            "end": ISODate("2017-08-21T14:32:13.053Z")
-        }
-    },
     "status": "success",
     "user": "0000-0001-6230-4374",
     "compendium_id": "rUSMb",
@@ -204,45 +99,6 @@
     "_id": ObjectId("599aef061163940012bdf2d2"),
     "createdAt": ISODate("2017-08-21T14:32:38.627Z"),
     "updatedAt": ISODate("2017-08-21T14:32:41.028Z"),
-    "steps": {
-        "cleanup": {
-            "text": "Done: removed container.\nDone: kept image with tag bagtainer:6yDj3 for job 6yDj3\nDone: deleted tmp payload file.",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:40.939Z"),
-            "end": ISODate("2017-08-21T14:32:41.022Z")
-        },
-        "image_execute": {
-            "text": "metadata test\r\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:39.607Z"),
-            "end": ISODate("2017-08-21T14:32:40.933Z"),
-            "statuscode": 0
-        },
-        "image_build": {
-            "text": "Step 2/3 : MAINTAINER <http://o2r.info>\nSuccessfully built e826f1d6c70f\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:39.392Z"),
-            "end": ISODate("2017-08-21T14:32:39.594Z")
-        },
-        "image_prepare": {
-            "text": "payload with 898560 total bytes",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:39.295Z"),
-            "end": ISODate("2017-08-21T14:32:39.388Z")
-        },
-        "validate_compendium": {
-            "text": "all checks passed",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:39.279Z"),
-            "end": ISODate("2017-08-21T14:32:39.291Z")
-        },
-        "validate_bag": {
-            "text": "Command failed: bagit.py --validate /tmp/o2r/job/6yDj3\n2017-08-21 14:32:39,253 - INFO - /tmp/o2r/job/6yDj3 is invalid: Oxum error.  Found 15 files and 884263 bytes on disk; expected 11 files and 818508 bytes.\n",
-            "status": "failure",
-            "start": ISODate("2017-08-21T14:32:38.712Z"),
-            "end": ISODate("2017-08-21T14:32:39.275Z")
-        }
-    },
     "status": "success",
     "user": "0000-0001-6230-4374",
     "compendium_id": "kU3am",
@@ -254,38 +110,6 @@
     "_id": ObjectId("599aef191163940012bdf2d3"),
     "createdAt": ISODate("2017-08-21T14:32:57.790Z"),
     "updatedAt": ISODate("2017-08-21T14:32:58.120Z"),
-    "steps": {
-        "cleanup": {
-            "text": "Done: nothing provided that could be cleaned up",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:32:58.079Z"),
-            "end": ISODate("2017-08-21T14:32:58.082Z")
-        },
-        "image_execute": {
-            "text": "",
-            "status": "queued"
-        },
-        "image_build": {
-            "text": "",
-            "status": "queued"
-        },
-        "image_prepare": {
-            "text": "",
-            "status": "queued"
-        },
-        "validate_compendium": {
-            "text": "Error: ENOENT: no such file or directory, open '/tmp/o2r/job/xwTPi/data/bagtainer.yml'",
-            "status": "failure",
-            "start": ISODate("2017-08-21T14:32:58.069Z"),
-            "end": ISODate("2017-08-21T14:32:58.076Z")
-        },
-        "validate_bag": {
-            "text": "Command failed: bagit.py --validate /tmp/o2r/job/xwTPi\n2017-08-21 14:32:57,999 - INFO - /tmp/o2r/job/xwTPi is invalid: Oxum error.  Found 14 files and 885860 bytes on disk; expected 10 files and 820573 bytes.\n",
-            "status": "failure",
-            "start": ISODate("2017-08-21T14:32:57.820Z"),
-            "end": ISODate("2017-08-21T14:32:58.042Z")
-        }
-    },
     "status": "running",
     "user": "0000-0001-6230-4374",
     "compendium_id": "lqDQP",
@@ -293,58 +117,13 @@
     "__v": 0
 },
 
-
-
-
-
-
-
 {
     "_id": ObjectId("599aef2c1163940012bdf2d4"),
     "createdAt": ISODate("2017-08-21T14:33:16.331Z"),
     "updatedAt": ISODate("2017-08-21T14:33:20.261Z"),
-    "steps": {
-        "cleanup": {
-            "text": "Done: removed container.\nDone: kept image with tag bagtainer:uIu4G for job uIu4G\nDone: deleted tmp payload file.",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:33:20.049Z"),
-            "end": ISODate("2017-08-21T14:33:20.245Z")
-        },
-        "image_execute": {
-            "text": "metadata test\r\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:33:17.738Z"),
-            "end": ISODate("2017-08-21T14:33:20.007Z"),
-            "statuscode": 0
-        },
-        "image_build": {
-            "text": "Step 3/3 : CMD echo metadata test\nSuccessfully built e826f1d6c70f\n",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:33:17.306Z"),
-            "end": ISODate("2017-08-21T14:33:17.726Z")
-        },
-        "image_prepare": {
-            "text": "payload with 901120 total bytes",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:33:17.214Z"),
-            "end": ISODate("2017-08-21T14:33:17.296Z")
-        },
-        "validate_compendium": {
-            "text": "all checks passed",
-            "status": "success",
-            "start": ISODate("2017-08-21T14:33:17.198Z"),
-            "end": ISODate("2017-08-21T14:33:17.211Z")
-        },
-        "validate_bag": {
-            "text": "Command failed: bagit.py --validate /tmp/o2r/job/uIu4G\n2017-08-21 14:33:17,154 - INFO - /tmp/o2r/job/uIu4G is invalid: Oxum error.  Found 15 files and 886343 bytes on disk; expected 11 files and 820692 bytes.\n",
-            "status": "failure",
-            "start": ISODate("2017-08-21T14:33:16.426Z"),
-            "end": ISODate("2017-08-21T14:33:17.178Z")
-        }
-    },
     "status": "success",
     "user": "0000-0001-6230-4374",
-    "compendium_id": "8tFEy",
+    "compendium_id": "6RFgw",
     "id": "uIu4G",
     "__v": 0
 }
