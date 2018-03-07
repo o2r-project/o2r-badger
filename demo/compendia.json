@@ -2388,7 +2388,6 @@
               ]
             ],
             "geojson": {
-              "geojson": {
                 "type": "Feature",
                 "bbox": [
                   11.14716796875004,
@@ -4444,7 +4443,6 @@
                     ]
                   ]
                 }
-              }
             }
           },
           "files": []
@@ -4597,6 +4595,266 @@
     "candidate": false,
     "jobs": [],
     "created": ISODate("2018-03-02T15:36:34.139Z"),
+    "__v": 0
+  },
+
+  {
+    "_id": ObjectId("5a9fcb6069dcfd0017fffc26"),
+    "createdAt": ISODate("2018-03-07T11:26:22.515Z"),
+    "updatedAt": ISODate("2018-03-07T11:26:22.515Z"),
+    "id": "MGi7q",
+    "user": "0000-0002-1701-2564",
+    "metadata": {
+      "o2r": {
+        "upload_type": "publication",
+        "title": "Controls on microalgal community structures in cryoconite holes upon high-Arctic glaciers, Svalbard",
+        "temporal": {
+          "end": "2017-03-06T23:00:00.000Z",
+          "begin": "2017-03-06T23:00:00.000Z"
+        },
+        "spatial": {
+          "union": {
+            "bbox": [
+              [
+                15.831298828124998,
+                78.48890747312655
+              ],
+              [
+                17.3858642578125,
+                78.48890747312655
+              ],
+              [
+                17.3858642578125,
+                78.73511021612853
+              ],
+              [
+                15.831298828124998,
+                78.73511021612853
+              ],
+              [
+                15.831298828124998,
+                78.48890747312655
+              ]
+            ],
+            "geojson": {
+              "geojson": {
+                "type": "Feature",
+                "bbox": [
+                  15.831298828124998,
+                  78.48890747312655,
+                  17.3858642578125,
+                  78.73511021612853
+                ],
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [
+                    [
+                      [
+                        15.831298828124998,
+                        78.48890747312655
+                      ],
+                      [
+                        17.3858642578125,
+                        78.48890747312655
+                      ],
+                      [
+                        17.3858642578125,
+                        78.73511021612853
+                      ],
+                      [
+                        15.831298828124998,
+                        78.73511021612853
+                      ],
+                      [
+                        15.831298828124998,
+                        78.48890747312655
+                      ]
+                    ]
+                  ]
+                }
+              }
+            }
+          },
+          "files": []
+        },
+        "publication_type": "other",
+        "publication_date": "2016-02-03T00:00:00.000Z",
+        "paperLanguage": [],
+        "mainfile_candidates": [
+          "main.Rmd"
+        ],
+        "mainfile": "main.Rmd",
+        "license": {
+          "uibindings": "GPL-3.0",
+          "text": "CC-BY-NC-4.0",
+          "md": null,
+          "data": "CC-BY-NC-4.0",
+          "code": "GPL-3.0"
+        },
+        "keywords": [
+          "container",
+          "ship",
+          "trade",
+          "statistic"
+        ],
+        "interaction": [],
+        "inputfiles": [
+          "data.csv"
+        ],
+        "identifier": {
+          "reserveddoi": null,
+          "doiurl": "https://doi.org/10.5194/bg-13-659-2016",
+          "doi": "10.5194/bg-13-659-2016"
+        },
+        "ercIdentifier": "MGi7q",
+        "displayfile_candidates": [
+          "display.html"
+        ],
+        "displayfile": "display.html",
+        "description": "Glaciers are known to harbor surprisingly complex ecosystems. On their surface, distinct cylindrical holes filled with meltwater and sediments are considered hot spots for microbial life. The present paper addresses possible biological interactions within the community of prokaryotic cyanobacteria and eukaryotic microalgae (microalgae) and relations to their potential grazers, such as tardigrades and rotifers, additional to their environmental controls. Svalbard glaciers with substantial allochthonous input of material from local sources reveal high microalgal densities. Small valley glaciers with high sediment coverages and high impact of birds show high biomasses and support a high biological diversity. Invertebrate grazer densities do not show any significant negative correlation with microalgal abundances but rather a positive correlation with eukaryotic microalgae. Shared environmental preferences and a positive effect of grazing are the proposed mechanisms to explain these correlations. Most microalgae found in this study form colonies (<\u202f10 cells, or >\u202f25\u202fµm), which may protect them against invertebrate grazing. This finding rather indicates grazing as a positive control on eukaryotic microalgae by nutrient recycling. Density differences between the eukaryotic microalgae and prokaryotic cyanobacteria and their high distinction in redundancy (RDA) and principal component (PCA) analyses indicate that these two groups are in strong contrast. Eukaryotic microalgae occurred mainly in unstable cryoconite holes with high sediment loads, high N\u202f:\u202fP ratios, and a high impact of nutrient input by bird guano, as a proxy for nutrients. In these environments autochthonous nitrogen fixation appears to be negligible. Selective wind transport of Oscillatoriales via soil and dust particles is proposed to explain their dominance in cryoconites further away from the glacier margins. We propose that, for the studied glaciers, nutrient levels related to recycling of limiting nutrients are the main factor driving variation in the community structure of microalgae and grazers.",
+        "depends": [],
+        "creators": [
+          {
+            "name": "T. R. Vonnahme",
+            "affiliation": "Centre for Polar Ecology, Faculty of Science, University of South Bohemia, České Budějovice, Czech Republic",
+            "orcid": ""
+          },
+          {
+            "name": "M. Devetter",
+            "affiliation": "",
+            "orcid": ""
+          },
+          {
+            "name": "J. D. Žárský",
+            "affiliation": "Department of Ecology, Charles University, Prague, Czech Republic",
+            "orcid": ""
+          },
+          {
+            "name": "M. Šabacká",
+            "affiliation": "British Antarctic Survey, Cambridge, UK",
+            "orcid": ""
+          },
+          {
+            "name": "J. Elster",
+            "affiliation": "Institute of Botany, Academy of the Science of the Czech Republic, Třeboň, Czech Republic",
+            "orcid": ""
+          }
+        ],
+        "communities": [
+          {
+            "identifier": "o2r"
+          }
+        ],
+        "codefiles": [
+          "main.Rmd"
+        ],
+        "access_right": "open"
+      },
+      "zenodo": {
+        "metadata": {
+          "access_right": "open",
+          "communities": [
+            {
+              "identifier": "o2r"
+            }
+          ],
+          "creators": [
+            {
+              "affiliation": "Centre for Polar Ecology, Faculty of Science, University of South Bohemia, České Budějovice, Czech Republic",
+              "name": "T. R. Vonnahme",
+              "orcid": ""
+            },
+            {
+              "affiliation": "",
+              "name": "M. Devetter",
+              "orcid": ""
+            },
+            {
+              "affiliation": "Department of Ecology, Charles University, Prague, Czech Republic",
+              "name": "J. D. Žárský",
+              "orcid": ""
+            },
+            {
+              "affiliation": "British Antarctic Survey, Cambridge, UK",
+              "name": "M. Šabacká",
+              "orcid": ""
+            },
+            {
+              "affiliation": "Institute of Botany, Academy of the Science of the Czech Republic, Třeboň, Czech Republic",
+              "name": "J. Elster",
+              "orcid": ""
+            }
+          ],
+          "description": "Glaciers are known to harbor surprisingly complex ecosystems. On their surface, distinct cylindrical holes filled with meltwater and sediments are considered hot spots for microbial life. The present paper addresses possible biological interactions within the community of prokaryotic cyanobacteria and eukaryotic microalgae (microalgae) and relations to their potential grazers, such as tardigrades and rotifers, additional to their environmental controls. Svalbard glaciers with substantial allochthonous input of material from local sources reveal high microalgal densities. Small valley glaciers with high sediment coverages and high impact of birds show high biomasses and support a high biological diversity. Invertebrate grazer densities do not show any significant negative correlation with microalgal abundances but rather a positive correlation with eukaryotic microalgae. Shared environmental preferences and a positive effect of grazing are the proposed mechanisms to explain these correlations. Most microalgae found in this study form colonies (<\u202f10 cells, or >\u202f25\u202fµm), which may protect them against invertebrate grazing. This finding rather indicates grazing as a positive control on eukaryotic microalgae by nutrient recycling. Density differences between the eukaryotic microalgae and prokaryotic cyanobacteria and their high distinction in redundancy (RDA) and principal component (PCA) analyses indicate that these two groups are in strong contrast. Eukaryotic microalgae occurred mainly in unstable cryoconite holes with high sediment loads, high N\u202f:\u202fP ratios, and a high impact of nutrient input by bird guano, as a proxy for nutrients. In these environments autochthonous nitrogen fixation appears to be negligible. Selective wind transport of Oscillatoriales via soil and dust particles is proposed to explain their dominance in cryoconites further away from the glacier margins. We propose that, for the studied glaciers, nutrient levels related to recycling of limiting nutrients are the main factor driving variation in the community structure of microalgae and grazers.",
+          "keywords": [
+            "container",
+            "ship",
+            "trade",
+            "statistic"
+          ],
+          "license": "CC-BY-NC-4.0",
+          "publication_date": "2016-02-03T00:00:00.000Z",
+          "publication_type": "other",
+          "title": "Controls on microalgal community structures in cryoconite holes upon high-Arctic glaciers, Svalbard",
+          "upload_type": "publication"
+        }
+      },
+      "zenodo_sandbox": {
+        "metadata": {
+          "access_right": "open",
+          "communities": [
+            {
+              "identifier": "o2r"
+            }
+          ],
+          "creators": [
+            {
+              "affiliation": "Centre for Polar Ecology, Faculty of Science, University of South Bohemia, České Budějovice, Czech Republic",
+              "name": "T. R. Vonnahme",
+              "orcid": ""
+            },
+            {
+              "affiliation": "",
+              "name": "M. Devetter",
+              "orcid": ""
+            },
+            {
+              "affiliation": "Department of Ecology, Charles University, Prague, Czech Republic",
+              "name": "J. D. Žárský",
+              "orcid": ""
+            },
+            {
+              "affiliation": "British Antarctic Survey, Cambridge, UK",
+              "name": "M. Šabacká",
+              "orcid": ""
+            },
+            {
+              "affiliation": "Institute of Botany, Academy of the Science of the Czech Republic, Třeboň, Czech Republic",
+              "name": "J. Elster",
+              "orcid": ""
+            }
+          ],
+          "description": "Glaciers are known to harbor surprisingly complex ecosystems. On their surface, distinct cylindrical holes filled with meltwater and sediments are considered hot spots for microbial life. The present paper addresses possible biological interactions within the community of prokaryotic cyanobacteria and eukaryotic microalgae (microalgae) and relations to their potential grazers, such as tardigrades and rotifers, additional to their environmental controls. Svalbard glaciers with substantial allochthonous input of material from local sources reveal high microalgal densities. Small valley glaciers with high sediment coverages and high impact of birds show high biomasses and support a high biological diversity. Invertebrate grazer densities do not show any significant negative correlation with microalgal abundances but rather a positive correlation with eukaryotic microalgae. Shared environmental preferences and a positive effect of grazing are the proposed mechanisms to explain these correlations. Most microalgae found in this study form colonies (<\u202f10 cells, or >\u202f25\u202fµm), which may protect them against invertebrate grazing. This finding rather indicates grazing as a positive control on eukaryotic microalgae by nutrient recycling. Density differences between the eukaryotic microalgae and prokaryotic cyanobacteria and their high distinction in redundancy (RDA) and principal component (PCA) analyses indicate that these two groups are in strong contrast. Eukaryotic microalgae occurred mainly in unstable cryoconite holes with high sediment loads, high N\u202f:\u202fP ratios, and a high impact of nutrient input by bird guano, as a proxy for nutrients. In these environments autochthonous nitrogen fixation appears to be negligible. Selective wind transport of Oscillatoriales via soil and dust particles is proposed to explain their dominance in cryoconites further away from the glacier margins. We propose that, for the studied glaciers, nutrient levels related to recycling of limiting nutrients are the main factor driving variation in the community structure of microalgae and grazers.",
+          "keywords": [
+            "container",
+            "ship",
+            "trade",
+            "statistic"
+          ],
+          "license": "CC-BY-NC-4.0",
+          "publication_date": "2016-02-03T00:00:00.000Z",
+          "publication_type": "other",
+          "title": "Controls on microalgal community structures in cryoconite holes upon high-Arctic glaciers, Svalbard",
+          "upload_type": "publication"
+        }
+      }
+    },
+    "substituted": false,
+    "compendium": false,
+    "bag": false,
+    "candidate": false,
+    "jobs": [],
+    "created": ISODate("2018-03-07T11:22:08.578Z"),
     "__v": 0
   }
 
