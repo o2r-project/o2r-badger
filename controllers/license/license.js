@@ -117,7 +117,7 @@ exports.getBadgeFromReference = (req, res) => {
         .then(getLicenseFromCompendium)
         .then(sendResponse)
         .then((passon) => {
-            debug('Completed generating peer-review badge for %s', passon.id);
+            debug('Completed generating licence badge for %s', passon.id);
             //done(passon.id, null);
         })
         .catch(err => {
@@ -219,7 +219,7 @@ function getLicenseFromDOAJ(passon) {
         //todo: replace "if" with "multiple services" implementation
         if (passon.osiCode === 'unknown' && passon.odData === 'unknown' && passon.odText === 'unknown') {
             let requestURL = config.ext.doajArticles + encodeURIComponent('doi:' + passon.id);
-            debug('Fetching review status from %s with URL', config.ext.doajArticles, requestURL);
+            debug('Fetching licence from %s with URL', config.ext.doajArticles, requestURL);
 
             //request DOIJ API to get license
             //e.g. https://doaj.org/api/v1/search/articles/doi%3A10.3390%2Frs2081892
@@ -255,7 +255,7 @@ function getLicenseFromDOAJ(passon) {
 
 function sendResponse(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Sending badge for review status code %s, data %s, text %s', passon.osiCode, passon.odData, passon.odText);
+        debug('Sending badge for licence code %s, data %s, text %s', passon.osiCode, passon.odData, passon.odText);
 
         if (typeof passon.osiCode === 'undefined' ||
             typeof passon.odData === 'undefined' ||
