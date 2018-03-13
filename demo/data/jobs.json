@@ -49,7 +49,7 @@
     "_id": ObjectId("02911f00dd0a4d96be0ad006"),
     "createdAt": ISODate("2017-08-21T14:31:27.473Z"),
     "updatedAt": ISODate("2017-08-21T14:31:32.640Z"),
-    "status": "failure",
+    "status": "success",
     "user": "0000-0001-6230-4374",
     "compendium_id": "DzCxr",
     "id": "UBcdF",
