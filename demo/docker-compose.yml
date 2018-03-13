@@ -22,13 +22,14 @@ volumes:
 services:
   mongodb:
     image: mongo:3.4
-    command: "--replSet rso2r"
 
   configmongodb:
     image: mongo:3.4
     depends_on:
       - mongodb
-    command: bash -c "sleep 5; mongo --verbose --host mongodb --eval 'printjson(rs.initiate()); printjson(rs.conf()); printjson(rs.status()); printjson(rs.slaveOk());'"
+    volumes:
+      - ./data:/data
+    command: bash -c "sleep 5; mongoimport --verbose --host mongodb --db muncher --collection compendia --type json --file data/compendia.json --jsonArray && mongoimport --verbose --host mongodb --db muncher --collection jobs --type json --file data/jobs.json --jsonArray"
 
   mongoadmin:
     image: adicom/admin-mongo:latest
@@ -57,6 +58,13 @@ services:
       - DEBUG=*,-mquery,-express:*,-express-session,-body-parser:*
       - "MUNCHER_META_TOOL_CONTAINER=o2rproject/o2r-meta:5c12559"
 
+  badger:
+    image: o2rproject/o2r-badger:2.1.0
+    restart: unless-stopped
+    environment:
+      - BADGER_O2R_HOST=http://muncher:8080
+      - DEBUG=*,-express:*,-body-parser:*
+
   webserver:
     image: nginx:latest
     restart: unless-stopped
@@ -64,6 +72,7 @@ services:
       - muncher
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./html:/etc/nginx/html/index.html:ro"
     ports:
       - "80:80"
 
