@@ -42,7 +42,7 @@ services:
       - "1234:1234"
 
   muncher:
-    image: o2rproject/o2r-muncher:0.15.0
+    image: muncher:badger-demo
     restart: unless-stopped
     depends_on:
       - configmongodb
@@ -59,7 +59,7 @@ services:
       - "MUNCHER_META_TOOL_CONTAINER=o2rproject/o2r-meta:5c12559"
 
   badger:
-    image: o2rproject/o2r-badger:2.1.0
+    image: badger:demo
     restart: unless-stopped
     environment:
       - BADGER_O2R_HOST=http://muncher:8080
