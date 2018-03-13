@@ -87,7 +87,7 @@ exports.getBadgeFromReference = (req, res) => {
     let id = req.params.id;
     let extended;
 
-    debug('Handling badge generation for id %s', req.params.id);
+    debug('Handling spatial badge generation for id %s', req.params.id);
 
     if (typeof req.params.extended !== 'undefined') {
         extended = req.params.extended;
@@ -183,6 +183,7 @@ function getCenterFromData(passon) {
             bbox = passon.body.metadata.o2r.spatial.union.geojson.bbox;
             debug('Bounding box is %s, %s, %s, %s', bbox[0], bbox[1], bbox[2], bbox[3]);
         } catch (err) {
+            debug('Metadata: %O:', passon.body);
             err.badgeNA = true;
             err.msg = 'o2r compendium does not contain spatial information (bbox)';
             reject(err);
