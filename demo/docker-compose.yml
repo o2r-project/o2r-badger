@@ -16,9 +16,6 @@
 ---
 version: '2'
 
-volumes:
-  o2rvol: {}
-
 services:
   mongodb:
     image: mongo:3.4
@@ -31,32 +28,25 @@ services:
       - ./data:/data
     command: bash -c "sleep 5; mongoimport --verbose --host mongodb --db muncher --collection compendia --type json --file data/compendia.json --jsonArray && mongoimport --verbose --host mongodb --db muncher --collection jobs --type json --file data/jobs.json --jsonArray"
 
-  mongoadmin:
-    image: adicom/admin-mongo:latest
-    depends_on:
-      - mongodb
-    environment:
-      - DB_HOST=mongodb
-      - CONN_NAME=Local
-    ports:
-      - "1234:1234"
+#  mongoadmin:
+#    image: adicom/admin-mongo:latest
+#    depends_on:
+#      - mongodb
+#    environment:
+#      - DB_HOST=mongodb
+#      - CONN_NAME=Local
+#    ports:
+#      - "1234:1234"
 
   muncher:
     image: muncher:badger-demo
     restart: unless-stopped
     depends_on:
       - configmongodb
-    volumes:
-      - o2rvol:/tmp/o2r
-      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - "MUNCHER_MONGODB=mongodb://mongodb"
       - MUNCHER_PORT=8080
-      - MUNCHER_VOLUME=referenceimplementation_o2rvol
-      - MUNCHER_CONTAINER_USER=root
-      - MUNCHER_CONTAINERIT_USER=root
       - DEBUG=*,-mquery,-express:*,-express-session,-body-parser:*
-      - "MUNCHER_META_TOOL_CONTAINER=o2rproject/o2r-meta:5c12559"
 
   badger:
     image: badger:demo

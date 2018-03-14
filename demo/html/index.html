@@ -6,22 +6,43 @@
 <body>
 
 <h1>Muncher metadata</h1>
-<h1>Extender installation</h1>
+
+<h1>Creating the reproducibilty package</h1>
+<p>To </p>
+
+<p>Then upload the file <code>badger_demo.zip</code> to the Zenodo Sanbox repository at </p>
+
+
+<h1>Reproduction instructions</h1>
+
+<h2>Makefile</h2>
+
+<p>Run <code>make reproduce</code> to automatically download and run stable images of the o2r-badger and o2r-muncher and the o2r-extender Chrome extension. </p>
+
+
+<h2>Extender installation</h2>
+
+<pre><code>- Open `chrome://extensions/` in Chrome,
+- make sure that "Developer mode" in the top-right corner is enabled,
+- click "Load unpacked extension..."
+- and select the `extension` directory of the downloaded o2r-extender directory.
+</code></pre>
+
 
 <p>Open the extender options by right clicking the extender icon and selecting <em>options</em>. Then change the setting <code>Badge Entpoint</code> to <code>http://localhost/api/1.0/badge/</code></p>
 
 <h1>Supported research websites</h1>
 
 <ul>
-    <li><a href="https://www.plos.org/">PLOS</a>: Partially supported, no filter (reason: technical problems with the PLOS JS framework)</li>
+    <li><a href="https://www.plos.org/">PLOS</a></li>
 
-    <li><a href="https://scholar.google.de/">Google Scholar</a>: Partially supported, no big badges (reason: no detail page)</li>
+    <li><a href="https://scholar.google.de/">Google Scholar</a></li>
 
-    <li><a href="https://academic.microsoft.com/">MS Academic Search</a>: Fully supported</li>
+    <li><a href="https://academic.microsoft.com/">MS Academic Search</a></li>
 
     <li><a href="https://www.doaj.org">DOAJ</a>: Fully supported</li>
 
-    <li><a href="https://www.scienceopen.com/">ScienceOpen</a>: Fully supported</li>
+    <li><a href="https://www.scienceopen.com/">ScienceOpen</a></li>
 </ul>
 
 </body>
