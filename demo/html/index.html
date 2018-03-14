@@ -8,9 +8,20 @@
 <h1>Muncher metadata</h1>
 
 <h1>Creating the reproducibilty package</h1>
-<p>To </p>
+<p>Run <code>make create_package</code> to generate a package containing the required components for badger demo.
 
-<p>Then upload the file <code>badger_demo.zip</code> to the Zenodo Sanbox repository at </p>
+<p>The make rule <code>create_package</code> will execute the following steps:</p>
+<ul>
+    <li> Download stable versions of the o2r-badger, o2r-muncher, o2r-extender and required dependencies</li>
+    <li> Build an Docker image of the o2r-badger and o2r-muncher</li>
+    <li> Save the Docker images and the source code in a single zip file</li>
+    <li> Cleanup the downloaded files</li>
+</ul>
+
+
+</p>
+
+<p>Then upload the file <code>badger_demo.zip</code> to a Zenodo Sandbox repository</p>
 
 
 <h1>Reproduction instructions</h1>
@@ -22,16 +33,21 @@
 
 <h2>Extender installation</h2>
 
-<pre><code>- Open `chrome://extensions/` in Chrome,
-- make sure that "Developer mode" in the top-right corner is enabled,
-- click "Load unpacked extension..."
-- and select the `extension` directory of the downloaded o2r-extender directory.
-</code></pre>
+<ul>
+    <li>Open <code>chrome://extensions/</code> in Chrome, </li>
+    <li>make sure that "Developer mode" in the top-right corner is enabled, </li>
+    <li>click "Load unpacked extension..." </li>
+    <li>and select the `extension` directory of the downloaded o2r-extender directory. </li>
+</ul>
 
 
-<p>Open the extender options by right clicking the extender icon and selecting <em>options</em>. Then change the setting <code>Badge Entpoint</code> to <code>http://localhost/api/1.0/badge/</code></p>
+<p>Open the extender options by right clicking the new "o2r" extension icon and selecting <em>options</em>. Then change the setting <code>Badge Entpoint</code> to <code>http://localhost/api/1.0/badge/</code></p>
 
-<h1>Supported research websites</h1>
+<p> When visiting one of the supported websites make sure to allow mixed content in Chrome: Select "Load unsafe scripts" by clicking the shield icon in the address bar ([detailed explanation](https://pearsonnacommunity.force.com/support/s/article/ka6d00000019KVGAA2/How-to-display-mixed-content-with-Google-Chrome-Internet-Explorer-or-Firefox-1408394589290))
+
+</p>
+
+<h1>Then visit one of the following research websites:</h1>
 
 <ul>
     <li><a href="https://www.plos.org/">PLOS</a></li>
