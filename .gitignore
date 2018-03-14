@@ -5,3 +5,5 @@ launch.json
 .idea
 .vscode
 controllers/location/index.html
+demo/badger_demo.zip
+demo/badger_demo/
