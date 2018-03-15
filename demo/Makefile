@@ -14,8 +14,7 @@ create_package:
 	zip -r badger_demo.zip package o2r-extender o2r-badger o2r-muncher -x *.git* */node_modules/**\*;	rm -rf package/ o2r-badger/ o2r-muncher/ o2r-extender/;
 
 reproduce:
-	wget https://sandbox.zenodo.org/record/12345/files/badger_demo.zip;	unzip badger_demo.zip -d  badger_demo;	\
+	wget https://zenodo.org/record/1199272/files/badger_demo.zip;	unzip badger_demo.zip -d  badger_demo;	\
 	docker import badger_demo/package/muncher.tar;	docker import badger_demo/package/mongo.tar;	\
 	docker import badger_demo/package/badger.tar;	docker import badger_demo/package/nginx.tar;	\
-	docker-compose up;	\
-	xdg-open http://localhost/index.html
+	docker-compose up;

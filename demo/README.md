@@ -1,6 +1,6 @@
 # Badger demo
 
-This repository contains demo data and the required software to enhance research websites with badges for reproducible research papers.
+This repository contains demo data and means to download the required software to enhance research websites with badges for reproducible research papers.
 
 ## Requirements
 
@@ -37,3 +37,6 @@ The required services will be started via `docker-compose` and are available at 
 Visit `http://localhost/index.html` for instructions how to install and configure the o2r-extender Chrome extension.
 
 
+### Cleanup
+
+To stop the services and reset the repository to its previous state, press Ctrl-C or run `docker-compose down`. Then remove the `badger_demo` directory and the `badger_demo.zip` file.
