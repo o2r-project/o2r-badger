@@ -1,6 +1,6 @@
 create_package:
 	mkdir package;	\
-	git clone -n https://github.com/LukasLohoff/o2r-badger;	cd o2r-badger;	git checkout 50e3b2d3c9dcebb423adb7676d292bdea4b3d2c8;	\
+	git clone -n https://github.com/LukasLohoff/o2r-badger;	cd o2r-badger;	git checkout 58b95b3fedbd68866681e3b7d4aea68ff119c973;	\
 	docker build -t badger:demo -f Dockerfile.local .;	cd ..;	docker save badger:demo > package/badger.tar; \
 		
 	git clone -n https://github.com/LukasLohoff/o2r-extender;	cd o2r-extender;	\
