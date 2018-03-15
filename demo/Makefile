@@ -1,6 +1,6 @@
 create_package:
 	mkdir package;	\
-	git clone -n https://github.com/LukasLohoff/o2r-badger;	cd o2r-badger;	git checkout a252a1f12ba4a7e51b0029d10de4f6da192a4245;	\
+	git clone -n https://github.com/LukasLohoff/o2r-badger;	cd o2r-badger;	git checkout 50e3b2d3c9dcebb423adb7676d292bdea4b3d2c8;	\
 	docker build -t badger:demo -f Dockerfile.local .;	cd ..;	docker save badger:demo > package/badger.tar; \
 		
 	git clone -n https://github.com/LukasLohoff/o2r-extender;	cd o2r-extender;	\
@@ -14,7 +14,7 @@ create_package:
 	zip -r badger_demo.zip package o2r-extender o2r-badger o2r-muncher -x *.git* */node_modules/**\*;	rm -rf package/ o2r-badger/ o2r-muncher/ o2r-extender/;
 
 reproduce:
-	unzip badger_demo.zip -d  badger_demo;	\
+	wget https://sandbox.zenodo.org/record/12345/files/badger_demo.zip;	unzip badger_demo.zip -d  badger_demo;	\
 	docker import badger_demo/package/muncher.tar;	docker import badger_demo/package/mongo.tar;	\
 	docker import badger_demo/package/badger.tar;	docker import badger_demo/package/nginx.tar;	\
 	docker-compose up;	\
