@@ -17,7 +17,7 @@ Usage
 
 ### Creating the reproducibilty package
 
-Run `make create_package` to generate a package containing the required components for badger demo.
+Run `make create_package` from this directory to generate a package containing the required components for badger demo.
 
 This will execute the following steps:
 
@@ -34,7 +34,7 @@ Run `make reproduce` to automatically download and run stable images of the o2r-
 
 The required services will be started via `docker-compose` and are available at `http://localhost`. 
 
-Visit `http://localhost/index.html` for instructions how to install and configure the o2r-extender Chrome extension.
+Visit [http://localhost/index.html](http://localhost/index.html) for instructions how to install and configure the o2r-extender Chrome extension.
 
 
 ### Cleanup

@@ -4,7 +4,7 @@ create_package:
 	docker build -t badger:demo -f Dockerfile.local .;	cd ..;	docker save badger:demo > package/badger.tar; \
 		
 	git clone -n https://github.com/LukasLohoff/o2r-extender;	cd o2r-extender;	\
-	git checkout 38dc00654fc2b1097a459c428eedc030ee3bda8b;	cd ..	\
+	git checkout b1aa87e94655192ae5cb38e3a2fed01f7142e1e9;	cd ..	\
 	
 	git clone -n https://github.com/o2r-project/o2r-muncher; 	cd o2r-muncher;	git checkout 0e2a5cfff68a6adeddcf43d2df42fde52849e6fc;	\
 	docker build -t muncher:badger-demo .;	cd ..;	docker save muncher:badger-demo > package/muncher.tar; \
