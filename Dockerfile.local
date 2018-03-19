@@ -36,6 +36,7 @@ COPY config config
 COPY controllers controllers
 COPY index.js index.js
 COPY package.json package.json
+COPY lib lib
 
 RUN npm install --production
 EXPOSE 8089

@@ -87,7 +87,7 @@ exports.getBadgeFromReference = (req, res) => {
     let id = req.params.id;
     let extended;
 
-    debug('Handling badge generation for id %s', req.params.id);
+    debug('Handling spatial badge generation for id %s', req.params.id);
 
     if (typeof req.params.extended !== 'undefined') {
         extended = req.params.extended;
@@ -177,12 +177,13 @@ function getCenterFromData(passon) {
             return;
         }
 
-        let coordinates = passon.body;
+        let bbox;
 
         try {
-            let coords = coordinates.metadata.o2r.spatial.spatial.union.geojson.bbox;
-            debug('Bounding box is %s, %s, %s, %s', coords[0], coords[1], coords[2], coords[3]);
+            bbox = passon.body.metadata.o2r.spatial.union.geojson.bbox;
+            debug('Bounding box is %s, %s, %s, %s', bbox[0], bbox[1], bbox[2], bbox[3]);
         } catch (err) {
+            debug('Metadata: %O:', passon.body);
             err.badgeNA = true;
             err.msg = 'o2r compendium does not contain spatial information (bbox)';
             reject(err);
@@ -190,7 +191,7 @@ function getCenterFromData(passon) {
         }
 
         //calculate the center of the polygon
-        let result = calculateMeanCenter(coordinates);
+        let result = calculateMeanCenter(bbox);
         passon.latitude = result[0];
         passon.longitude = result[1];
         fulfill(passon)
@@ -347,9 +348,7 @@ function sendBigBadge(passon) {
  * @desc calculate the mean center of a polygon
  * @param json geojson file containing the bbox of an area
  */
-function calculateMeanCenter(json) {
-	let bbox = json.metadata.o2r.spatial.spatial.union.geojson.bbox;
-
+function calculateMeanCenter(bbox) {
 	let x1 = parseFloat(bbox[1]);
 	let y1 = parseFloat(bbox[0]);
 	let x2 = parseFloat(bbox[3]);

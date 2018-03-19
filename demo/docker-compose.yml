@@ -1,0 +1,76 @@
+# (C) Copyright 2017 o2r project. https://o2r.info
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+---
+version: '2'
+
+volumes:
+  o2rvol: {}
+
+services:
+  mongodb:
+    image: mongo:3.4
+
+  configmongodb:
+    image: mongo:3.4
+    depends_on:
+      - mongodb
+    volumes:
+      - ./data:/data
+    command: bash -c "sleep 5; mongoimport --verbose --host mongodb --db muncher --collection compendia --type json --file data/compendia.json --jsonArray && mongoimport --verbose --host mongodb --db muncher --collection jobs --type json --file data/jobs.json --jsonArray"
+
+  mongoadmin:
+    image: adicom/admin-mongo:latest
+    depends_on:
+      - mongodb
+    environment:
+      - DB_HOST=mongodb
+      - CONN_NAME=Local
+    ports:
+      - "1234:1234"
+
+  muncher:
+    image: muncher:badger-demo
+    restart: unless-stopped
+    depends_on:
+      - configmongodb
+    volumes:
+      - o2rvol:/tmp/o2r
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - "MUNCHER_MONGODB=mongodb://mongodb"
+      - MUNCHER_PORT=8080
+      - MUNCHER_VOLUME=referenceimplementation_o2rvol
+      - DEBUG=*,-mquery,-express:*,-express-session,-body-parser:*
+      - "MUNCHER_META_TOOL_CONTAINER=o2rproject/o2r-meta:5c12559"
+
+  badger:
+    image: badger:demo
+    restart: unless-stopped
+    environment:
+      - BADGER_O2R_HOST=http://muncher:8080
+      - DEBUG=*,-express:*,-body-parser:*
+
+  webserver:
+    image: nginx:latest
+    restart: unless-stopped
+    depends_on:
+      - muncher
+    volumes:
+      - "./nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./html:/etc/nginx/html/index.html:ro"
+    ports:
+      - "80:80"
+

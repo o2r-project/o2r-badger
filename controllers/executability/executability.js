@@ -141,7 +141,6 @@ exports.getBadgeFromReference = (req, res) => {
 
 function sendResponse(passon) {
     return new Promise((fulfill, reject) => {
-        debug('Sending response for status %s', passon.jobStatus);
 
         try {
             passon.jobStatus = passon.body.status;
@@ -151,6 +150,8 @@ function sendResponse(passon) {
             reject(err);
             return;
         }
+        debug('Sending response for status %s', passon.jobStatus);
+
 
         let badgeString;
         // request options

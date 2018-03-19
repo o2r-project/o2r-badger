@@ -61,7 +61,7 @@ function getCompendiumID(passon) {
 function getCompendium(passon) {
     return new Promise((fulfill, reject) => {
         let requestURL = config.ext.o2r + '/api/v1/compendium/' + passon.compendiumID;
-        debug('Fetching license status for compendium %s from %s', passon.compendiumID, requestURL);
+        debug('Fetching metadata for compendium %s from %s', passon.compendiumID, requestURL);
         passon.service = 'o2r';
 
         request({

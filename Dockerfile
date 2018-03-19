@@ -26,7 +26,7 @@ RUN apk add --no-cache \
   && wget -O /sbin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 \
   && chmod +x /sbin/dumb-init \
   # Fix phantomjs bin for svg2png (see https://github.com/dustinblackman/phantomized)
-  && curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1/dockerized-phantomjs.tar.gz" | tar xz -C / \
+  && curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1a/dockerized-phantomjs.tar.gz" | tar xz -C / \
   && apk del \
     curl \
     wget \
