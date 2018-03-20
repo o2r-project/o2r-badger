@@ -21,25 +21,25 @@ volumes:
 
 services:
   mongodb:
-    image: mongo:3.4
+    image: mongo:badger-demo
 
   configmongodb:
-    image: mongo:3.4
+    image: mongo:badger-demo
     depends_on:
       - mongodb
     volumes:
       - ./data:/data
     command: bash -c "sleep 5; mongoimport --verbose --host mongodb --db muncher --collection compendia --type json --file data/compendia.json --jsonArray && mongoimport --verbose --host mongodb --db muncher --collection jobs --type json --file data/jobs.json --jsonArray"
 
-  mongoadmin:
-    image: adicom/admin-mongo:latest
-    depends_on:
-      - mongodb
-    environment:
-      - DB_HOST=mongodb
-      - CONN_NAME=Local
-    ports:
-      - "1234:1234"
+  #mongoadmin:
+  #  image: adicom/admin-mongo:latest
+  #  depends_on:
+  #    - mongodb
+  #  environment:
+  #    - DB_HOST=mongodb
+  #    - CONN_NAME=Local
+  #  ports:
+  #    - "1234:1234"
 
   muncher:
     image: muncher:badger-demo
@@ -62,9 +62,10 @@ services:
     environment:
       - BADGER_O2R_HOST=http://muncher:8080
       - DEBUG=*,-express:*,-body-parser:*
+      - DISABLE_TRACKING=true
 
   webserver:
-    image: nginx:latest
+    image: nginx:badger-demo
     restart: unless-stopped
     depends_on:
       - muncher
