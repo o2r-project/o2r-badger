@@ -22,7 +22,9 @@ create_package:
 	docker save nginx:badger-demo > images/nginx.tar; \
 
 	zip -r badger_demo.zip images o2r-extender o2r-badger o2r-muncher -x *.git* */node_modules/**\*; \
-	cd o2r-badger/demo; zip ../../badger_demo.zip README.md Makefile docker-compose.yml nginx.conf html; \
+	cd o2r-badger/demo; \
+	zip ../../badger_demo.zip README.md Makefile docker-compose.yml nginx.conf; \
+	zip -r ../../badger_demo.zip html; \
 
 	rm -rf images/ o2r-badger/ o2r-muncher/ o2r-extender/; \
 	docker rmi badger:demo muncher:badger-demo mongo:badger-demo nginx:badger-demo; \
