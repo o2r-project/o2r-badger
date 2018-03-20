@@ -5,46 +5,49 @@
 </head>
 <body>
 
-<h1>Badger demo implementation</h1>
+<h1>Badger demo</h1>
+
+<h2>About</h2>
+
+<p></p>Learn more about this demo package in the repository at</p>
+
+<p><a href="https://doi.org/10.5281/zenodo.1199272"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1199272.svg" alt="DOI"></a></p>
 
 <h2>Extender installation</h2>
 
-<ul>
-    <li>First, install the Chrome extension:</li>
-    <ul>
-        <li>Open <code>chrome://extensions/</code> in Chrome or select "More tools -> Extensions" in the menu , </li>
-        <li>make sure that "Developer mode" in the top-right corner is enabled, </li>
-        <li>click "Load unpacked extension..." </li>
-        <li>and select the "extension" directory of o2r-extender (<code>o2r-badger/demo/badger_demo/o2r-extender/extension</code>) directory. </li>
-    </ul>
-    <li>Then follow these instructions to configure the o2r-extender to run in a local environment:</li>
-    <ul>
-        <li>Open the extender options by right clicking the new "o2r" extension icon and selecting <em>options</em>. Then change the setting <code>Badge Entpoint</code> to <code>http://localhost/api/1.0/badge/</code></li>
-        <li>When visiting one of the supported websites make sure to allow mixed content in Chrome: Select "Load unsafe scripts" by clicking the shield icon in the address bar (<a href="https://pearsonnacommunity.force.com/support/s/article/ka6d00000019KVGAA2/How-to-display-mixed-content-with-Google-Chrome-Internet-Explorer-or-Firefox-1408394589290">detailed explanation</a>)
-    </ul>
+<ol>
+    <li><strong>Install the <em>o2r-extender</em> Chrome extension</strong></li>
+    <ol>
+        <li>Open <code>chrome://extensions/</code> in Chrome or select "More tools > Extensions" in the menu,</li>
+        <li>make sure that "Developer mode" in the top-right corner is enabled,</li>
+        <li>click "Load unpacked extension...", and</li>
+        <li>select the "extension" directory of o2r-extender from the demo package: <code>badger_demo/o2r-extender/extension</code></li>
+    </ol>
+    <li><strong>Configure <em>o2r-extender</em> to use local <em>o2r-badger</em></strong></li>
+    <ol>
+        <li>Open the extender options by right clicking the new "o2r" icon and selecting <em>options</em>. Then change the setting <code>Badge Endpoint</code> to <code>http://localhost/api/1.0/badge/</code></li>
+        <li>Allow mixed content in Chrome when using the extension on one of the supported websites: Select "Load unsafe scripts" by clicking the shield icon in the address bar (<a href="https://pearsonnacommunity.force.com/support/s/article/ka6d00000019KVGAA2/How-to-display-mixed-content-with-Google-Chrome-Internet-Explorer-or-Firefox-1408394589290">detailed explanation</a>).
+    </ol>
 
-</ul>
-
-
-</p>
-
-<p>Then visit one of the following research websites:</p>
-
-<ul>
-    <li><a href="https://www.plos.org/search?q=">PLOS</a></li>
-
-    <li><a href="https://scholar.google.de/">Google Scholar</a></li>
-
-    <li><a href="https://academic.microsoft.com/">MS Academic Search</a></li>
-
-    <li><a href="https://www.doaj.org">DOAJ</a></li>
-
-    <li><a href="https://www.scienceopen.com/">ScienceOpen</a></li>
-</ul>
+</ol>
 
 <h2>Demo compendia</h2>
 
-<p>This repository comes with demo compendia to to support a few selected research papers.</p>
+<p>This repository comes with demo compendia to to support demonstrations for selected research papers and search terms.</p>
+
+<h3>Research websites</h3>
+
+<p>Then visit one of the following research websites and search for papers to learn about their badges:</p>
+
+<ul>
+    <li><a href="https://scholar.google.de/">Google Scholar</a> with example search for <a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=air+quality&btnG=">"air quality"</a></li>
+    <li><a href="https://academic.microsoft.com/">MS Academic Search</a> with demo paper <a href="https://academic.microsoft.com/#/search?iq=@Controls%20on%20microalgal%20community%20structures%20in%20cryoconite%20holes%20upon%20high-Arctic%20glaciers%2C%20Svalbard@&q=Controls%20on%20microalgal%20community%20structures%20in%20cryoconite%20holes%20upon%20high-Arctic%20glaciers%2C%20Svalbard&filters=&from=0&sort=0">"Controls on microalgal community structures in cryoconite holes upon high-Arctic glaciers, Svalbard"</a></li>
+    <li><a href="https://www.doaj.org">DOAJ</a> with example search for <a href="https://doaj.org/search?source=%7B%22query%22%3A%7B%22filtered%22%3A%7B%22filter%22%3A%7B%22bool%22%3A%7B%22must%22%3A%5B%7B%22term%22%3A%7B%22_type%22%3A%22article%22%7D%7D%5D%7D%7D%2C%22query%22%3A%7B%22query_string%22%3A%7B%22query%22%3A%22air%20quality%22%2C%22default_operator%22%3A%22AND%22%7D%7D%7D%7D%2C%22from%22%3A0%2C%22size%22%3A10%7D">"air quality"</a> and demo paper <a href="https://doaj.org/search?source=%7B%22query%22%3A%7B%22query_string%22%3A%7B%22query%22%3A%22weighting%20regional%20climate%20models%22%2C%22default_operator%22%3A%22AND%22%7D%7D%2C%22from%22%3A0%2C%22size%22%3A10%7D">"A Bayesian posterior predictive framework for weighting ensemble regional climate models"</a></li>
+    <li><a href="https://www.scienceopen.com/">ScienceOpen</a> with demo paper <a href="https://www.scienceopen.com/search#%7B%22id%22%3A%22%22%2C%22isExactMatch%22%3Atrue%2C%22context%22%3Anull%2C%22kind%22%3A77%2C%22order%22%3A0%2C%22orderLowestFirst%22%3Afalse%2C%22query%22%3A%22boreal%20soil%20carbon%22%2C%22filters%22%3A%5B%5D%7D">"Underestimation of boreal soil carbon stocks by mathematical soil carbon models linked to soil nutrient status"</a></li>
+    <li><a href="https://www.plos.org/search?q=">PLOS</a></li>
+</ul>
+
+<h3>Compendium metadata</h3>
 
 <p>The metadata for these compendia can be explored at the following links: </p>
 
@@ -69,26 +72,9 @@
     </ul>
 </ul>
 
-<h3>Links to research websites that list these compendia in their search engines:</h3>
+<h2>Stop demo</h2>
 
-<ul>
-    <li>Search results for "Air quality" </li>
-    <ul>
-        <li><a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=air+quality&btnG=">on Google Scholar</a></li>
-        <li><a href="https://doaj.org/search?source=%7B%22query%22%3A%7B%22filtered%22%3A%7B%22filter%22%3A%7B%22bool%22%3A%7B%22must%22%3A%5B%7B%22term%22%3A%7B%22_type%22%3A%22article%22%7D%7D%5D%7D%7D%2C%22query%22%3A%7B%22query_string%22%3A%7B%22query%22%3A%22air%20quality%22%2C%22default_operator%22%3A%22AND%22%7D%7D%7D%7D%2C%22from%22%3A0%2C%22size%22%3A10%7D">on DOAJ</a></li>
-    </ul>
-
-    <li>Papers from the o2r corpus</li>
-    <ul>
-        <li>"<a href="https://www.scienceopen.com/search#%7B%22id%22%3A%22%22%2C%22isExactMatch%22%3Atrue%2C%22context%22%3Anull%2C%22kind%22%3A77%2C%22order%22%3A0%2C%22orderLowestFirst%22%3Afalse%2C%22query%22%3A%22boreal%20soil%20carbon%22%2C%22filters%22%3A%5B%5D%7D">Underestimation of boreal soil carbon stocks by mathematical soil carbon models linked to soil nutrient status</a>" (ScienceOpen)</li>
-        <li>"<a href="https://doaj.org/search?source=%7B%22query%22%3A%7B%22query_string%22%3A%7B%22query%22%3A%22weighting%20regional%20climate%20models%22%2C%22default_operator%22%3A%22AND%22%7D%7D%2C%22from%22%3A0%2C%22size%22%3A10%7D">A Bayesian posterior predictive framework for weighting ensemble regional climate models</a>" (DOAJ)</li>
-        <li>"<a href="https://academic.microsoft.com/#/search?iq=@Controls%20on%20microalgal%20community%20structures%20in%20cryoconite%20holes%20upon%20high-Arctic%20glaciers%2C%20Svalbard@&q=Controls%20on%20microalgal%20community%20structures%20in%20cryoconite%20holes%20upon%20high-Arctic%20glaciers%2C%20Svalbard&filters=&from=0&sort=0">Controls on microalgal community structures in cryoconite holes upon high-Arctic glaciers, Svalbard</a>" (Microsoft Academic)</li>
-    </ul>
-</ul>
-
-<h2>Cleanup</h2>
-
-<p>To stop the services and reset the repository to its previous state, press Ctrl-C or run <code>docker-compose down</code>. Then remove the <code>badger_demo</code> directory and the <code>badger_demo.zip</code> file.</p>
+<p>To stop the services run either `make clean_up` or <code>docker-compose down -v</code>.</p>
 
 </body>
 </html> 
