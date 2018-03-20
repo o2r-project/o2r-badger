@@ -2,9 +2,10 @@
 
 [![](https://images.microbadger.com/badges/image/o2rproject/o2r-badger.svg)](https://microbadger.com/images/o2rproject/o2r-badger "Get your own image badge on microbadger.com")
 
-API for retrieving scalable badges for scientific publications. Used by the [o2r-extender](https://github.com/o2r-project/o2r-extender), which is a Chrome extension that integrates these badges into several research aggregators.
+API for retrieving scalable badges for scientific publications.
+ Used by the [o2r-extender](https://github.com/o2r-project/o2r-extender), which is a Chrome extension that integrates these badges into several research aggregators.
 
-Based on the [Badges for computational geoscience containers](https://zivgitlab.uni-muenster.de/geocontainer-badges) study project at ifgi.
+Based on the [_Badges for computational geoscience containers_](https://zivgitlab.uni-muenster.de/geocontainer-badges) study project at [ifgi](https://www.uni-muenster.de/Geoinformatics/en/index.html).
 We thank the [project team](#contributors) for their contributions for this project.
 
 ## Badges
@@ -65,7 +66,9 @@ npm install --production
 DEBUG=* npm start
 ```
 
-The badger is running and can be accessed via `http://localhost:8089/`. To display badges for common research aggregators, install the o2r-extender, a chrome extension. More info [here](https://github.com/o2r-project/o2r-extender/).
+The badger is running and can be accessed via `http://localhost:8089/`.
+ To display badges for common research aggregators, install the o2r-extender, a chrome extension.
+  More info [here](https://github.com/o2r-project/o2r-extender/).
 
 ### Examples
 
@@ -131,7 +134,7 @@ If the badger finds no data for a given DOI a grey "n/a" badge is returned:
 
 ![na badge](https://img.shields.io/badge/research%20location-n%2Fa-lightgrey.svg)
 
-If there is an unexpected error during execution, or if the services are not accessbile, an error will be returned:
+If there is an unexpected error during execution, or if the services are not accessible, an error will be returned:
 
 ```bash
 404 Not found
@@ -193,8 +196,7 @@ For tests run `npm test`.
 
 # Study project documentation (shortened)
 
-This work is based on the study project "Badges for computational geoscience containers", see [here](https://studium.uni-muenster.de/qisserver/rds?state=verpublish&status=init&vmfile=no&publishid=230703&moduleCall=webInfo&publishConfFile=webInfo&publishSubDir=veranstaltung) and the [original code repos](https://zivgitlab.uni-muenster.de/groups/geocontainer-badges).
-We thank the valuable contributions of the students in this project.
+This work is based on the study project "Badges for computational geoscience containers", see [here](https://studium.uni-muenster.de/qisserver/rds?state=verpublish&status=init&vmfile=no&publishid=230703&moduleCall=webInfo&publishConfFile=webInfo&publishSubDir=veranstaltung) and the [original code repositories](https://zivgitlab.uni-muenster.de/groups/geocontainer-badges).
 
 ## 1 Scalable badges (geocontainer-badges/scalability)
 
@@ -204,9 +206,11 @@ This project provides an API for retrieving a scalable badge as svg or png.
 
 This badge will provide the user information about where a research took place. 
 The base for receiving those information is a bounding box in json format.
-For the small badge, the mean center of the bounding box is calculated and sended via reverse geocoding to the geocoding service geonames.org. This service sends back
+For the small badge, the mean center of the bounding box is calculated and sent via reverse geocoding to the geocoding service [GeoNames](https://geonames.org).
+This service sends back
 the country and if available also the district. 
-For the extended badge, the spatial information can be requested via the o2r API /spatial/o2r/:id/extended. When requesting the API, the user receives a Leaflet Map 
+For the extended badge, the spatial information can be requested via the o2r API /spatial/o2r/:id/extended.
+When requesting the API, the user receives a Leaflet Map 
 where the bounding box of the research location is highlighted.
 
 ## 3 Executability badges (geocontainer-badges/executable-code)
@@ -219,7 +223,8 @@ The information about the executablility of a compendia are requested from the [
 
 The project's aim is to provide an API, which gives information about the licencing of a research compendium.
 
-The API is specified as: ```/api/1.0/badge/licence/:id/:extended?```. With ```:id``` specifying the ID of the research compendium and ```:extended``` is optional. If ```extended``` is given in the URL, the big badges are sent to the client. Otherwise, small badges from [shields.io](https://shields.io/) are the response.
+The API is specified as: ```/api/1.0/badge/licence/:id/:extended?```. With ```:id``` specifying the ID of the research compendium and ```:extended``` is optional.
+If ```extended``` is given in the URL, the big badges are sent to the client. Otherwise, small badges from [shields.io](https://shields.io/) are the response.
 For licences of code (software) the list of licences available at [Open Definition Licenses Service](http://licenses.opendefinition.org/#all-licenses)
 with this ```json``` [file](http://licenses.opendefinition.org/licenses/groups/osi.json) is provided.
 For licences of data and text of the research compendia the licences from [Open Definition](http://opendefinition.org/licenses/) is used
@@ -232,7 +237,8 @@ In this project we developed an API for retrieving badges which provide informat
 **API** to receive a release-badge for a compendium with a specific DOI (testing locally):
 **http://localhost:8089/api/1.0/badge/releasetime/:id/**
 
-with **id** being an URL-encoded DOI of an published compendium. To receive a "big badge" for a paper page, "extended" has to be added at the end of the API.
+with **id** being an URL-encoded DOI of an published compendium.
+To receive a "big badge" for a paper page, "extended" has to be added at the end of the API.
 
 The information about the release date are requested through the [crossref API](https://github.com/CrossRef/rest-api-doc/blob/master/rest_api.md). 
 
