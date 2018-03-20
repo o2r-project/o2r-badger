@@ -32,6 +32,13 @@ This will execute the following steps:
 
 Then manually upload the file `badger_demo.zip` to a suitable data repository.
 
+A short cut for developing the demo locally is
+
+```
+make create_images
+docker-compose up
+```
+
 ### Reproduction instructions
 
 Download the reproduction package from https://zenodo.org/record/1199272 unzip it.
