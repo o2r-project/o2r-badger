@@ -40,9 +40,6 @@ There are three options to get the badger running on your system.
 ### 1) with Docker, via Docker Hub
 
 ```bash
-docker pull o2rproject/o2r-badger
-
-# Start the badger:
 docker run -it -e DEBUG=* -p 8089:8089 o2rproject/o2r-badger
 ```
 
@@ -50,12 +47,11 @@ docker run -it -e DEBUG=* -p 8089:8089 o2rproject/o2r-badger
 
 First, clone the repository: `git clone https://github.com/o2r-project/o2r-badger`
 
-This project includes a `Dockerfile` which can be built with:
+This project includes a `Dockerfile` which can be built and started with:
 
 ```bash
-docker build -t badger -f Dockerfile.local .
+docker build -t badger .
 
-## Start the badger:
 docker run -it -e DEBUG=* -p 8089:8089 badger
 ```
 
@@ -66,11 +62,10 @@ git clone https://github.com/o2r-project/o2r-badger
 cd o2r-badger
 npm install --production
 
-# Start the badger:
 DEBUG=* npm start
 ```
 
-The badger is running and can be accessed via `http://localhost:8089/`. To display badges for common research aggregators, install the o2r-extender, a chrome extension. More info [here](https://github.com/o2r-project/o2r-extender/)
+The badger is running and can be accessed via `http://localhost:8089/`. To display badges for common research aggregators, install the o2r-extender, a chrome extension. More info [here](https://github.com/o2r-project/o2r-extender/).
 
 ### Examples
 
