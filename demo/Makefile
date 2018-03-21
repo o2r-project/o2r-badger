@@ -3,11 +3,11 @@ create_images:
 	git clone -n https://github.com/o2r-project/o2r-badger; \
 	cd o2r-badger; git checkout 5f54e81d0fd5c682dab07e2aa4dc0f2ec4d691c0; \
 	#git clone -n https://github.com/nuest/o2r-badger; \
-	#cd o2r-badger; git checkout 9723ab6d3171be0266250ebbd54c1f726d175ddb
+	#cd o2r-badger; git checkout 9723ab6d3171be0266250ebbd54c1f726d175ddb;	\
 	docker build -t badger:demo .; \
 	cd ..; \
-	git clone -n https://github.com/LukasLohoff/o2r-extender; cd o2r-extender; \
-	git checkout b1aa87e94655192ae5cb38e3a2fed01f7142e1e9; \
+	git clone -n https://github.com/o2r-project/o2r-extender; cd o2r-extender; \
+	git checkout 4b34c86fd9ef87727f988627ecbe386957d7c6f3; \
 	cd ..; \
 	git clone -n https://github.com/o2r-project/o2r-muncher; \
 	cd o2r-muncher;	git checkout 0e2a5cfff68a6adeddcf43d2df42fde52849e6fc;	\
