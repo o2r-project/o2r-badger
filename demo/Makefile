@@ -1,7 +1,7 @@
 create_images:
 	mkdir -p images; \
 	git clone -n https://github.com/o2r-project/o2r-badger; \
-	cd o2r-badger; git checkout a363dfb5fef9ec4d661be26b091f362a4145cf1a; \
+	cd o2r-badger; git checkout afe3dc639260c68c6603ec6ab5c54dfc43bf96aa; \
 	docker build -t badger:demo .; \
 	cd ..; \
 	git clone -n https://github.com/o2r-project/o2r-extender; cd o2r-extender; \
