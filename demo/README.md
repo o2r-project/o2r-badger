@@ -11,9 +11,7 @@ It includes a test dataset (see directory `./data`) and automated steps to build
 * Docker
 * docker-compose
 * git
-* zip 
-* unzip
-* wget
+* zip/unzip
 * Chrome or Chromium
 
 ## Usage
@@ -25,14 +23,14 @@ If you do not have `make` then manually execute the commands of the `create_pack
 
 This will execute the following steps:
 
-*   Download stable versions of [`o2r-badger`](https://github.com/o2r-project/o2r-badger), [`o2r-muncher`](https://github.com/o2r-project/o2r-muncher), and [`o2r-extender`](https://github.com/o2r-project/o2r-extender)
-*   Build Docker images of `o2r-badger` and `o2r-muncher`
-*   Save Docker images and the source code in a single zip file
-*   Remove the downloaded files and created Docker images
+* Download stable versions of [`o2r-badger`](https://github.com/o2r-project/o2r-badger), [`o2r-muncher`](https://github.com/o2r-project/o2r-muncher), and [`o2r-extender`](https://github.com/o2r-project/o2r-extender)
+* Build Docker images of `o2r-badger` and `o2r-muncher`
+* Save Docker images and the source code in a single zip file
+* Remove the downloaded files and created Docker images
 
 Then manually upload the file `badger_demo.zip` to a suitable data repository.
 
-A short cut for developing the demo locally is
+A shortcut for developing the demo locally is
 
 ```
 make create_images
@@ -41,9 +39,9 @@ docker-compose up
 
 ### Reproduction instructions
 
-Download the reproduction package from https://zenodo.org/record/1199272 unzip it.
+Download the reproduction package from https://zenodo.org/record/1199272 and unzip it.
 
-Run `make reproduce` to load images and run containers of `o2r-badger` and `o2r-muncher`.
+Run `make reproduce` to load images and start containers of `o2r-badger` and `o2r-muncher`.
 If you do not have `make` then manually execute the commands of the respective target in `Makefile`.
 
 The required services are started via `docker-compose`.
