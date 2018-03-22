@@ -46,3 +46,4 @@ reproduce:
 
 clean_up:
 	docker-compose down;
+	docker rmi --force badger:demo muncher:badger-demo mongo:badger-demo nginx:badger-demo;
