@@ -290,7 +290,9 @@ If you reference this project in scholarly communication, please use the citatio
 ```
 Nüst, Daniel, Lukas Lohoff, Lasse Einfeldt, Nimrod Gavish, Marlena Götza, Shahzeib T. Jaswal, Salman Khalid, et al. 2019. “Guerrilla Badges for Reproducible Geospatial Data Science (AGILE 2019 Short Paper).” EarthArXiv. June 19. doi:10.31223/osf.io/xtsqh.
 ```
- 
+
+Code archive: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1199272.svg)](https://doi.org/10.5281/zenodo.1199272)
+
 ## Licence
 
 This project is licensed under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
