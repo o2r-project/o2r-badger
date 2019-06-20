@@ -1,6 +1,6 @@
 # o2r badger
 
-[![](https://images.microbadger.com/badges/image/o2rproject/o2r-badger.svg)](https://microbadger.com/images/o2rproject/o2r-badger "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/o2rproject/o2r-badger.svg)](https://microbadger.com/images/o2rproject/o2r-badger "Get your own image badge on microbadger.com") 
 
 API for retrieving scalable badges for scientific publications.
  Used by the [o2r-extender](https://github.com/o2r-project/o2r-extender), which is a Chrome extension that integrates these badges into several research aggregators.
@@ -282,6 +282,14 @@ As you will notice currently the only service supported is DOAJ, with a DOI as i
 - Matthias Mohr
 - Daniel Nüst
 - Lukas Lohoff
+
+## How to cite
+
+If you reference this project in scholarly communication, please use the citations provided on EarthArxiv: https://doi.org/10.31223/osf.io/xtsqh
+
+```
+Nüst, Daniel, Lukas Lohoff, Lasse Einfeldt, Nimrod Gavish, Marlena Götza, Shahzeib T. Jaswal, Salman Khalid, et al. 2019. “Guerrilla Badges for Reproducible Geospatial Data Science (AGILE 2019 Short Paper).” EarthArXiv. June 19. doi:10.31223/osf.io/xtsqh.
+```
  
 ## Licence
 
